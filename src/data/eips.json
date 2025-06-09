@@ -573,5 +573,299 @@
         "notes": "Under consideration for inclusion"
       }
     ]
+  },
+  {
+    "id": 4762,
+    "title": "EIP-4762: Statelessness gas cost changes",
+    "status": "Draft",
+    "description": "Adjusts gas costs to support stateless execution and Verkle tree state transitions.",
+    "author": "Guillaume Ballet, Vitalik Buterin, Dankrad Feist",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2022-01-13",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-4762-statelessness-gas-cost-changes/8714",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-4762"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Considered",
+        "notes": "Under consideration for inclusion in Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 6800,
+    "title": "EIP-6800: Ethereum state using a unified verkle tree",
+    "status": "Draft",
+    "description": "Migrates Ethereum's state from Merkle Patricia tries to Verkle trees for improved efficiency and statelessness support.",
+    "author": "Guillaume Ballet, Verkle Team",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2023-03-20",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-6800-ethereum-state-using-a-unified-verkle-tree/13734",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-6800"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Considered",
+        "notes": "Under consideration for inclusion in Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 6873,
+    "title": "EIP-6873: Preimage retention",
+    "status": "Draft",
+    "description": "Specifies preimage retention requirements for Verkle tree state transitions and stateless execution.",
+    "author": "Guillaume Ballet",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2023-04-11",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-6873-preimage-retention/13766",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-6873"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Considered",
+        "notes": "Under consideration for inclusion in Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7545,
+    "title": "EIP-7545: Verkle proof verification precompile",
+    "status": "Draft",
+    "description": "Adds a precompiled contract for efficient verification of Verkle tree proofs to support stateless execution.",
+    "author": "Guillaume Ballet, Verkle Team",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2023-11-01",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7545-verkle-proof-verification-precompile/15665",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7545"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Considered",
+        "notes": "Under consideration for inclusion in Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7667,
+    "title": "EIP-7667: Raise gas costs of hash functions",
+    "status": "Draft",
+    "description": "Increases gas costs for hash function operations to better reflect computational costs in Verkle tree environments.",
+    "author": "Verkle Team",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-03-26",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7667-raise-gas-costs-of-hash-functions/19123",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7667"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Considered",
+        "notes": "Under consideration for inclusion in Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7793,
+    "title": "EIP-7793: Conditional Transactions",
+    "status": "Draft",
+    "description": "Enables transactions that execute conditionally based on blockchain state, improving automation and reducing failed transactions.",
+    "author": "TBD",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-09-10",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7793-conditional-transactions/21080",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7793"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Proposed for inclusion in Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7843,
+    "title": "EIP-7843: SLOTNUM opcode",
+    "status": "Draft",
+    "description": "Adds a new opcode that returns the current slot number, enabling time-based smart contract logic.",
+    "author": "TBD",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-08-15",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7843-slotnum-opcode/20900",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7843"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Proposed for inclusion in Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7732,
+    "title": "EIP-7732: Enshrined Proposer-Builder Separation (ePBS)",
+    "status": "Draft",
+    "description": "Enshrines proposer-builder separation at the protocol level to improve MEV resistance and block production efficiency.",
+    "author": "Potuz, et al.",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-07-15",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7732-enshrined-proposer-builder-separation-epbs/20329",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7732"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Headliner proposal for Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7937,
+    "title": "EIP-7937: 64-bit mode opcodes for EVM",
+    "status": "Draft",
+    "description": "Introduces 64-bit arithmetic and operations to the EVM for improved performance and expanded computational capabilities.",
+    "author": "Wei Tang, et al.",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-08-20",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7937-64-bit-mode-opcodes-for-evm/21050",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7937"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Headliner proposal for Gloas/Amsterdam upgrade - EVM64 suite"
+      }
+    ]
+  },
+  {
+    "id": 7919,
+    "title": "EIP-7919: Pureth - Provable RPC responses",
+    "status": "Draft",
+    "description": "Enables provable RPC responses to eliminate trust requirements in data access and improve decentralization.",
+    "author": "Etan Kissling, et al.",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-09-01",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7919-pureth-provable-rpc-responses/21180",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7919"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Headliner proposal for Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7942,
+    "title": "EIP-7942: Available Attestation",
+    "status": "Draft",
+    "description": "A comprehensive solution to address all known reorganization attacks in Ethereum PoS through available attestation mechanisms.",
+    "author": "Mingfei Zhang, et al.",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-04-29",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7942-available-attestation-a-reorg-resilient-solution-for-ethereum/23927",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7942"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Headliner proposal for Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7886,
+    "title": "EIP-7886: Delayed Execution",
+    "status": "Draft",
+    "description": "Introduces delayed execution mechanisms to improve transaction ordering and MEV resistance.",
+    "author": "TBD",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-06-01",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7886-delayed-execution-the-case-for-glamsterdam/24500",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7886"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Headliner proposal for Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7928,
+    "title": "EIP-7928: Block-level Access Lists",
+    "status": "Draft",
+    "description": "Introduces block-level access lists to improve gas efficiency and enable new optimization patterns.",
+    "author": "TBD",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-05-20",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7928-block-level-access-lists-the-case-for-glamsterdam/24343",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7928"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Headliner proposal for Gloas/Amsterdam upgrade"
+      }
+    ]
+  },
+  {
+    "id": 7805,
+    "title": "EIP-7805: Fork-Choice Inclusion Lists (FOCIL)",
+    "status": "Draft",
+    "description": "Implements fork-choice enforced inclusion lists to improve censorship resistance and transaction inclusion guarantees.",
+    "author": "TBD",
+    "type": "Standards Track",
+    "category": "Core",
+    "createdDate": "2024-05-15",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7805-fork-choice-inclusion-lists-focil-as-a-candidate-for-glamsterdam/24342",
+    "testCasesAvailable": false,
+    "clientImplementations": [],
+    "resources": ["https://eips.ethereum.org/EIPS/eip-7805"],
+    "forkRelationships": [
+      {
+        "forkName": "Glamsterdam",
+        "status": "Proposed",
+        "notes": "Candidate for inclusion in Gloas/Amsterdam upgrade"
+      }
+    ]
   }
 ] 

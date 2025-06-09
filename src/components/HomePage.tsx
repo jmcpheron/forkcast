@@ -1,32 +1,8 @@
 import { Link } from 'react-router-dom';
+import { networkUpgrades } from '../data/upgrades';
 
 const HomePage = () => {
-  const upgrades = [
-    {
-      path: '/upgrade/pectra',
-      name: 'Pectra Upgrade',
-      description: 'Recent improvements to Ethereum\'s staking and validator capabilities.',
-      status: 'Active',
-      activationDate: 'May 2025',
-      disabled: true
-    },
-    {
-      path: '/upgrade/fusaka',
-      name: 'Fusaka Upgrade',
-      description: 'Major improvements to Ethereum\'s scalability and user experience, including PeerDAS for enhanced data availability.',
-      status: 'Upcoming',
-      activationDate: 'Q4 2025',
-      disabled: false
-    },
-    {
-      path: '/upgrade/glamsterdam',
-      name: 'Glamsterdam Upgrade',
-      description: 'Next-generation features for Ethereum\'s future development.',
-      status: 'Planning',
-      activationDate: 'TBD',
-      disabled: true
-    }
-  ];
+  const upgrades = networkUpgrades;
 
   const getStatusColor = (status: string) => {
     switch (status) {
