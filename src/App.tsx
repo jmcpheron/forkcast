@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PublicNetworkUpgradePage from './components/PublicNetworkUpgradePage';
 import HomePage from './components/HomePage';
+import SensePage from './components/SensePage';
 import { getUpgradeById } from './data/upgrades';
 
 function App() {
-  // Use the same logic as vite.config.ts for base path
-  const basename = import.meta.env.MODE === 'production' ? '/forkcast' : '';
-
+  const isGitHubPages = window.location.hostname === 'wolovim.github.io';
+  const basename = isGitHubPages ? '/forkcast' : '';
+  
   const fusakaUpgrade = getUpgradeById('fusaka')!;
   const glamsterdamUpgrade = getUpgradeById('glamsterdam')!;
   const pectraUpgrade = getUpgradeById('pectra')!;
@@ -15,6 +16,7 @@ function App() {
     <Router basename={basename}>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/sense" element={<SensePage />} />
         <Route path="/upgrade/fusaka" element={
           <PublicNetworkUpgradePage 
             forkName="Fusaka"
