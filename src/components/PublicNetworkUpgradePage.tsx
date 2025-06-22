@@ -18,9 +18,6 @@ interface EIP {
   category: string;
   createdDate: string;
   discussionLink: string;
-  testCasesAvailable: boolean;
-  clientImplementations: string[];
-  resources: string[];
   forkRelationships: ForkRelationship[];
 }
 
