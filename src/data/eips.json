@@ -9,9 +9,6 @@
     "category": "Core",
     "createdDate": "2020-02-21",
     "discussionLink": "https://ethereum-magicians.org/t/eip-2537-bls12-381-precompiles/4187",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-2537"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -30,9 +27,6 @@
     "category": "Core",
     "createdDate": "2020-09-04",
     "discussionLink": "https://ethereum-magicians.org/t/eip-2935-save-historical-block-hashes-in-state/4565",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-2935"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -51,12 +45,6 @@
     "category": "Core",
     "createdDate": "2021-11-25",
     "discussionLink": "https://ethereum-magicians.org/t/eip-4844-shard-blob-transactions/7435",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": [
-      "https://eips.ethereum.org/EIPS/eip-4844",
-      "https://www.eip4844.com/"
-    ],
     "forkRelationships": [
       {
         "forkName": "Cancun-Deneb",
@@ -75,9 +63,6 @@
     "category": "Core",
     "createdDate": "2022-12-09",
     "discussionLink": "https://ethereum-magicians.org/t/eip-6110-supply-validator-deposits-on-chain/12072",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-6110"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -96,9 +81,6 @@
     "category": "Core",
     "createdDate": "2023-05-09",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7002-execution-layer-triggerable-exits/14195",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7002"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -117,9 +99,6 @@
     "category": "Core",
     "createdDate": "2023-06-28",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7251-increase-the-max-effective-balance/14955",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Prysm", "Lighthouse", "Teku", "Nimbus"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7251"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -138,9 +117,6 @@
     "category": "Core",
     "createdDate": "2023-11-09",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7549-move-committee-index-outside-attestation/15710",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Prysm", "Lighthouse", "Teku", "Nimbus"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7549"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -159,9 +135,6 @@
     "category": "Core",
     "createdDate": "2024-01-15",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7594-peerdas-peer-data-availability-sampling/18000",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7594"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -180,9 +153,6 @@
     "category": "Core",
     "createdDate": "2024-01-18",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7600-pectra-meta-eip/18400",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7600"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -201,9 +171,6 @@
     "category": "Core",
     "createdDate": "2024-02-01",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7607-fusaka-meta-eip/18439",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7607"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -222,9 +189,6 @@
     "category": "Core",
     "createdDate": "2024-02-13",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7623-increase-calldata-cost/18647",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7623"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -243,9 +207,6 @@
     "category": "Networking",
     "createdDate": "2024-01-10",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7642-eth-69-drop-pre-merge-fields/18200",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7642"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -269,9 +230,6 @@
     "category": "Core",
     "createdDate": "2024-04-14",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7685-general-purpose-execution-layer-requests/19668",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7685"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -290,9 +248,6 @@
     "category": "Core",
     "createdDate": "2024-04-17",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7691-blob-throughput-increase/19724",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7691"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -311,9 +266,6 @@
     "category": "Core",
     "createdDate": "2024-04-20",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7702-set-eoa-account-code-for-one-transaction/19769",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7702"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -332,9 +284,6 @@
     "category": "Core",
     "createdDate": "2024-01-20",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7823-set-upper-bounds-for-modexp/18500",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7823"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -353,9 +302,6 @@
     "category": "Core",
     "createdDate": "2024-01-22",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7825-transaction-gas-limit-cap/18520",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7825"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -374,9 +320,6 @@
     "category": "Interface",
     "createdDate": "2024-05-01",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7840-add-blob-schedule-to-el-config-files/20100",
-    "testCasesAvailable": false,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7840"],
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -395,9 +338,6 @@
     "category": "Core",
     "createdDate": "2024-01-25",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7883-modexp-gas-cost-increase/18600",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7883"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -416,9 +356,6 @@
     "category": "Core",
     "createdDate": "2024-01-28",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7892-blob-parameter-only-hardforks/18650",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7892"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -437,9 +374,6 @@
     "category": "Core",
     "createdDate": "2024-02-02",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7918-blob-base-fee-bounded-by-execution-cost/18700",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7918"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -458,9 +392,6 @@
     "category": "Core",
     "createdDate": "2024-02-05",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7935-set-default-gas-limit-to-xx0m/18750",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7935"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -479,9 +410,6 @@
     "category": "Core",
     "createdDate": "2022-11-15",
     "discussionLink": "https://ethereum-magicians.org/t/eip-5920-pay-opcode/11717",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth (experimental)"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-5920"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -500,9 +428,6 @@
     "category": "Core",
     "createdDate": "2024-01-30",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7907-meter-contract-code-size-and-increase-limit/18680",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7907"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -521,9 +446,6 @@
     "category": "Core",
     "createdDate": "2023-06-28",
     "discussionLink": "https://ethereum-magicians.org/t/rip-7212-precompile-for-secp256r1-curve-support/14789",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu"],
-    "resources": ["https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7212.md"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -542,9 +464,6 @@
     "category": "Core",
     "createdDate": "2024-02-10",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7917-deterministic-proposer-lookahead/18800",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7917"],
     "forkRelationships": [
       {
         "forkName": "Fusaka", 
@@ -563,9 +482,6 @@
     "category": "Core", 
     "createdDate": "2024-02-08",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7934-rlp-execution-block-size-limit/18750",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7934"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
@@ -584,9 +500,6 @@
     "category": "Core",
     "createdDate": "2022-01-13",
     "discussionLink": "https://ethereum-magicians.org/t/eip-4762-statelessness-gas-cost-changes/8714",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-4762"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -605,9 +518,6 @@
     "category": "Core",
     "createdDate": "2023-03-20",
     "discussionLink": "https://ethereum-magicians.org/t/eip-6800-ethereum-state-using-a-unified-verkle-tree/13734",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-6800"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -626,9 +536,6 @@
     "category": "Core",
     "createdDate": "2023-04-11",
     "discussionLink": "https://ethereum-magicians.org/t/eip-6873-preimage-retention/13766",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-6873"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -647,9 +554,6 @@
     "category": "Core",
     "createdDate": "2023-11-01",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7545-verkle-proof-verification-precompile/15665",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7545"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -668,9 +572,6 @@
     "category": "Core",
     "createdDate": "2024-03-26",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7667-raise-gas-costs-of-hash-functions/19123",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7667"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -689,9 +590,6 @@
     "category": "Core",
     "createdDate": "2024-09-10",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7793-conditional-transactions/21080",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7793"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -710,9 +608,6 @@
     "category": "Core",
     "createdDate": "2024-08-15",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7843-slotnum-opcode/20900",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7843"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -731,9 +626,6 @@
     "category": "Core",
     "createdDate": "2024-07-15",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7732-enshrined-proposer-builder-separation-epbs/20329",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7732"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -752,9 +644,6 @@
     "category": "Core",
     "createdDate": "2024-10-05",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7782-reduce-block-latency/21271",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7782"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -773,9 +662,6 @@
     "category": "Core",
     "createdDate": "2024-08-20",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7937-64-bit-mode-opcodes-for-evm/21050",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7937"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -794,9 +680,6 @@
     "category": "Core",
     "createdDate": "2024-09-01",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7919-pureth-provable-rpc-responses/21180",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7919"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -815,9 +698,6 @@
     "category": "Core",
     "createdDate": "2024-04-29",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7942-available-attestation-a-reorg-resilient-solution-for-ethereum/23927",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7942"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -836,9 +716,6 @@
     "category": "Core",
     "createdDate": "2024-06-01",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7886-delayed-execution-the-case-for-glamsterdam/24500",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7886"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -857,9 +734,6 @@
     "category": "Core",
     "createdDate": "2024-05-20",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7928-block-level-access-lists-the-case-for-glamsterdam/24343",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7928"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -878,9 +752,6 @@
     "category": "Core",
     "createdDate": "2024-05-15",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7805-fork-choice-inclusion-lists-focil-as-a-candidate-for-glamsterdam/24342",
-    "testCasesAvailable": false,
-    "clientImplementations": [],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7805"],
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
@@ -899,9 +770,6 @@
     "category": "Core",
     "createdDate": "2024-04-17",
     "discussionLink": "https://ethereum-magicians.org/t/glamsterdam-headliner-proposal-eof/21271",
-    "testCasesAvailable": true,
-    "clientImplementations": ["Geth", "Nethermind", "Besu", "Erigon"],
-    "resources": ["https://eips.ethereum.org/EIPS/eip-7692"],
     "forkRelationships": [
       {
         "forkName": "Fusaka",
