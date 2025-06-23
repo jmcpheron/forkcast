@@ -96,11 +96,20 @@ const HomePage = () => {
           </p>
           <p className="text-xs">
             Have feedback? Contact{' '}
-            <a 
-              href="https://x.com/wolovim" 
-              target="_blank" 
+            <a
+              href="https://x.com/nixorokish"
+              target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-600 hover:text-slate-800 underline decoration-1 underline-offset-2"
+              className="text-slate-500 hover:text-slate-700 underline decoration-1 underline-offset-2"
+            >
+              @nixorokish
+            </a>
+            {' '}or{' '}
+            <a
+              href="https://x.com/wolovim"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-slate-700 underline decoration-1 underline-offset-2"
             >
               @wolovim
             </a>
