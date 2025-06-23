@@ -24,7 +24,7 @@ export const networkUpgrades: NetworkUpgrade[] = [
     name: 'Fusaka Upgrade',
     description: 'Major improvements to Ethereum\'s scalability and user experience, including PeerDAS for enhanced data availability.',
     status: 'Upcoming',
-    activationDate: 'Q4 2025',
+    activationDate: 'TBD',
     disabled: false
   },
   {

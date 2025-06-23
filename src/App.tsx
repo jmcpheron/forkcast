@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import PublicNetworkUpgradePage from './components/PublicNetworkUpgradePage';
 import HomePage from './components/HomePage';
 import SensePage from './components/SensePage';
@@ -10,7 +10,7 @@ function App() {
   
   const fusakaUpgrade = getUpgradeById('fusaka')!;
   const glamsterdamUpgrade = getUpgradeById('glamsterdam')!;
-  const pectraUpgrade = getUpgradeById('pectra')!;
+  // const pectraUpgrade = getUpgradeById('pectra')!;
 
   return (
     <Router basename={basename}>
@@ -35,7 +35,7 @@ function App() {
             status={glamsterdamUpgrade.status}
           />
         } />
-        <Route path="/upgrade/pectra" element={
+        {/* <Route path="/upgrade/pectra" element={
           <PublicNetworkUpgradePage 
             forkName="Pectra"
             displayName={pectraUpgrade.name}
@@ -43,7 +43,9 @@ function App() {
             activationDate={pectraUpgrade.activationDate}
             status={pectraUpgrade.status}
           />
-        } />
+        } /> */}
+        {/* Catch-all route that redirects to home page */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
