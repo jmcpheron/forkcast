@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import PublicNetworkUpgradePage from './components/PublicNetworkUpgradePage';
 import HomePage from './components/HomePage';
-import SensePage from './components/SensePage';
 import { getUpgradeById } from './data/upgrades';
 
 function App() {
@@ -16,7 +15,6 @@ function App() {
     <Router basename={basename}>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/sense" element={<SensePage />} />
         <Route path="/upgrade/fusaka" element={
           <PublicNetworkUpgradePage 
             forkName="Fusaka"
