@@ -913,16 +913,11 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                     };
                                     
                                     return (
-                                      <div key={stakeholder} className="bg-white border border-slate-200 rounded p-3">
-                                        <div className="flex items-center justify-between mb-2">
-                                          <h5 className="font-medium text-slate-900 text-xs">
-                                            {stakeholderNames[stakeholder as keyof typeof stakeholderNames]}
-                                          </h5>
-                                          <span className={`px-2 py-1 text-xs font-medium rounded flex-shrink-0 ${getImpactColor(impact.impact as 'None' | 'Low' | 'Medium' | 'High')}`}>
-                                            {impact.impact}
-                                          </span>
-                                        </div>
-                                        <p className="text-slate-600 text-xs leading-relaxed">{impact.description}</p>
+                                      <div key={stakeholder} className="bg-white border border-slate-200 rounded p-4">
+                                        <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-slate-100 pb-2">
+                                          {stakeholderNames[stakeholder as keyof typeof stakeholderNames]}
+                                        </h5>
+                                        <p className="text-slate-700 text-xs leading-relaxed">{impact.description}</p>
                                       </div>
                                     );
                                   })}
@@ -1140,16 +1135,11 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                     };
                                     
                                     return (
-                                      <div key={stakeholder} className="bg-white border border-slate-200 rounded p-3">
-                                        <div className="flex items-center justify-between mb-2">
-                                          <h5 className="font-medium text-slate-900 text-xs">
-                                            {stakeholderNames[stakeholder as keyof typeof stakeholderNames]}
-                                          </h5>
-                                          <span className={`px-2 py-1 text-xs font-medium rounded flex-shrink-0 ${getImpactColor(impact.impact as 'None' | 'Low' | 'Medium' | 'High')}`}>
-                                            {impact.impact}
-                                          </span>
-                                        </div>
-                                        <p className="text-slate-600 text-xs leading-relaxed">{impact.description}</p>
+                                      <div key={stakeholder} className="bg-white border border-slate-200 rounded p-4">
+                                        <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-slate-100 pb-2">
+                                          {stakeholderNames[stakeholder as keyof typeof stakeholderNames]}
+                                        </h5>
+                                        <p className="text-slate-700 text-xs leading-relaxed">{impact.description}</p>
                                       </div>
                                     );
                                   })}
