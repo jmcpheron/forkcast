@@ -7,6 +7,7 @@ interface ForkRelationship {
   forkName: string;
   status: string;
   isHeadliner?: boolean;
+  headlinerDiscussionLink?: string;
 }
 
 interface EIP {
@@ -90,6 +91,14 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
       default:
         return 'Unknown';
     }
+  };
+
+  // Helper function to get headliner discussion link for this fork
+  const getHeadlinerDiscussionLink = (eip: EIP): string | null => {
+    const forkRelationship = eip.forkRelationships.find(fork => 
+      fork.forkName.toLowerCase() === forkName.toLowerCase()
+    );
+    return forkRelationship?.headlinerDiscussionLink || null;
   };
 
   // Helper function to check if EIP is headliner for this fork
@@ -821,6 +830,27 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               <p className="text-slate-700 text-sm leading-relaxed">
                                 {eip.laymanDescription}
                               </p>
+
+                              {/* Headliner Discussion Link (for headliners in regular sections) */}
+                              {(() => {
+                                const isHeadlinerEip = isHeadliner(eip);
+                                const discussionLink = getHeadlinerDiscussionLink(eip);
+                                return isHeadlinerEip && discussionLink && (
+                                  <div className="mt-3">
+                                    <a 
+                                      href={discussionLink}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
+                                    >
+                                      Read the headliner proposal and discussion on EthMag
+                                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                      </svg>
+                                    </a>
+                                  </div>
+                                );
+                              })()}
                             </div>
 
                             {/* North Star Goal Alignment */}
@@ -1027,6 +1057,27 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               <p className="text-slate-700 text-sm leading-relaxed">
                                 {eip.laymanDescription}
                               </p>
+
+                              {/* Headliner Discussion Link (for headliners in regular sections) */}
+                              {(() => {
+                                const isHeadlinerEip = isHeadliner(eip);
+                                const discussionLink = getHeadlinerDiscussionLink(eip);
+                                return isHeadlinerEip && discussionLink && (
+                                  <div className="mt-3">
+                                    <a 
+                                      href={discussionLink}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
+                                    >
+                                      Read the headliner proposal and discussion on EthMag
+                                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                      </svg>
+                                    </a>
+                                  </div>
+                                );
+                              })()}
                             </div>
 
                             {/* North Star Goal Alignment */}
