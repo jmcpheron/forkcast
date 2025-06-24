@@ -990,7 +990,8 @@
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/eip-7732-the-case-for-inclusion-in-glamsterdam/24306"
       }
     ],
     "laymanDescription": "It proposes a minimal set of changes to maximally decouple execution and consensus layer validation. This feature enables L1 scaling by changing the time required to execute a block from the current ~2 seconds to 8 seconds. And it changes the time required to broadcast blobs in the network from the current ~2 seconds to ~9 seconds.",
@@ -1031,7 +1032,8 @@
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/eip-7782-the-case-for-2x-shorter-slot-times-in-glamsterdam/24616"
       }
     ],
     "laymanDescription": "This reduces Ethereum's slot time from 12 seconds to 6 seconds, making Ethereum a better confirmation engine for apps and rollups. Everyone benefits: users get faster confirmations with better censorship resistance, DeFi gets more efficient trading with lower fees, stakers get lower reward variability, and nodes get better resource utilization with smoother bandwidth usage.",
@@ -1076,7 +1078,8 @@
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/glamsterdam-headliner-proposal-evm64/24311"
       }
     ],
     "laymanDescription": "This is the core EIP of the EVM64 collection, introducing 64-bit arithmetic operations to the EVM. The full EVM64 suite includes multiple EIPs enabling much more efficient mathematical computations by adding 64-bit operations alongside existing 256-bit ones.",
@@ -1117,7 +1120,8 @@
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/glamsterdam-headliner-proposal-pureth/24459"
       }
     ],
     "laymanDescription": "This enables Ethereum nodes to provide cryptographic proofs with their responses, eliminating the need to trust RPC providers. Users can verify that data from any source is authentic without running their own full node.",
@@ -1158,7 +1162,8 @@
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/glamsterdam-headliner-proposal-available-attestation/24377"
       }
     ],
     "laymanDescription": "This is a comprehensive solution to eliminate all known reorganization attacks on Ethereum. Instead of fixing attacks one-by-one, Available Attestation redesigns how consensus works to make reorg attacks fundamentally impossible.",
@@ -1194,12 +1199,13 @@
     "type": "Standards Track",
     "category": "Core",
     "createdDate": "2024-06-01",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7886-delayed-execution-the-case-for-glamsterdam/24500",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7886-delayed-execution/22890",
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/eip-7886-delayed-execution-the-case-for-glamsterdam/24500"
       }
     ],
     "laymanDescription": "This introduces a delay between when transactions are committed and when they're executed, reducing MEV extraction and front-running while improving transaction ordering fairness.",
@@ -1235,12 +1241,13 @@
     "type": "Standards Track",
     "category": "Core",
     "createdDate": "2024-05-20",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7928-block-level-access-lists-the-case-for-glamsterdam/24343",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7928-block-level-access-lists/23337",
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/eip-7928-block-level-access-lists-the-case-for-glamsterdam/24343"
       }
     ],
     "laymanDescription": "This introduces access lists at the block level rather than individual transactions, dramatically reducing gas costs for applications that access similar state and enabling new optimization patterns.",
@@ -1276,12 +1283,13 @@
     "type": "Standards Track",
     "category": "Core",
     "createdDate": "2024-05-15",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7805-fork-choice-inclusion-lists-focil-as-a-candidate-for-glamsterdam/24342",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7805-committee-based-fork-choice-enforced-inclusion-lists-focil/21578",
     "forkRelationships": [
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/eip-7805-fork-choice-inclusion-lists-focil-as-a-candidate-for-glamsterdam/24342"
       }
     ],
     "laymanDescription": "This enforces transaction inclusion at the fork choice level, making censorship much more difficult by requiring validators to include specific transactions or face consensus penalties.",
@@ -1326,7 +1334,8 @@
       {
         "forkName": "Glamsterdam",
         "status": "Proposed",
-        "isHeadliner": true
+        "isHeadliner": true,
+        "headlinerDiscussionLink": "https://ethereum-magicians.org/t/glamsterdam-headliner-proposal-eof/24464"
       }
     ],
     "laymanDescription": "This introduces a new container format for EVM bytecode that enables code versioning, removes complex jump analysis, and paves the way for new execution environments like RISC-V and EVM64 within the same contract. Originally declined from Fusaka due to controversy, it's being reproposed with multiple variants to address community concerns.",
