@@ -154,21 +154,6 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
     };
   }, [eips]);
 
-  const getImpactColor = (impact: 'None' | 'Low' | 'Medium' | 'High') => {
-    switch (impact) {
-      case 'None':
-        return 'bg-slate-100 text-slate-600';
-      case 'Low':
-        return 'bg-blue-100 text-blue-800';
-      case 'Medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'High':
-        return 'bg-orange-100 text-orange-800';
-      default:
-        return 'bg-slate-100 text-slate-600';
-    }
-  };
-
   const getInclusionStageColor = (stage: string) => {
     switch (stage) {
       case 'Proposed for Inclusion':
@@ -637,112 +622,35 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                   </>
                 )}
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
                     { stage: 'Proposed for Inclusion', count: eips.filter(eip => getInclusionStage(eip) === 'Proposed for Inclusion').length, color: 'bg-slate-100 text-slate-700' },
                     { stage: 'Considered for Inclusion', count: eips.filter(eip => getInclusionStage(eip) === 'Considered for Inclusion').length, color: 'bg-slate-200 text-slate-700' },
                     { stage: 'Scheduled for Inclusion', count: eips.filter(eip => getInclusionStage(eip) === 'Scheduled for Inclusion').length, color: 'bg-yellow-50 text-yellow-700' },
                     { stage: 'Declined for Inclusion', count: eips.filter(eip => getInclusionStage(eip) === 'Declined for Inclusion').length, color: 'bg-red-50 text-red-800' }
-                  ].map(({ stage, count, color }) => (
-                    <div key={stage} className="text-center p-4 bg-slate-50 rounded">
-                      <div className="text-2xl font-light text-slate-900 mb-1">{count}</div>
-                      <div className="text-xs text-slate-500 mb-1">EIP{count !== 1 ? 's' : ''}</div>
-                      <div className={`text-xs font-medium px-2 py-1 rounded inline-block ${color}`}>
-                        {stage}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Strategic Focus Areas */}
-                <div className="border-t border-slate-200 pt-4">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-2 uppercase tracking-wide">North Star Impact</h3>
-                  <p className="text-xs text-slate-500 mb-4 italic">Note: Metrics exclude EIPs declined for inclusion</p>
-                  <div className="space-y-6">
-                    {[
-                      {
-                        name: 'Scale L1',
-                        description: 'Enhance mainnet capacity and efficiency',
-                        borderColor: 'border-purple-200',
-                        textColor: 'text-purple-800',
-                        gradientBg: 'bg-gradient-to-r from-white to-purple-100/50'
-                      },
-                      {
-                        name: 'Scale L2',
-                        description: 'Enable high-throughput Layer 2 solutions',
-                        borderColor: 'border-purple-300',
-                        textColor: 'text-purple-800',
-                        gradientBg: 'bg-gradient-to-r from-white to-purple-200/60'
-                      },
-                      {
-                        name: 'Improve UX',
-                        description: 'Enhance user and developer experience',
-                        borderColor: 'border-purple-400',
-                        textColor: 'text-purple-800',
-                        gradientBg: 'bg-gradient-to-r from-white to-purple-300/70'
-                      }
-                    ].map(({ name, description, borderColor, textColor, gradientBg }) => {
-                      const relevantEips = eips.filter(eip => 
-                        eip.northStars?.includes(name as any) && 
-                        getInclusionStage(eip) !== 'Declined for Inclusion'
-                      );
-                      
-                      // Calculate impact level breakdown for details
-                      const impactBreakdown = relevantEips.reduce((acc, eip) => {
-                        const alignment = eip.northStarAlignment;
-                        const impact = name === 'Scale L1' ? alignment?.scaleL1?.impact :
-                                     name === 'Scale L2' ? alignment?.scaleL2?.impact :
-                                     alignment?.improveUX?.impact;
-                        if (impact) {
-                          acc[impact] = (acc[impact] || 0) + 1;
-                        }
-                        return acc;
-                      }, {} as Record<string, number>);
-
-                      return (
-                        <div key={name} className={`${borderColor} ${gradientBg} border-l-2 pl-4 py-4 rounded-r`}>
-                          <div className="mb-3">
-                            <h4 className={`${textColor} font-medium text-sm leading-tight`}>{name}</h4>
-                            <p className="text-slate-700 text-sm leading-relaxed">{description}</p>
-                          </div>
-                          
-                          {/* EIP count and impact breakdown */}
-                          {relevantEips.length > 0 ? (
-                            <div className="ml-3 bg-white/60 rounded px-3 py-2">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`${textColor} text-base font-light`}>{relevantEips.length}</span>
-                                <span className="text-xs text-slate-500">
-                                  EIP{relevantEips.length !== 1 ? 's' : ''} contributing to this goal
-                                </span>
-                              </div>
-                              
-                              {/* Impact levels breakdown */}
-                              <div className="flex items-center gap-2 text-xs">
-                                <span className="text-slate-500">Impact distribution:</span>
-                                {['High', 'Medium', 'Low'].map(level => {
-                                  const levelCount = impactBreakdown[level] || 0;
-                                  if (levelCount === 0) return null;
-                                  return (
-                                    <span key={level} className={`px-1.5 py-0.5 rounded ${
-                                      level === 'High' ? 'bg-orange-100 text-orange-700' :
-                                      level === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                                      'bg-blue-100 text-blue-700'
-                                    }`}>
-                                      {levelCount} {level}
-                                    </span>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="ml-3 text-xs text-slate-500 italic">
-                              No EIPs directly targeting this goal in this upgrade
-                            </div>
-                          )}
+                  ].map(({ stage, count, color }) => {
+                    const stageId = stage.toLowerCase().replace(/\s+/g, '-');
+                    const hasEips = count > 0;
+                    
+                    return (
+                      <button
+                        key={stage}
+                        onClick={() => hasEips && scrollToSection(stageId)}
+                        disabled={!hasEips}
+                        className={`text-center p-4 rounded transition-all duration-200 ${
+                          hasEips 
+                            ? 'bg-slate-50 hover:bg-slate-100 hover:shadow-sm cursor-pointer' 
+                            : 'bg-slate-50 opacity-50 cursor-not-allowed'
+                        }`}
+                      >
+                        <div className="text-2xl font-light text-slate-900 mb-1">{count}</div>
+                        <div className="text-xs text-slate-500 mb-1">EIP{count !== 1 ? 's' : ''}</div>
+                        <div className={`text-xs font-medium px-2 py-1 rounded inline-block ${color}`}>
+                          {stage}
                         </div>
-                      );
-                    })}
-                  </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -852,36 +760,21 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               <div className="bg-slate-50 border border-slate-200 rounded p-4">
                                 <div className="space-y-4">
                                   {eip.northStarAlignment?.scaleL1 && (
-                                    <div className="flex items-start justify-between">
-                                      <div className="flex-1">
-                                        <h5 className="text-sm font-medium text-slate-900 mb-1">1. Scale L1</h5>
-                                        <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL1.description}</p>
-                                      </div>
-                                      <span className={`px-2 py-1 text-xs font-medium rounded ml-4 ${getImpactColor(eip.northStarAlignment.scaleL1.impact as 'None' | 'Low' | 'Medium' | 'High')}`}>
-                                        Impact: {eip.northStarAlignment.scaleL1.impact}
-                                      </span>
+                                    <div>
+                                      <h5 className="text-sm font-medium text-slate-900 mb-2">1. Scale L1</h5>
+                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL1.description}</p>
                                     </div>
                                   )}
                                   {eip.northStarAlignment?.scaleL2 && (
-                                    <div className="flex items-start justify-between">
-                                      <div className="flex-1">
-                                        <h5 className="text-sm font-medium text-slate-900 mb-1">2. Scale L2 via Blobs</h5>
-                                        <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL2.description}</p>
-                                      </div>
-                                      <span className={`px-2 py-1 text-xs font-medium rounded ml-4 ${getImpactColor(eip.northStarAlignment.scaleL2.impact as 'None' | 'Low' | 'Medium' | 'High')}`}>
-                                        Impact: {eip.northStarAlignment.scaleL2.impact}
-                                      </span>
+                                    <div>
+                                      <h5 className="text-sm font-medium text-slate-900 mb-2">2. Scale L2</h5>
+                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL2.description}</p>
                                     </div>
                                   )}
                                   {eip.northStarAlignment?.improveUX && (
-                                    <div className="flex items-start justify-between">
-                                      <div className="flex-1">
-                                        <h5 className="text-sm font-medium text-slate-900 mb-1">3. Improve UX (incl. L2 interop, app layer)</h5>
-                                        <p className="text-xs text-slate-600">{eip.northStarAlignment.improveUX.description}</p>
-                                      </div>
-                                      <span className={`px-2 py-1 text-xs font-medium rounded ml-4 ${getImpactColor(eip.northStarAlignment.improveUX.impact as 'None' | 'Low' | 'Medium' | 'High')}`}>
-                                        Impact: {eip.northStarAlignment.improveUX.impact}
-                                      </span>
+                                    <div>
+                                      <h5 className="text-sm font-medium text-slate-900 mb-2">3. Improve UX</h5>
+                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.improveUX.description}</p>
                                     </div>
                                   )}
                                 </div>
@@ -1074,36 +967,21 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               <div className="bg-slate-50 border border-slate-200 rounded p-4">
                                 <div className="space-y-4">
                                   {eip.northStarAlignment?.scaleL1 && (
-                                    <div className="flex items-start justify-between">
-                                      <div className="flex-1">
-                                        <h5 className="text-sm font-medium text-slate-900 mb-1">1. Scale L1</h5>
-                                        <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL1.description}</p>
-                                      </div>
-                                      <span className={`px-2 py-1 text-xs font-medium rounded ml-4 ${getImpactColor(eip.northStarAlignment.scaleL1.impact as 'None' | 'Low' | 'Medium' | 'High')}`}>
-                                        Impact: {eip.northStarAlignment.scaleL1.impact}
-                                      </span>
+                                    <div>
+                                      <h5 className="text-sm font-medium text-slate-900 mb-2">1. Scale L1</h5>
+                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL1.description}</p>
                                     </div>
                                   )}
                                   {eip.northStarAlignment?.scaleL2 && (
-                                    <div className="flex items-start justify-between">
-                                      <div className="flex-1">
-                                        <h5 className="text-sm font-medium text-slate-900 mb-1">2. Scale L2 via Blobs</h5>
-                                        <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL2.description}</p>
-                                      </div>
-                                      <span className={`px-2 py-1 text-xs font-medium rounded ml-4 ${getImpactColor(eip.northStarAlignment.scaleL2.impact as 'None' | 'Low' | 'Medium' | 'High')}`}>
-                                        Impact: {eip.northStarAlignment.scaleL2.impact}
-                                      </span>
+                                    <div>
+                                      <h5 className="text-sm font-medium text-slate-900 mb-2">2. Scale L2</h5>
+                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL2.description}</p>
                                     </div>
                                   )}
                                   {eip.northStarAlignment?.improveUX && (
-                                    <div className="flex items-start justify-between">
-                                      <div className="flex-1">
-                                        <h5 className="text-sm font-medium text-slate-900 mb-1">3. Improve UX (incl. L2 interop, app layer)</h5>
-                                        <p className="text-xs text-slate-600">{eip.northStarAlignment.improveUX.description}</p>
-                                      </div>
-                                      <span className={`px-2 py-1 text-xs font-medium rounded ml-4 ${getImpactColor(eip.northStarAlignment.improveUX.impact as 'None' | 'Low' | 'Medium' | 'High')}`}>
-                                        Impact: {eip.northStarAlignment.improveUX.impact}
-                                      </span>
+                                    <div>
+                                      <h5 className="text-sm font-medium text-slate-900 mb-2">3. Improve UX</h5>
+                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.improveUX.description}</p>
                                     </div>
                                   )}
                                 </div>
