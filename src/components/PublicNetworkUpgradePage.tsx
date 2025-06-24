@@ -626,13 +626,6 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                     : eip.laymanDescription
                                   }
                                 </p>
-                                <div className="mt-2 flex flex-wrap gap-1">
-                                  {eip.northStars?.map(star => (
-                                    <span key={star} className="px-2 py-0.5 text-xs bg-purple-100 text-purple-700 rounded">
-                                      {star}
-                                    </span>
-                                  ))}
-                                </div>
                               </button>
                             );
                           })}
