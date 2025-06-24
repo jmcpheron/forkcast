@@ -46,13 +46,15 @@ interface PublicNetworkUpgradePageProps {
   displayName: string;
   description: string;
   status: string;
+  metaEipLink?: string;
 }
 
 const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
   forkName,
   displayName,
   description,
-  status
+  status,
+  metaEipLink
 }) => {
   const [eips, setEips] = useState<EIP[]>([]);
   const [activeSection, setActiveSection] = useState<string>('overview');
@@ -464,6 +466,21 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                   />
                 </div>
                 <p className="text-base text-slate-600 mb-2 leading-relaxed max-w-2xl">{description}</p>
+                {metaEipLink && (
+                  <div className="mb-4">
+                    <a 
+                      href={metaEipLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
+                    >
+                      View Meta EIP Discussion
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                )}
               </div>
               <div className="mt-6 lg:mt-0">
                 <span className={`px-3 py-1 text-xs font-medium rounded ${getUpgradeStatusColor(status)}`}>

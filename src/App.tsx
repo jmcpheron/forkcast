@@ -21,6 +21,7 @@ function App() {
             displayName={fusakaUpgrade.name}
             description={fusakaUpgrade.description}
             status={fusakaUpgrade.status}
+            metaEipLink={fusakaUpgrade.metaEipLink}
           />
         } />
         <Route path="/upgrade/glamsterdam" element={
@@ -29,6 +30,7 @@ function App() {
             displayName={glamsterdamUpgrade.name}
             description={glamsterdamUpgrade.description}
             status={glamsterdamUpgrade.status}
+            metaEipLink={glamsterdamUpgrade.metaEipLink}
           />
         } />
         {/* <Route path="/upgrade/pectra" element={
