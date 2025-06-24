@@ -20,7 +20,6 @@ function App() {
             forkName="Fusaka"
             displayName={fusakaUpgrade.name}
             description={fusakaUpgrade.description}
-            activationDate={fusakaUpgrade.activationDate}
             status={fusakaUpgrade.status}
           />
         } />
@@ -29,7 +28,6 @@ function App() {
             forkName="Glamsterdam"
             displayName={glamsterdamUpgrade.name}
             description={glamsterdamUpgrade.description}
-            activationDate={glamsterdamUpgrade.activationDate}
             status={glamsterdamUpgrade.status}
           />
         } />

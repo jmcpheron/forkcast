@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import eipsData from '../data/eips.json';
+import { networkUpgrades } from '../data/upgrades';
 
 interface ForkRelationship {
   forkName: string;
@@ -43,7 +44,6 @@ interface PublicNetworkUpgradePageProps {
   forkName: string;
   displayName: string;
   description: string;
-  activationDate?: string;
   status: string;
 }
 
@@ -51,7 +51,6 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
   forkName,
   displayName,
   description,
-  activationDate,
   status
 }) => {
   const [eips, setEips] = useState<EIP[]>([]);
@@ -345,11 +344,112 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
     );
   };
 
+  // Timeline component
+  const NetworkUpgradeTimeline: React.FC<{ currentForkName: string }> = ({ currentForkName }) => {
+    const currentForkId = currentForkName.toLowerCase();
+    const upgrades = networkUpgrades;
+
+    // Find the index for 'we are here' (between last Active and first Upcoming)
+    const activeIdx = upgrades.findIndex(u => u.status === 'Active');
+    const upcomingIdx = upgrades.findIndex(u => u.status === 'Upcoming');
+
+    // Position for 'we are here' marker (between upgrades)
+    let markerPercent = 50;
+    if (activeIdx !== -1 && upcomingIdx !== -1) {
+      // Calculate position between the last active and first upcoming upgrade
+      const totalUpgrades = upgrades.length;
+      const activePosition = (activeIdx / (totalUpgrades - 1)) * 100;
+      const upcomingPosition = (upcomingIdx / (totalUpgrades - 1)) * 100;
+      // Move marker further right by weighting towards the upcoming position
+      markerPercent = (activePosition * 0.25 + upcomingPosition * 0.7);
+    }
+
+    const timelineHeight = 24;
+
+    return (
+      <div className="mb-6 hidden sm:block">
+        <div className="bg-white border border-slate-200 rounded px-6 py-4 relative overflow-visible min-h-[60px]">
+          {/* Timeline line with rounded end caps and muted gradient */}
+          <svg className="absolute left-0 right-0" style={{ top: '50%', height: timelineHeight, width: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'visible', transform: 'translateY(-50%)' }} viewBox="0 0 100 14" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="timeline-gradient" x1="6" y1="6" x2="94" y2="6" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#e0e7ff" /> {/* indigo-100 */}
+                <stop offset="100%" stopColor="#bae6fd" /> {/* cyan-100 */}
+              </linearGradient>
+            </defs>
+            {/* Main line with rounded end caps */}
+            <line x1="4" y1="8" x2="94" y2="8" stroke="url(#timeline-gradient)" strokeWidth="2" strokeLinecap="round" opacity="1" />
+            {/* Smaller arrowhead at the end, flush with the box edge */}
+            <g transform="translate(94,8)">
+              <polygon points="0,-3 2,0 0,3" fill="#bae6fd" opacity="1" />
+            </g>
+          </svg>
+          {/* Timeline upgrades as flex row, rounded boxes */}
+          <div className="relative flex flex-row justify-between items-stretch w-full px-12" style={{ zIndex: 1, minHeight: timelineHeight }}>
+            {upgrades.map((upgrade) => {
+              const isCurrent = upgrade.id === currentForkId;
+              let labelClass = 'text-slate-500 font-normal';
+              let boxClass = 'bg-white border border-slate-200';
+              let dateClass = 'text-xs text-slate-400';
+              if (isCurrent) {
+                labelClass = 'text-slate-900 font-semibold';
+                boxClass = 'bg-white border border-purple-200 shadow-sm';
+                dateClass = 'text-xs text-slate-500 font-medium';
+              }
+              
+              const boxContent = (
+                <div className={`px-3 py-1.5 rounded ${boxClass} mb-1 truncate max-w-[180px] text-center leading-tight flex flex-col items-center transition-all duration-200 ${!isCurrent ? 'hover:border-slate-300 hover:shadow-sm' : ''}`} style={{ position: 'relative', zIndex: 2 }}>
+                  <span className={`${labelClass} text-xs mb-0.5 leading-tight`}>
+                    {upgrade.name.replace(/ Upgrade$/, '')}
+                  </span>
+                  <span className={`text-xs ${dateClass}`}>{upgrade.activationDate}</span>
+                </div>
+              );
+
+              return (
+                <div key={upgrade.id} className="flex flex-col items-center flex-1 min-w-0" style={{ position: 'relative' }}>
+                  {/* Make non-current upgrades clickable */}
+                  {!isCurrent && upgrade.path ? (
+                    <Link to={upgrade.path} className="block">
+                      {boxContent}
+                    </Link>
+                  ) : (
+                    boxContent
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          {/* 'We are here' marker between upgrades - adjusted positioning */}
+          {activeIdx !== -1 && upcomingIdx !== -1 && (
+            <div
+              className="absolute flex flex-col items-center z-20"
+              style={{
+                left: `calc(${markerPercent}% - 10px)`,
+                top: '60%',
+                transform: 'translateY(-50%)',
+              }}
+            >
+              {/* Pulsing dot */}
+              <span className="relative flex h-4 w-4">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-200 opacity-40"></span>
+                <span className="relative inline-flex rounded-full h-4 w-4 bg-purple-300 border-2 border-purple-200"></span>
+              </span>
+              <div className="text-[10px] text-purple-300 font-medium mt-0.5 leading-tight text-center">
+                <div>we are here</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8">
           <div className="mb-6">
             <Link to="/" className="text-3xl font-serif bg-gradient-to-r from-purple-600 via-blue-600 to-purple-800 bg-clip-text text-transparent hover:from-purple-700 hover:via-blue-700 hover:to-purple-900 transition-all duration-200 tracking-tight">
               Forkcast
@@ -358,7 +458,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
           <Link to="/" className="text-slate-600 hover:text-slate-800 mb-6 inline-block text-sm font-medium">
             ← All Network Upgrades
           </Link>
-          
+
           <div className="border-b border-slate-200 pb-8">
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
               <div className="flex-1">
@@ -369,12 +469,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                     title="Copy link to this upgrade"
                   />
                 </div>
-                <p className="text-base text-slate-600 mb-4 leading-relaxed max-w-2xl">{description}</p>
-                {activationDate && (
-                  <p className="text-sm text-slate-500">
-                    <span className="font-medium">Expected Activation:</span> {activationDate}
-                  </p>
-                )}
+                <p className="text-base text-slate-600 mb-2 leading-relaxed max-w-2xl">{description}</p>
               </div>
               <div className="mt-6 lg:mt-0">
                 <span className={`px-3 py-1 text-xs font-medium rounded ${getUpgradeStatusColor(status)}`}>
@@ -384,7 +479,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
             </div>
             
             {/* Discrete experiment notice */}
-            <div className="mt-6">
+            <div className="mt-2">
               <p className="text-xs text-slate-400 italic">
                 An experiment by the Protocol & Application Support team · Have feedback? Contact{' '}
                 <a
@@ -408,6 +503,9 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Network Upgrade Timeline */}
+        <NetworkUpgradeTimeline currentForkName={forkName} />
 
         {/* Main Content with TOC */}
         <div className="flex gap-8">
