@@ -39,6 +39,7 @@ interface EIP {
     elClients: { impact: string, description: string };
   };
   benefits?: string[];
+  tradeoffs?: string[];
 }
 
 interface PublicNetworkUpgradePageProps {
@@ -829,7 +830,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                             </div>
 
                             {/* Benefits */}
-                            <div>
+                            <div className={eip.tradeoffs && eip.tradeoffs.length > 0 ? "mb-8" : ""}>
                               <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
                               <ul className="space-y-2">
                                 {eip.benefits?.map((benefit, index) => (
@@ -840,6 +841,21 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 ))}
                               </ul>
                             </div>
+
+                            {/* Trade-offs & Considerations */}
+                            {eip.tradeoffs && eip.tradeoffs.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Trade-offs & Considerations</h4>
+                                <ul className="space-y-2">
+                                  {eip.tradeoffs.map((tradeoff, index) => (
+                                    <li key={index} className="flex items-start text-sm">
+                                      <span className="text-amber-600 mr-3 mt-0.5 text-xs">⚠</span>
+                                      <span className="text-slate-700">{tradeoff}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
                           </article>
                         );
                       })}
@@ -1036,7 +1052,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                             </div>
 
                             {/* Benefits */}
-                            <div>
+                            <div className={eip.tradeoffs && eip.tradeoffs.length > 0 ? "mb-8" : ""}>
                               <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
                               <ul className="space-y-2">
                                 {eip.benefits?.map((benefit, index) => (
@@ -1047,6 +1063,21 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 ))}
                               </ul>
                             </div>
+
+                            {/* Trade-offs & Considerations */}
+                            {eip.tradeoffs && eip.tradeoffs.length > 0 && (
+                              <div>
+                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Trade-offs & Considerations</h4>
+                                <ul className="space-y-2">
+                                  {eip.tradeoffs.map((tradeoff, index) => (
+                                    <li key={index} className="flex items-start text-sm">
+                                      <span className="text-amber-600 mr-3 mt-0.5 text-xs">⚠</span>
+                                      <span className="text-slate-700">{tradeoff}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
                           </article>
                         );
                       })}
