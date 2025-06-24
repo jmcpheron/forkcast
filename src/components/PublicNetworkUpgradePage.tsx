@@ -773,26 +773,26 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                             </div>
 
                             {/* North Star Goal Alignment */}
-                            <div className="mb-8">
-                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
+                            <div className="mb-6">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-3 uppercase tracking-wide">North Star Goal Alignment</h4>
                               <div className="bg-slate-50 border border-slate-200 rounded p-4">
                                 <div className="space-y-4">
                                   {eip.northStarAlignment?.scaleL1 && (
-                                    <div>
-                                      <h5 className="text-sm font-medium text-slate-900 mb-2">1. Scale L1</h5>
-                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL1.description}</p>
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL1.description}</p>
                                     </div>
                                   )}
                                   {eip.northStarAlignment?.scaleL2 && (
-                                    <div>
-                                      <h5 className="text-sm font-medium text-slate-900 mb-2">2. Scale L2</h5>
-                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL2.description}</p>
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-purple-200 pb-2">Scale Blobs</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL2.description}</p>
                                     </div>
                                   )}
                                   {eip.northStarAlignment?.improveUX && (
-                                    <div>
-                                      <h5 className="text-sm font-medium text-slate-900 mb-2">3. Improve UX</h5>
-                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.improveUX.description}</p>
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-emerald-200 pb-2">Improve UX</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
                                     </div>
                                   )}
                                 </div>
@@ -995,26 +995,26 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                             </div>
 
                             {/* North Star Goal Alignment */}
-                            <div className="mb-8">
-                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
+                            <div className="mb-6">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-3 uppercase tracking-wide">North Star Goal Alignment</h4>
                               <div className="bg-slate-50 border border-slate-200 rounded p-4">
                                 <div className="space-y-4">
                                   {eip.northStarAlignment?.scaleL1 && (
-                                    <div>
-                                      <h5 className="text-sm font-medium text-slate-900 mb-2">1. Scale L1</h5>
-                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL1.description}</p>
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL1.description}</p>
                                     </div>
                                   )}
                                   {eip.northStarAlignment?.scaleL2 && (
-                                    <div>
-                                      <h5 className="text-sm font-medium text-slate-900 mb-2">2. Scale L2</h5>
-                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.scaleL2.description}</p>
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-purple-200 pb-2">Scale Blobs</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL2.description}</p>
                                     </div>
                                   )}
                                   {eip.northStarAlignment?.improveUX && (
-                                    <div>
-                                      <h5 className="text-sm font-medium text-slate-900 mb-2">3. Improve UX</h5>
-                                      <p className="text-xs text-slate-600">{eip.northStarAlignment.improveUX.description}</p>
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-emerald-200 pb-2">Improve UX</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
                                     </div>
                                   )}
                                 </div>
