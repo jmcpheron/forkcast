@@ -57,11 +57,15 @@ const HomePage = () => {
                 </div>
                 
                 <p className={`text-sm leading-relaxed mb-4 ${upgrade.disabled ? 'text-slate-400' : 'text-slate-600'}`}>
-                  {upgrade.description}
+                  {upgrade.tagline}
                 </p>
                 
                 <div className={`text-xs ${upgrade.disabled ? 'text-slate-400' : 'text-slate-500'}`}>
-                  <span className="font-medium">Expected:</span> {upgrade.activationDate}
+                  <span className="font-medium">
+                    {upgrade.status === 'Active' ? 'Activated:' : 
+                     upgrade.status === 'Upcoming' ? 'Target:' : 
+                     upgrade.status === 'Planning' ? 'Target:' : 'Date:'}
+                  </span> {upgrade.activationDate}
                 </div>
               </>
             );
@@ -120,4 +124,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage; 
+export default HomePage;
