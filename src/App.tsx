@@ -9,6 +9,7 @@ function RedirectHandler() {
   const location = useLocation();
 
   useEffect(() => {
+    // Check for redirect parameter from 404.html
     const urlParams = new URLSearchParams(location.search);
     const redirect = urlParams.get('redirect');
     

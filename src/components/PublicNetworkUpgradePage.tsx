@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import eipsData from '../data/eips.json';
 import { networkUpgrades } from '../data/upgrades';
+import { useMetaTags } from '../hooks/useMetaTags';
 
 interface ForkRelationship {
   forkName: string;
@@ -61,6 +62,13 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
   const [activeSection, setActiveSection] = useState<string>('overview');
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const location = useLocation();
+
+  // Update meta tags for SEO and social sharing
+  useMetaTags({
+    title: `${displayName} - Forkcast`,
+    description: description,
+    url: `https://forkcast.org/upgrade/${forkName.toLowerCase()}`,
+  });
 
   // Filter EIPs that have relationships with this fork
   useEffect(() => {
