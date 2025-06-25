@@ -1,18 +1,39 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import PublicNetworkUpgradePage from './components/PublicNetworkUpgradePage';
 import HomePage from './components/HomePage';
 import { getUpgradeById } from './data/upgrades';
 
+function RedirectHandler() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const redirect = urlParams.get('redirect');
+    
+    if (redirect) {
+      // Remove the redirect parameter and navigate to the target path
+      urlParams.delete('redirect');
+      const newSearch = urlParams.toString();
+      const newPath = redirect + (newSearch ? '?' + newSearch : '');
+      
+      // Use replace to avoid adding to browser history
+      navigate(newPath, { replace: true });
+    }
+  }, [navigate, location.search]);
+
+  return null;
+}
+
 function App() {
-  const isGitHubPages = window.location.hostname === 'wolovim.github.io';
-  const basename = isGitHubPages ? '/forkcast' : '';
-  
   const fusakaUpgrade = getUpgradeById('fusaka')!;
   const glamsterdamUpgrade = getUpgradeById('glamsterdam')!;
   // const pectraUpgrade = getUpgradeById('pectra')!;
 
   return (
-    <Router basename={basename}>
+    <Router basename="">
+      <RedirectHandler />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/upgrade/fusaka" element={
