@@ -500,8 +500,8 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
             
             {/* Discrete experiment notice */}
             <div className="mt-2">
-              <p className="text-xs text-slate-400 italic">
-                An experiment by the Protocol & Application Support team · Have feedback? Contact{' '}
+              <p className="text-xs text-slate-400 italic max-w-xl">
+              Forkcast is an ongoing experiment by the Protocol & Application Support team to make the network upgrade process more accessible. Have feedback? Contact{' '}
                 <a
                   href="https://x.com/nixorokish"
                   target="_blank"
@@ -519,6 +519,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                 >
                   @wolovim
                 </a>
+                .
               </p>
             </div>
           </div>
@@ -589,8 +590,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                         <div>
                           <h4 className="font-medium text-amber-900 text-sm mb-1">Headliner Selection in Progress</h4>
                           <p className="text-amber-800 text-xs leading-relaxed">
-                            Glamsterdam is currently in the headliner proposal phase. Multiple major features are competing for inclusion, including 
-                             ePBS, EVM64, Pureth, Delayed Execution, Block-level Access Lists, and FOCIL. The community is actively deciding which direction to prioritize. 
+                            Headliners are the largest and most impactful features of an upgrade and may be permissionlessly proposed by anyone. The community is actively deciding which direction to prioritize in this network upgrade.
                             <a 
                               href="https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195" 
                               target="_blank" 
@@ -753,7 +753,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                             </header>
 
                             {/* Description */}
-                            <div className="mb-8">
+                            <div className="">
                               <p className="text-slate-700 text-sm leading-relaxed">
                                 {eip.laymanDescription}
                               </p>
@@ -780,35 +780,21 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               })()}
                             </div>
 
-                            {/* North Star Goal Alignment */}
-                            <div className="mb-6">
-                              <h4 className="text-sm font-semibold text-slate-900 mb-3 uppercase tracking-wide">North Star Goal Alignment</h4>
-                              <div className="bg-slate-50 border border-slate-200 rounded p-4">
-                                <div className="space-y-4">
-                                  {eip.northStarAlignment?.scaleL1 && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL1.description}</p>
-                                    </div>
-                                  )}
-                                  {eip.northStarAlignment?.scaleBlobs && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-purple-200 pb-2">Scale Blobs</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleBlobs.description}</p>
-                                    </div>
-                                  )}
-                                  {eip.northStarAlignment?.improveUX && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-emerald-200 pb-2">Improve UX</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
+                            {/* Benefits */}
+                            <div className="mt-8 mb-8">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
+                              <ul className="space-y-2">
+                                {eip.benefits?.map((benefit, index) => (
+                                  <li key={index} className="flex items-start text-sm">
+                                    <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
+                                    <span className="text-slate-700">{benefit}</span>
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
 
                             {/* Stakeholder Impact */}
-                            <div className="mb-8">
+                            <div className="mt-8 mb-8">
                               <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Stakeholder Impact</h4>
                               <div className="bg-slate-50 border border-slate-200 rounded p-4">
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -837,22 +823,9 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               </div>
                             </div>
 
-                            {/* Benefits */}
-                            <div className={eip.tradeoffs && eip.tradeoffs.length > 0 ? "mb-8" : ""}>
-                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
-                              <ul className="space-y-2">
-                                {eip.benefits?.map((benefit, index) => (
-                                  <li key={index} className="flex items-start text-sm">
-                                    <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
-                                    <span className="text-slate-700">{benefit}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
                             {/* Trade-offs & Considerations */}
                             {eip.tradeoffs && eip.tradeoffs.length > 0 && (
-                              <div>
+                              <div className="mt-8 mb-8">
                                 <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Trade-offs & Considerations</h4>
                                 <ul className="space-y-2">
                                   {eip.tradeoffs.map((tradeoff, index) => (
@@ -864,6 +837,33 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 </ul>
                               </div>
                             )}
+
+                            {/* North Star Goal Alignment */}
+                            <div className="mt-8">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
+                              <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                                <div className="space-y-4">
+                                  {eip.northStarAlignment?.scaleL1 && (
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL1.description}</p>
+                                    </div>
+                                  )}
+                                  {eip.northStarAlignment?.scaleBlobs && (
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-purple-200 pb-2">Scale Blobs</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleBlobs.description}</p>
+                                    </div>
+                                  )}
+                                  {eip.northStarAlignment?.improveUX && (
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-emerald-200 pb-2">Improve UX</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </article>
                         );
                       })}
@@ -975,7 +975,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                             </header>
 
                             {/* Description */}
-                            <div className="mb-8">
+                            <div className="">
                               <p className="text-slate-700 text-sm leading-relaxed">
                                 {eip.laymanDescription}
                               </p>
@@ -1002,35 +1002,21 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               })()}
                             </div>
 
-                            {/* North Star Goal Alignment */}
-                            <div className="mb-6">
-                              <h4 className="text-sm font-semibold text-slate-900 mb-3 uppercase tracking-wide">North Star Goal Alignment</h4>
-                              <div className="bg-slate-50 border border-slate-200 rounded p-4">
-                                <div className="space-y-4">
-                                  {eip.northStarAlignment?.scaleL1 && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL1.description}</p>
-                                    </div>
-                                  )}
-                                  {eip.northStarAlignment?.scaleBlobs && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-purple-200 pb-2">Scale Blobs</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleBlobs.description}</p>
-                                    </div>
-                                  )}
-                                  {eip.northStarAlignment?.improveUX && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-emerald-200 pb-2">Improve UX</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
+                            {/* Benefits */}
+                            <div className="mt-8 mb-8">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
+                              <ul className="space-y-2">
+                                {eip.benefits?.map((benefit, index) => (
+                                  <li key={index} className="flex items-start text-sm">
+                                    <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
+                                    <span className="text-slate-700">{benefit}</span>
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
 
                             {/* Stakeholder Impact */}
-                            <div className="mb-8">
+                            <div className="mt-8 mb-8">
                               <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Stakeholder Impact</h4>
                               <div className="bg-slate-50 border border-slate-200 rounded p-4">
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -1059,22 +1045,9 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               </div>
                             </div>
 
-                            {/* Benefits */}
-                            <div className={eip.tradeoffs && eip.tradeoffs.length > 0 ? "mb-8" : ""}>
-                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
-                              <ul className="space-y-2">
-                                {eip.benefits?.map((benefit, index) => (
-                                  <li key={index} className="flex items-start text-sm">
-                                    <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
-                                    <span className="text-slate-700">{benefit}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
                             {/* Trade-offs & Considerations */}
                             {eip.tradeoffs && eip.tradeoffs.length > 0 && (
-                              <div>
+                              <div className="mt-8 mb-8">
                                 <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Trade-offs & Considerations</h4>
                                 <ul className="space-y-2">
                                   {eip.tradeoffs.map((tradeoff, index) => (
@@ -1086,6 +1059,33 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 </ul>
                               </div>
                             )}
+
+                            {/* North Star Goal Alignment */}
+                            <div className="mt-8">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
+                              <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                                <div className="space-y-4">
+                                  {eip.northStarAlignment?.scaleL1 && (
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL1.description}</p>
+                                    </div>
+                                  )}
+                                  {eip.northStarAlignment?.scaleBlobs && (
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-purple-200 pb-2">Scale Blobs</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleBlobs.description}</p>
+                                    </div>
+                                  )}
+                                  {eip.northStarAlignment?.improveUX && (
+                                    <div className="bg-white border border-slate-200 rounded p-4">
+                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-emerald-200 pb-2">Improve UX</h5>
+                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </article>
                         );
                       })}
