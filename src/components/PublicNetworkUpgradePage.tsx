@@ -122,7 +122,23 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
 
   // Helper function to get layman title (use title if no layman description)
   const getLaymanTitle = (eip: EIP): string => {
-    return eip.title.replace(/^EIP-\d+:\s*/, '');
+    return eip.title.replace(/^(EIP|RIP)-\d+:\s*/, '');
+  };
+
+  // Helper function to get proposal prefix (EIP or RIP)
+  const getProposalPrefix = (eip: EIP): string => {
+    if (eip.title.startsWith('RIP-')) {
+      return 'RIP';
+    }
+    return 'EIP';
+  };
+
+  // Helper function to get specification URL
+  const getSpecificationUrl = (eip: EIP): string => {
+    if (eip.title.startsWith('RIP-')) {
+      return `https://github.com/ethereum/RIPs/blob/master/RIPS/rip-${eip.id}.md`;
+    }
+    return `https://eips.ethereum.org/EIPS/eip-${eip.id}`;
   };
 
   // Handle URL hash on component mount and location changes
@@ -217,7 +233,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
         .sort((a, b) => a.id - b.id)
         .map(eip => ({
           id: `eip-${eip.id}`,
-          label: `☆ EIP-${eip.id}: ${getLaymanTitle(eip)}`,
+          label: `☆ ${getProposalPrefix(eip)}-${eip.id}: ${getLaymanTitle(eip)}`,
           type: 'eip' as const,
           count: null as number | null
         }))
@@ -258,10 +274,11 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
         const eipItems = sortedEips.map(eip => {
           const isHeadlinerEip = isHeadliner(eip);
           const starSymbol = forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★';
+          const proposalPrefix = getProposalPrefix(eip);
           
           return {
             id: `eip-${eip.id}`,
-            label: `${isHeadlinerEip ? `${starSymbol} ` : ''}EIP-${eip.id}: ${getLaymanTitle(eip)}`,
+            label: `${isHeadlinerEip ? `${starSymbol} ` : ''}${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}`,
             type: 'eip' as const,
             count: null as number | null
           };
@@ -875,21 +892,28 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 <div className="flex-1">
                                   <div className="flex items-center gap-3">
                                     <h3 className="text-xl font-medium text-slate-900 leading-tight">
-                                      <Tooltip 
-                                        text="Competing headliner proposal for this network upgrade"
-                                        className="inline-block cursor-pointer"
-                                      >
-                                        <span className="text-purple-400 hover:text-purple-600 mr-2 transition-colors cursor-help">
-                                          ☆
-                                        </span>
-                                      </Tooltip>
-                                      <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">EIP-{eip.id}</span>
+                                      {isHeadliner(eip) && (
+                                        <Tooltip 
+                                          text={forkName.toLowerCase() === 'glamsterdam' 
+                                            ? "Competing headliner proposal for this network upgrade" 
+                                            : "Headliner feature of this network upgrade"
+                                          } 
+                                          className="inline-block cursor-pointer"
+                                        >
+                                          <span 
+                                            className="text-purple-400 hover:text-purple-600 mr-2 transition-colors cursor-help" 
+                                          >
+                                            {forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★'}
+                                          </span>
+                                        </Tooltip>
+                                      )}
+                                      <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">{getProposalPrefix(eip)}-{eip.id}</span>
                                       <span>{getLaymanTitle(eip)}</span>
                                     </h3>
                                     <div className="flex items-center gap-2 relative top-0.5">
-                                      <Tooltip text={`View EIP-${eip.id} specification`}>
+                                      <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
                                         <a 
-                                          href={`https://eips.ethereum.org/EIPS/eip-${eip.id}`}
+                                          href={getSpecificationUrl(eip)}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
@@ -1105,13 +1129,13 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                           </span>
                                         </Tooltip>
                                       )}
-                                      <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">EIP-{eip.id}</span>
+                                      <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">{getProposalPrefix(eip)}-{eip.id}</span>
                                       <span>{getLaymanTitle(eip)}</span>
                                     </h3>
                                     <div className="flex items-center gap-2 relative top-0.5">
-                                      <Tooltip text={`View EIP-${eip.id} specification`}>
+                                      <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
                                         <a 
-                                          href={`https://eips.ethereum.org/EIPS/eip-${eip.id}`}
+                                          href={getSpecificationUrl(eip)}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
