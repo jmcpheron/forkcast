@@ -200,6 +200,10 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
   // Generate TOC items
   const tocItems = [
     { id: 'overview', label: 'Overview', type: 'section' as const, count: null as number | null },
+    // Add Glamsterdam timeline section
+    ...(forkName.toLowerCase() === 'glamsterdam' ? [
+      { id: 'glamsterdam-timeline', label: 'Timeline', type: 'section' as const, count: null as number | null }
+    ] : []),
     // Add headliner proposals section for forks with multiple headliners
     ...(forkName.toLowerCase() === 'glamsterdam' && eips.filter(eip => isHeadliner(eip)).length > 1 ? [
       {
@@ -450,6 +454,140 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
     );
   };
 
+  // Glamsterdam-specific timeline component
+  const GlamsterdamTimeline: React.FC = () => {
+    const phases = [
+      {
+        id: 'fork-focus',
+        title: 'Fork Focus Discussion & Headliner Proposals',
+        dateRange: 'May 26 - June 20',
+        description: 'ACD calls focus on discussing Glamsterdam\'s high-level goals. Headliner champions present proposals.',
+        status: 'completed'
+      },
+      {
+        id: 'headliner-discussion',
+        title: 'Headliner Discussion & Finalization',
+        dateRange: 'June 23 - July 17',
+        description: 'ACD evaluates candidate headliners, solicits community feedback, and finalizes decisions.',
+        status: 'current'
+      },
+      {
+        id: 'non-headliner-proposals',
+        title: 'Non-Headliner EIP Proposals',
+        dateRange: 'July 21 - Aug 21',
+        description: 'ACD begins reviewing other EIPs Proposed for Inclusion in Glamsterdam.',
+        status: 'upcoming'
+      },
+      {
+        id: 'cfi-decisions',
+        title: 'Non-Headliner EIP CFI Decisions',
+        dateRange: 'Sep 4 & 11',
+        description: 'ACDC and ACDE calls select which Proposed for Inclusion EIPs advance to Considered for Inclusion.',
+        status: 'upcoming'
+      },
+      {
+        id: 'cfi-to-sfi',
+        title: 'CFI → SFI EIP Decisions',
+        dateRange: 'Date TBD',
+        description: 'As Glamsterdam devnets begin, final decisions on which CFI EIPs will be included in the upgrade\'s devnet.',
+        status: 'upcoming'
+      }
+    ];
+
+    const getPhaseStatusColor = (status: string) => {
+      switch (status) {
+        case 'completed':
+          return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+        case 'current':
+          return 'bg-purple-100 text-purple-800 border-purple-200';
+        case 'upcoming':
+          return 'bg-slate-100 text-slate-600 border-slate-200';
+        default:
+          return 'bg-slate-100 text-slate-600 border-slate-200';
+      }
+    };
+
+    const getPhaseStatusIcon = (status: string) => {
+      switch (status) {
+        case 'completed':
+          return (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          );
+        case 'current':
+          return (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          );
+        case 'upcoming':
+          return (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          );
+        default:
+          return null;
+      }
+    };
+
+    return (
+      <div className="mb-4">
+        <div className="bg-white border border-slate-200 rounded-lg p-6">
+          <div className="space-y-2">
+            {phases.map((phase, index) => (
+              <div key={phase.id} className="relative">
+                {/* Timeline connector */}
+                {index < phases.length - 1 && (
+                  <div className="absolute left-5 top-10 w-0.5 h-16 bg-slate-200"></div>
+                )}
+
+                <div className="flex gap-3">
+                  {/* Status icon */}
+                  <div className={`flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center ${getPhaseStatusColor(phase.status)}`}>
+                    {getPhaseStatusIcon(phase.status)}
+                  </div>
+
+                  {/* Content */}
+                  <div className={`flex-1 ${index === phases.length - 1 ? 'pb-2' : 'pb-6'}`}>
+                    <div className="flex items-start justify-between mb-1">
+                      <h4 className="font-medium text-slate-900 text-sm">{phase.title}</h4>
+                      <span className="text-xs text-slate-500 font-mono bg-slate-50 px-2 py-0.5 rounded">
+                        {phase.dateRange}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mb-2">{phase.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Source link */}
+          <div className="mt-3 pt-3 border-t border-slate-200">
+            <div className="flex items-start justify-between">
+              <a
+                href="https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
+              >
+                View full timeline details on Ethereum Magicians
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+              <p className="text-xs text-slate-500 italic">
+                Timeline subject to change
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 p-6">
       <div className="max-w-4xl mx-auto">
@@ -679,6 +817,26 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                   })}
                 </div>
               </div>
+
+              {/* Glamsterdam Timeline Section */}
+              {forkName.toLowerCase() === 'glamsterdam' && (
+                <div className="space-y-6" id="glamsterdam-timeline" data-section>
+                  <div className="border-b border-slate-200 pb-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h2 className="text-xl font-medium text-slate-900">Timeline</h2>
+                      <CopyLinkButton
+                        sectionId="glamsterdam-timeline"
+                        title="Copy link to timeline"
+                        size="sm"
+                      />
+                    </div>
+                    <p className="text-sm text-slate-600 max-w-3xl">
+                      The planning timeline for Glamsterdam, showing the progression from headliner selection to final implementation decisions.
+                    </p>
+                  </div>
+                  <GlamsterdamTimeline />
+                </div>
+              )}
 
               {/* Headliner Proposals Section (for Glamsterdam) */}
               {forkName.toLowerCase() === 'glamsterdam' && eips.filter(eip => isHeadliner(eip)).length > 1 && (
