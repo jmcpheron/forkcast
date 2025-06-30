@@ -326,7 +326,6 @@
     "northStars": ["Scale L1"],
     "northStarAlignment": {
       "scaleL1": { "impact": "Low", "description": "Improves network reliability by preventing consensus bugs and reducing testing complexity for a critical precompile." },
-      "scaleBlobs": { "impact": "None", "description": "No direct scaling benefits for Layer 2 networks." },
       "improveUX": { "impact": "Low", "description": "More predictable execution behavior for cryptographic operations, enabling future optimizations." }
     },
     "stakeholderImpacts": {
@@ -423,7 +422,6 @@
     "northStars": ["Scale L1"],
     "northStarAlignment": {
       "scaleL1": { "impact": "Low", "description": "Improves network economic sustainability by ensuring cryptographic precompiles are properly priced, preventing potential DoS vectors from underpriced operations." },
-      "scaleBlobs": { "impact": "None", "description": "No direct impact on Layer 2 scaling capabilities." },
       "improveUX": { "impact": "Low", "description": "More accurate pricing for cryptographic operations, though may increase costs for some RSA and modular exponentiation use cases." }
     },
     "stakeholderImpacts": {
@@ -863,7 +861,6 @@
     "northStars": ["Scale L1"],
     "northStarAlignment": {
       "scaleL1": { "impact": "Medium", "description": "Essential infrastructure component for Verkle tree transition, ensuring data integrity and availability during the state system migration." },
-      "scaleBlobs": { "impact": "None", "description": "No direct impact on Layer 2 scaling capabilities." },
       "improveUX": { "impact": "Low", "description": "Invisible infrastructure improvement that ensures reliable access to historical state data during transition." }
     },
     "stakeholderImpacts": {
@@ -943,7 +940,6 @@
     "northStars": ["Scale L1"],
     "northStarAlignment": {
       "scaleL1": { "impact": "Low", "description": "Ensures sustainable economics for hash operations in the Verkle tree environment and prevents potential DoS vectors from underpriced operations." },
-      "scaleBlobs": { "impact": "None", "description": "No direct impact on Layer 2 scaling capabilities." },
       "improveUX": { "impact": "Low", "description": "More accurate pricing for cryptographic operations, though may increase costs for some hash-intensive applications." }
     },
     "stakeholderImpacts": {
@@ -1023,7 +1019,6 @@
     "northStars": ["Improve UX"],
     "northStarAlignment": {
       "scaleL1": { "impact": "None", "description": "No direct scaling benefits, though more precise timing could enable more efficient protocol designs." },
-      "scaleBlobs": { "impact": "None", "description": "No direct impact on Layer 2 scaling capabilities." },
       "improveUX": { "impact": "Medium", "description": "Enables more reliable time-based smart contracts and better coordination between consensus and execution layers." }
     },
     "stakeholderImpacts": {
