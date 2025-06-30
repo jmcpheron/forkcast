@@ -697,6 +697,30 @@
         "forkName": "Fusaka", 
         "status": "Scheduled"
       }
+    ],
+    "laymanDescription": "This makes Ethereum's block proposer schedule completely predictable ahead of time. Currently, validators can't know who will propose blocks in the next epoch until it starts, which creates uncertainty for MEV mitigation and preconfirmation protocols. This change pre-calculates and stores the proposer schedule for future epochs, making it deterministic and accessible to applications.",
+    "northStars": ["Scale L1", "Improve UX"],
+    "northStarAlignment": {
+      "scaleL1": { "impact": "Medium", "description": "Enables more sophisticated MEV mitigation strategies and preconfirmation protocols by providing predictable proposer schedules, improving overall network efficiency and reducing coordination overhead." },
+      "scaleBlobs": { "impact": "Low", "description": "More predictable block production timing benefits Layer 2 settlement coordination and blob transaction scheduling." },
+      "improveUX": { "impact": "High", "description": "Enables better MEV protection for users, more reliable preconfirmation services, and improved transaction ordering predictability." }
+    },
+    "stakeholderImpacts": {
+      "endUsers": { "impact": "Medium", "description": "Better protection from MEV extraction through improved preconfirmation services and more predictable transaction ordering." },
+      "appDevs": { "impact": "High", "description": "Can build more sophisticated MEV mitigation strategies and preconfirmation protocols with predictable proposer schedules." },
+      "walletDevs": { "impact": "Medium", "description": "Can implement better MEV protection features and more reliable transaction timing predictions for users." },
+      "toolingInfra": { "impact": "High", "description": "MEV analysis tools, preconfirmation services, and block builder infrastructure need updates to leverage predictable proposer schedules." },
+      "layer2s": { "impact": "Medium", "description": "More predictable L1 block production timing improves Layer 2 settlement coordination and transaction scheduling." },
+      "stakersNodes": { "impact": "Low", "description": "Minimal impact on validator operations, but provides better visibility into future proposer assignments." },
+      "clClients": { "impact": "Medium", "description": "Need to implement proposer lookahead calculation and storage in beacon state, with additional computation at epoch boundaries." },
+      "elClients": { "impact": "Low", "description": "Minimal impact as this primarily affects consensus layer proposer scheduling and beacon state management." }
+    },
+    "benefits": [
+      "Enables sophisticated MEV mitigation strategies",
+      "Improves preconfirmation protocol reliability",
+      "Makes block proposer schedule deterministic",
+      "Simplifies on-chain preconfirmation components",
+      "Prevents validator manipulation of proposer schedules"
     ]
   },
   {
