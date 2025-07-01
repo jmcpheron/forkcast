@@ -50,7 +50,7 @@ const HomePage = () => {
                     </span>
                     {upgrade.disabled && (
                       <span className="px-2 py-1 text-xs font-medium rounded bg-slate-100 text-slate-500 border border-slate-200 whitespace-nowrap">
-                        Coming Soon
+                        Page Coming Soon
                       </span>
                     )}
                   </div>
