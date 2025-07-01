@@ -570,9 +570,10 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                   <div className={`flex-1 ${index === phases.length - 1 ? 'pb-2' : 'pb-6'}`}>
                     <div className="flex items-start justify-between mb-1">
                       <h4 className="font-medium text-slate-900 text-sm">{phase.title}</h4>
-                      <span className="text-xs text-slate-500 font-mono bg-slate-50 px-2 py-0.5 rounded">
+                      {/* Hidden dateRange for Glamsterdam timeline */}
+                      {/* <span className="text-xs text-slate-500 font-mono bg-slate-50 px-2 py-0.5 rounded">
                         {phase.dateRange}
-                      </span>
+                      </span> */}
                     </div>
                     <p className="text-xs text-slate-600 mb-2">{phase.description}</p>
                   </div>
