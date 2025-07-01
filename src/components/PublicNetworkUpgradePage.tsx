@@ -658,12 +658,10 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
               <p className="text-xs text-slate-400 italic max-w-xl">
               Forkcast is an ongoing experiment by the Protocol & Application Support team to make the network upgrade process more accessible. Have feedback? Contact{' '}
                 <a
-                  href="https://x.com/nixorokish"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:nixo@ethereum.org"
                   className="text-slate-500 hover:text-slate-700 underline decoration-1 underline-offset-2"
                 >
-                  @nixorokish
+                  nixo
                 </a>
                 {' '}or{' '}
                 <a
