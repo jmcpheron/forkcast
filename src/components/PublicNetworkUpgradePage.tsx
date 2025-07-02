@@ -41,6 +41,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
 }) => {
   const [eips, setEips] = useState<EIP[]>([]);
   const [activeSection, setActiveSection] = useState<string>('overview');
+  const [isDeclinedExpanded, setIsDeclinedExpanded] = useState(false);
   const location = useLocation();
 
   // Update meta tags for SEO and social sharing
@@ -129,11 +130,11 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
       .flatMap(stage => {
         // For Glamsterdam, exclude headliners from "Proposed for Inclusion" since they have their own section
         const stageEips = eips.filter(eip => {
-                  const matchesStage = getInclusionStage(eip, forkName) === stage;
-        if (forkName.toLowerCase() === 'glamsterdam' && stage === 'Proposed for Inclusion') {
-          return matchesStage && !isHeadliner(eip, forkName);
-        }
-        return matchesStage;
+          const matchesStage = getInclusionStage(eip, forkName) === stage;
+          if (forkName.toLowerCase() === 'glamsterdam' && stage === 'Proposed for Inclusion') {
+            return matchesStage && !isHeadliner(eip, forkName);
+          }
+          return matchesStage;
         });
         
         if (stageEips.length === 0) return [];
@@ -150,19 +151,25 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
           // If both are same type (both headliner or both not), sort by EIP number
           return a.id - b.id;
         });
-        
+
         const stageItem = {
           id: stage.toLowerCase().replace(/\s+/g, '-'),
           label: stage,
           type: 'section' as const,
           count: stageEips.length
         };
-        
+
+        // For Declined for Inclusion, only show the section header, not individual EIPs
+        if (stage === 'Declined for Inclusion') {
+          return [stageItem];
+        }
+
+        // For all other stages, show individual EIPs
         const eipItems = sortedEips.map(eip => {
           const isHeadlinerEip = isHeadliner(eip, forkName);
           const starSymbol = forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★';
           const proposalPrefix = getProposalPrefix(eip);
-          
+
           return {
             id: `eip-${eip.id}`,
             label: `${isHeadlinerEip ? `${starSymbol} ` : ''}${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}`,
@@ -437,7 +444,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                       clClients: 'Client Developers (Consensus Layer)',
                                       elClients: 'Client Developers (Execution Layer)'
                                     };
-                                    
+
                                     return (
                                       <div key={stakeholder} className="bg-white border border-slate-200 rounded p-4">
                                         <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-slate-100 pb-2">
@@ -504,7 +511,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                 { stage: 'Scheduled for Inclusion', description: 'EIPs that client teams have agreed to implement in the next upgrade devnet. These are very likely to be included in the final upgrade.' },
                 { stage: 'Considered for Inclusion', description: 'EIPs that client teams are positive towards. Implementation may begin, but inclusion is not yet guaranteed.' },
                 { stage: 'Proposed for Inclusion', description: 'EIPs that have been proposed for this upgrade but are still under initial review by client teams.' },
-                { stage: 'Declined for Inclusion', description: 'EIPs that client teams have decided not to include in this upgrade. They may be reconsidered for future upgrades.' }
+                { stage: 'Declined for Inclusion', description: 'EIPs that were proposed, but ultimately declined for inclusion in the upgrade for various reasons. They may be reconsidered for future upgrades.' }
               ].map(({ stage, description }) => {
                 const stageEips = eips.filter(eip => getInclusionStage(eip, forkName) === stage);
                 
@@ -524,6 +531,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                 });
 
                 const stageId = stage.toLowerCase().replace(/\s+/g, '-');
+                const isDeclinedStage = stage === 'Declined for Inclusion';
 
                 return (
                   <div key={stage} className="space-y-6" id={stageId} data-section>
@@ -533,6 +541,22 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                         <span className={`px-2 py-1 text-xs font-medium rounded ${getInclusionStageColor(stage as any)}`}>
                           {stageEips.length} EIP{stageEips.length !== 1 ? 's' : ''}
                         </span>
+                        {isDeclinedStage && (
+                          <button
+                            onClick={() => setIsDeclinedExpanded(!isDeclinedExpanded)}
+                            className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-800 transition-colors"
+                          >
+                            {isDeclinedExpanded ? 'Collapse' : 'Expand'}
+                            <svg 
+                              className={`w-3.5 h-3.5 transition-transform ${isDeclinedExpanded ? 'rotate-180' : ''}`} 
+                              fill="none" 
+                              stroke="currentColor" 
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                        )}
                         <CopyLinkButton 
                           sectionId={stageId} 
                           title={`Copy link to ${stage}`}
@@ -542,182 +566,249 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                       <p className="text-sm text-slate-600 max-w-3xl">{description}</p>
                     </div>
 
-                    <div className="space-y-6">
-                      {sortedStageEips.map(eip => {
-                        if (!eip.laymanDescription) return null;
+                    {isDeclinedStage && !isDeclinedExpanded ? (
+                      <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                        <p className="text-sm text-slate-600">
+                          {stageEips.length} EIP{stageEips.length !== 1 ? 's' : ''} declined for inclusion in this upgrade. 
+                          <button
+                            onClick={() => setIsDeclinedExpanded(true)}
+                            className="ml-1 text-slate-700 hover:text-slate-900 underline decoration-1 underline-offset-2 transition-colors"
+                          >
+                            Click to expand and view details.
+                          </button>
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-6">
+                        {sortedStageEips.map(eip => {
+                          if (!eip.laymanDescription) return null;
 
-                        const eipId = `eip-${eip.id}`;
+                          const eipId = `eip-${eip.id}`;
 
-                        return (
-                          <article key={eip.id} className={`bg-white border rounded p-8 ${
-                            isHeadliner(eip, forkName) 
-                              ? 'border-purple-200 shadow-sm ring-1 ring-purple-100' 
-                              : 'border-slate-200'
-                          }`} id={eipId} data-section>
-                            {/* Header */}
-                            <header className="border-b border-slate-100 pb-6 mb-6">
-                              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-3">
-                                    <h3 className="text-xl font-medium text-slate-900 leading-tight">
-                                      {isHeadliner(eip, forkName) && (
-                                        <Tooltip 
-                                          text={forkName.toLowerCase() === 'glamsterdam' 
-                                            ? "Competing headliner proposal for this network upgrade" 
-                                            : "Headliner feature of this network upgrade"
-                                          } 
-                                          className="inline-block cursor-pointer"
-                                        >
-                                          <span 
-                                            className="text-purple-400 hover:text-purple-600 mr-2 transition-colors cursor-help" 
-                                          >
-                                            {forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★'}
-                                          </span>
-                                        </Tooltip>
-                                      )}
-                                      <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">{getProposalPrefix(eip)}-{eip.id}</span>
-                                      <span>{getLaymanTitle(eip)}</span>
+                          // For declined EIPs, show simplified view
+                          if (isDeclinedStage) {
+                            return (
+                              <article key={eip.id} className="bg-white border border-slate-200 rounded p-4" id={eipId} data-section>
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <h3 className="text-base font-medium text-slate-900 leading-tight mb-2">
+                                      <span className="text-slate-400 text-sm font-mono mr-2">{getProposalPrefix(eip)}-{eip.id}</span>
+                                      <span>{eip.title}</span>
                                     </h3>
-                                    <div className="flex items-center gap-2 relative top-0.5">
-                                      <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
+                                    <p className="text-slate-700 text-sm leading-relaxed">
+                                      {eip.description}
+                                    </p>
+                                  </div>
+                                  <div className="flex items-center gap-2 ml-4">
+                                    <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
+                                      <a 
+                                        href={getSpecificationUrl(eip)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                                      >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                        </svg>
+                                      </a>
+                                    </Tooltip>
+                                    {eip.discussionLink && (
+                                      <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} discussion`}>
                                         <a 
-                                          href={getSpecificationUrl(eip)}
+                                          href={eip.discussionLink}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                                         >
                                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                           </svg>
                                         </a>
                                       </Tooltip>
-                                      <CopyLinkButton 
-                                        sectionId={eipId} 
-                                        title={`Copy link to this section`}
-                                        size="sm"
-                                      />
+                                    )}
+                                    <CopyLinkButton 
+                                      sectionId={eipId} 
+                                      title={`Copy link to this section`}
+                                      size="sm"
+                                    />
+                                  </div>
+                                </div>
+                              </article>
+                            );
+                          }
+
+                          // Full view for non-declined EIPs
+                          return (
+                            <article key={eip.id} className={`bg-white border rounded p-8 ${
+                              isHeadliner(eip, forkName) 
+                                ? 'border-purple-200 shadow-sm ring-1 ring-purple-100' 
+                                : 'border-slate-200'
+                            }`} id={eipId} data-section>
+                              {/* Header */}
+                              <header className="border-b border-slate-100 pb-6 mb-6">
+                                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-3">
+                                      <h3 className="text-xl font-medium text-slate-900 leading-tight">
+                                        {isHeadliner(eip, forkName) && (
+                                          <Tooltip 
+                                            text={forkName.toLowerCase() === 'glamsterdam' 
+                                              ? "Competing headliner proposal for this network upgrade" 
+                                              : "Headliner feature of this network upgrade"
+                                            } 
+                                            className="inline-block cursor-pointer"
+                                          >
+                                            <span 
+                                              className="text-purple-400 hover:text-purple-600 mr-2 transition-colors cursor-help" 
+                                            >
+                                              {forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★'}
+                                            </span>
+                                          </Tooltip>
+                                        )}
+                                        <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">{getProposalPrefix(eip)}-{eip.id}</span>
+                                        <span>{getLaymanTitle(eip)}</span>
+                                      </h3>
+                                      <div className="flex items-center gap-2 relative top-0.5">
+                                        <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
+                                          <a 
+                                            href={getSpecificationUrl(eip)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                                          >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            </svg>
+                                          </a>
+                                        </Tooltip>
+                                        <CopyLinkButton 
+                                          sectionId={eipId} 
+                                          title={`Copy link to this section`}
+                                          size="sm"
+                                        />
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
+                              </header>
+
+                              {/* Description */}
+                              <div className="">
+                                <p className="text-slate-700 text-sm leading-relaxed">
+                                  {parseMarkdownLinks(eip.laymanDescription)}
+                                </p>
+
+                                {/* Headliner Discussion Link (for headliners in regular sections) */}
+                                {(() => {
+                                  const isHeadlinerEip = isHeadliner(eip, forkName);
+                                  const discussionLink = getHeadlinerDiscussionLink(eip, forkName);
+                                  return isHeadlinerEip && discussionLink && (
+                                    <div className="mt-3">
+                                      <a 
+                                        href={discussionLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
+                                      >
+                                        Read the headliner proposal and discussion on EthMag
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                        </svg>
+                                      </a>
+                                    </div>
+                                  );
+                                })()}
                               </div>
-                            </header>
 
-                            {/* Description */}
-                            <div className="">
-                              <p className="text-slate-700 text-sm leading-relaxed">
-                                {parseMarkdownLinks(eip.laymanDescription)}
-                              </p>
-
-                              {/* Headliner Discussion Link (for headliners in regular sections) */}
-                              {(() => {
-                                const isHeadlinerEip = isHeadliner(eip, forkName);
-                                const discussionLink = getHeadlinerDiscussionLink(eip, forkName);
-                                return isHeadlinerEip && discussionLink && (
-                                  <div className="mt-3">
-                                    <a 
-                                      href={discussionLink}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
-                                    >
-                                      Read the headliner proposal and discussion on EthMag
-                                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                      </svg>
-                                    </a>
-                                  </div>
-                                );
-                              })()}
-                            </div>
-
-                            {/* Benefits */}
-                            <div className="mt-8 mb-8">
-                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
-                              <ul className="space-y-2">
-                                {eip.benefits?.map((benefit, index) => (
-                                  <li key={index} className="flex items-start text-sm">
-                                    <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
-                                    <span className="text-slate-700">{benefit}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            {/* Stakeholder Impact */}
-                            <div className="mt-8 mb-8">
-                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Stakeholder Impact</h4>
-                              <div className="bg-slate-50 border border-slate-200 rounded p-4">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                  {Object.entries(eip.stakeholderImpacts || {}).map(([stakeholder, impact]) => {
-                                    const stakeholderNames = {
-                                      endUsers: 'End Users',
-                                      appDevs: 'Application Developers',
-                                      walletDevs: 'Wallet Developers',
-                                      toolingInfra: 'Tooling / Infrastructure Developers',
-                                      layer2s: 'Layer 2s',
-                                      stakersNodes: 'Stakers & Node Operators',
-                                      clClients: 'Client Developers (Consensus Layer)',
-                                      elClients: 'Client Developers (Execution Layer)'
-                                    };
-                                    
-                                    return (
-                                      <div key={stakeholder} className="bg-white border border-slate-200 rounded p-4">
-                                        <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-slate-100 pb-2">
-                                          {stakeholderNames[stakeholder as keyof typeof stakeholderNames]}
-                                        </h5>
-                                        <p className="text-slate-700 text-xs leading-relaxed">{impact.description}</p>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Trade-offs & Considerations */}
-                            {eip.tradeoffs && eip.tradeoffs.length > 0 && (
+                              {/* Benefits */}
                               <div className="mt-8 mb-8">
-                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Trade-offs & Considerations</h4>
+                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
                                 <ul className="space-y-2">
-                                  {eip.tradeoffs.map((tradeoff, index) => (
+                                  {eip.benefits?.map((benefit, index) => (
                                     <li key={index} className="flex items-start text-sm">
-                                      <span className="text-amber-600 mr-3 mt-0.5 text-xs">⚠</span>
-                                      <span className="text-slate-700">{tradeoff}</span>
+                                      <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
+                                      <span className="text-slate-700">{benefit}</span>
                                     </li>
                                   ))}
                                 </ul>
                               </div>
-                            )}
 
-                            {/* North Star Goal Alignment */}
-                            <div className="mt-8">
-                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
-                              <div className="bg-slate-50 border border-slate-200 rounded p-4">
-                                <div className="space-y-4">
-                                  {eip.northStarAlignment?.scaleL1 && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL1.description}</p>
-                                    </div>
-                                  )}
-                                  {eip.northStarAlignment?.scaleBlobs && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-purple-200 pb-2">Scale Blobs</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleBlobs.description}</p>
-                                    </div>
-                                  )}
-                                  {eip.northStarAlignment?.improveUX && (
-                                    <div className="bg-white border border-slate-200 rounded p-4">
-                                      <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-emerald-200 pb-2">Improve UX</h5>
-                                      <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
-                                    </div>
-                                  )}
+                              {/* Stakeholder Impact */}
+                              <div className="mt-8 mb-8">
+                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Stakeholder Impact</h4>
+                                <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                    {Object.entries(eip.stakeholderImpacts || {}).map(([stakeholder, impact]) => {
+                                      const stakeholderNames = {
+                                        endUsers: 'End Users',
+                                        appDevs: 'Application Developers',
+                                        walletDevs: 'Wallet Developers',
+                                        toolingInfra: 'Tooling / Infrastructure Developers',
+                                        layer2s: 'Layer 2s',
+                                        stakersNodes: 'Stakers & Node Operators',
+                                        clClients: 'Client Developers (Consensus Layer)',
+                                        elClients: 'Client Developers (Execution Layer)'
+                                      };
+                                      
+                                      return (
+                                        <div key={stakeholder} className="bg-white border border-slate-200 rounded p-4">
+                                          <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-slate-100 pb-2">
+                                            {stakeholderNames[stakeholder as keyof typeof stakeholderNames]}
+                                          </h5>
+                                          <p className="text-slate-700 text-xs leading-relaxed">{impact.description}</p>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </article>
-                        );
-                      })}
-                    </div>
+
+                              {/* Trade-offs & Considerations */}
+                              {eip.tradeoffs && eip.tradeoffs.length > 0 && (
+                                <div className="mt-8 mb-8">
+                                  <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Trade-offs & Considerations</h4>
+                                  <ul className="space-y-2">
+                                    {eip.tradeoffs.map((tradeoff, index) => (
+                                      <li key={index} className="flex items-start text-sm">
+                                        <span className="text-amber-600 mr-3 mt-0.5 text-xs">⚠</span>
+                                        <span className="text-slate-700">{tradeoff}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+
+                              {/* North Star Goal Alignment */}
+                              <div className="mt-8">
+                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
+                                <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                                  <div className="space-y-4">
+                                    {eip.northStarAlignment?.scaleL1 && (
+                                      <div className="bg-white border border-slate-200 rounded p-4">
+                                        <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
+                                        <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleL1.description}</p>
+                                      </div>
+                                    )}
+                                    {eip.northStarAlignment?.scaleBlobs && (
+                                      <div className="bg-white border border-slate-200 rounded p-4">
+                                        <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-purple-200 pb-2">Scale Blobs</h5>
+                                        <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.scaleBlobs.description}</p>
+                                      </div>
+                                    )}
+                                    {eip.northStarAlignment?.improveUX && (
+                                      <div className="bg-white border border-slate-200 rounded p-4">
+                                        <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-emerald-200 pb-2">Improve UX</h5>
+                                        <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </article>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 );
               })}
