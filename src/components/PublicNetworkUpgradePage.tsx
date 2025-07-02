@@ -1,47 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import eipsData from '../data/eips.json';
-import { networkUpgrades } from '../data/upgrades';
 import { useMetaTags } from '../hooks/useMetaTags';
-
-interface ForkRelationship {
-  forkName: string;
-  status: string;
-  isHeadliner?: boolean;
-  headlinerDiscussionLink?: string;
-}
-
-interface EIP {
-  id: number;
-  title: string;
-  status: string;
-  description: string;
-  author: string;
-  type: string;
-  category: string;
-  createdDate: string;
-  discussionLink: string;
-  forkRelationships: ForkRelationship[];
-  laymanDescription?: string;
-  northStars?: string[];
-  northStarAlignment?: {
-    scaleL1?: { impact: string, description: string };
-    scaleBlobs?: { impact: string, description: string };
-    improveUX?: { impact: string, description: string };
-  };
-  stakeholderImpacts?: {
-    endUsers: { impact: string, description: string };
-    appDevs: { impact: string, description: string };
-    walletDevs: { impact: string, description: string };
-    toolingInfra: { impact: string, description: string };
-    layer2s: { impact: string, description: string };
-    stakersNodes: { impact: string, description: string };
-    clClients: { impact: string, description: string };
-    elClients: { impact: string, description: string };
-  };
-  benefits?: string[];
-  tradeoffs?: string[];
-}
+import { EIP } from '../types';
+import {
+  getInclusionStage,
+  getHeadlinerDiscussionLink,
+  isHeadliner,
+  getLaymanTitle,
+  getProposalPrefix,
+  getSpecificationUrl,
+  parseMarkdownLinks
+} from '../utils';
+import {
+  getInclusionStageColor,
+  getUpgradeStatusColor
+} from '../utils/colors';
+import { Tooltip, CopyLinkButton } from './ui';
+import { 
+  NetworkUpgradeTimeline, 
+  GlamsterdamTimeline, 
+  TableOfContents, 
+  OverviewSection 
+} from './network-upgrade';
 
 interface PublicNetworkUpgradePageProps {
   forkName: string;
@@ -60,7 +41,6 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
 }) => {
   const [eips, setEips] = useState<EIP[]>([]);
   const [activeSection, setActiveSection] = useState<string>('overview');
-  const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const location = useLocation();
 
   // Update meta tags for SEO and social sharing
@@ -79,110 +59,6 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
     );
     setEips(filteredEips);
   }, [forkName]);
-
-  // Helper function to get inclusion stage from fork relationship
-  const getInclusionStage = (eip: EIP): string => {
-    const forkRelationship = eip.forkRelationships.find(fork => 
-      fork.forkName.toLowerCase() === forkName.toLowerCase()
-    );
-
-    if (!forkRelationship) return 'Unknown';
-
-    switch (forkRelationship.status) {
-      case 'Proposed':
-        return 'Proposed for Inclusion';
-      case 'Considered':
-        return 'Considered for Inclusion';
-      case 'Scheduled':
-        return 'Scheduled for Inclusion';
-      case 'Declined':
-        return 'Declined for Inclusion';
-      case 'Included':
-        return 'Included';
-      default:
-        return 'Unknown';
-    }
-  };
-
-  // Helper function to get headliner discussion link for this fork
-  const getHeadlinerDiscussionLink = (eip: EIP): string | null => {
-    const forkRelationship = eip.forkRelationships.find(fork => 
-      fork.forkName.toLowerCase() === forkName.toLowerCase()
-    );
-    return forkRelationship?.headlinerDiscussionLink || null;
-  };
-
-  // Helper function to check if EIP is headliner for this fork
-  const isHeadliner = (eip: EIP): boolean => {
-    const forkRelationship = eip.forkRelationships.find(fork => 
-      fork.forkName.toLowerCase() === forkName.toLowerCase()
-    );
-    return forkRelationship?.isHeadliner || false;
-  };
-
-  // Helper function to get layman title (use title if no layman description)
-  const getLaymanTitle = (eip: EIP): string => {
-    return eip.title.replace(/^(EIP|RIP)-\d+:\s*/, '');
-  };
-
-  // Helper function to get proposal prefix (EIP or RIP)
-  const getProposalPrefix = (eip: EIP): string => {
-    if (eip.title.startsWith('RIP-')) {
-      return 'RIP';
-    }
-    return 'EIP';
-  };
-
-  // Helper function to get specification URL
-  const getSpecificationUrl = (eip: EIP): string => {
-    if (eip.title.startsWith('RIP-')) {
-      return `https://github.com/ethereum/RIPs/blob/master/RIPS/rip-${eip.id}.md`;
-    }
-    return `https://eips.ethereum.org/EIPS/eip-${eip.id}`;
-  };
-
-  // Helper function to parse markdown links and convert to React components
-  const parseMarkdownLinks = (text: string): React.ReactNode[] => {
-    if (!text) return [];
-
-    // Regex to match markdown links: [text](url)
-    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-    const parts: React.ReactNode[] = [];
-    let lastIndex = 0;
-    let match;
-
-    while ((match = linkRegex.exec(text)) !== null) {
-      const [fullMatch, linkText, url] = match;
-      const matchIndex = match.index;
-
-      // Add text before the link
-      if (matchIndex > lastIndex) {
-        parts.push(text.slice(lastIndex, matchIndex));
-      }
-
-      // Add the link component
-      parts.push(
-        <a
-          key={`link-${matchIndex}`}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
-        >
-          {linkText}
-        </a>
-      );
-
-      lastIndex = matchIndex + fullMatch.length;
-    }
-
-    // Add remaining text after the last link
-    if (lastIndex < text.length) {
-      parts.push(text.slice(lastIndex));
-    }
-
-    return parts.length > 0 ? parts : [text];
-  };
 
   // Handle URL hash on component mount and location changes
   useEffect(() => {
@@ -224,38 +100,6 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
     };
   }, [eips]);
 
-  const getInclusionStageColor = (stage: string) => {
-    switch (stage) {
-      case 'Proposed for Inclusion':
-        return 'bg-slate-100 text-slate-700';
-      case 'Considered for Inclusion':
-        return 'bg-slate-200 text-slate-700';
-      case 'Scheduled for Inclusion':
-        return 'bg-yellow-50 text-yellow-700';
-      case 'Declined for Inclusion':
-        return 'bg-red-50 text-red-700';
-      case 'Included':
-        return 'bg-emerald-50 text-emerald-800';
-      default:
-        return 'bg-slate-100 text-slate-600';
-    }
-  };
-
-  const getUpgradeStatusColor = (status: string) => {
-    switch (status) {
-      case 'Active':
-        return 'bg-emerald-100 text-emerald-800';
-      case 'Upcoming':
-        return 'bg-blue-100 text-blue-800';
-      case 'Planning':
-        return 'bg-purple-100 text-purple-800';
-      case 'Research':
-        return 'bg-orange-100 text-orange-800';
-      default:
-        return 'bg-slate-200 text-slate-700';
-    }
-  };
-
   // Generate TOC items
   const tocItems = [
     { id: 'overview', label: 'Overview', type: 'section' as const, count: null as number | null },
@@ -264,15 +108,15 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
       { id: 'glamsterdam-timeline', label: 'Timeline', type: 'section' as const, count: null as number | null }
     ] : []),
     // Add headliner proposals section for forks with multiple headliners
-    ...(forkName.toLowerCase() === 'glamsterdam' && eips.filter(eip => isHeadliner(eip)).length > 1 ? [
+    ...(forkName.toLowerCase() === 'glamsterdam' && eips.filter(eip => isHeadliner(eip, forkName)).length > 1 ? [
       {
         id: 'headliner-proposals',
         label: 'Headliner Proposals',
         type: 'section' as const,
-        count: eips.filter(eip => isHeadliner(eip)).length
+        count: eips.filter(eip => isHeadliner(eip, forkName)).length
       },
       ...eips
-        .filter(eip => isHeadliner(eip))
+        .filter(eip => isHeadliner(eip, forkName))
         .sort((a, b) => a.id - b.id)
         .map(eip => ({
           id: `eip-${eip.id}`,
@@ -285,19 +129,19 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
       .flatMap(stage => {
         // For Glamsterdam, exclude headliners from "Proposed for Inclusion" since they have their own section
         const stageEips = eips.filter(eip => {
-          const matchesStage = getInclusionStage(eip) === stage;
-          if (forkName.toLowerCase() === 'glamsterdam' && stage === 'Proposed for Inclusion') {
-            return matchesStage && !isHeadliner(eip);
-          }
-          return matchesStage;
+                  const matchesStage = getInclusionStage(eip, forkName) === stage;
+        if (forkName.toLowerCase() === 'glamsterdam' && stage === 'Proposed for Inclusion') {
+          return matchesStage && !isHeadliner(eip, forkName);
+        }
+        return matchesStage;
         });
         
         if (stageEips.length === 0) return [];
         
         // Sort EIPs: headliners first, then by EIP number
         const sortedEips = stageEips.sort((a, b) => {
-          const aIsHeadliner = isHeadliner(a);
-          const bIsHeadliner = isHeadliner(b);
+          const aIsHeadliner = isHeadliner(a, forkName);
+          const bIsHeadliner = isHeadliner(b, forkName);
           
           // If one is headliner and other isn't, headliner comes first
           if (aIsHeadliner && !bIsHeadliner) return -1;
@@ -315,7 +159,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
         };
         
         const eipItems = sortedEips.map(eip => {
-          const isHeadlinerEip = isHeadliner(eip);
+          const isHeadlinerEip = isHeadliner(eip, forkName);
           const starSymbol = forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★';
           const proposalPrefix = getProposalPrefix(eip);
           
@@ -339,314 +183,6 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
       window.history.pushState(null, '', `#${sectionId}`);
       setActiveSection(sectionId);
     }
-  };
-
-  const copyLinkToClipboard = (sectionId: string) => {
-    const url = `${window.location.origin}${window.location.pathname}#${sectionId}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setCopiedSection(sectionId);
-      // Clear the copied state after 2 seconds
-      setTimeout(() => {
-        setCopiedSection(null);
-      }, 2000);
-    }).catch(() => {
-      // Fallback for browsers that don't support clipboard API
-      console.log('Failed to copy link');
-    });
-  };
-
-  const Tooltip: React.FC<{ children: React.ReactNode; text: string; className?: string }> = ({ 
-    children, 
-    text, 
-    className = '' 
-  }) => {
-    const [isVisible, setIsVisible] = useState(false);
-    
-    return (
-      <div 
-        className={`relative ${className}`}
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
-      >
-        {children}
-        {isVisible && (
-          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-20 animate-in fade-in duration-150">
-            {text}
-            <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-2 border-transparent border-t-slate-900"></div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const CopyLinkButton: React.FC<{ sectionId: string; title: string; size?: 'sm' | 'md' }> = ({ 
-    sectionId, 
-    title, 
-    size = 'md' 
-  }) => {
-    const isCopied = copiedSection === sectionId;
-    const iconSize = size === 'sm' ? 'w-3.5 h-3.5' : 'w-5 h-5';
-    
-    return (
-      <div className="relative">
-        <Tooltip text={isCopied ? "Copied!" : title}>
-          <button
-            onClick={() => copyLinkToClipboard(sectionId)}
-            className={`transition-colors cursor-pointer ${
-              isCopied 
-                ? 'text-emerald-600' 
-                : 'text-slate-400 hover:text-slate-600'
-            }`}
-          >
-            {isCopied ? (
-              <svg className={iconSize} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            ) : (
-              <svg className={iconSize} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-              </svg>
-            )}
-          </button>
-        </Tooltip>
-      </div>
-    );
-  };
-
-  // Timeline component
-  const NetworkUpgradeTimeline: React.FC<{ currentForkName: string }> = ({ currentForkName }) => {
-    const currentForkId = currentForkName.toLowerCase();
-    const upgrades = networkUpgrades;
-
-    // Find the index for 'we are here' (between last Active and first Upcoming)
-    const activeIdx = upgrades.findIndex(u => u.status === 'Active');
-    const upcomingIdx = upgrades.findIndex(u => u.status === 'Upcoming');
-
-    // Position for 'we are here' marker (between upgrades)
-    let markerPercent = 50;
-    if (activeIdx !== -1 && upcomingIdx !== -1) {
-      // Calculate position between the last active and first upcoming upgrade
-      const totalUpgrades = upgrades.length;
-      const activePosition = (activeIdx / (totalUpgrades - 1)) * 100;
-      const upcomingPosition = (upcomingIdx / (totalUpgrades - 1)) * 100;
-      // Move marker further right by weighting towards the upcoming position
-      markerPercent = (activePosition * 0.25 + upcomingPosition * 0.7);
-    }
-
-    const timelineHeight = 24;
-
-    return (
-      <div className="mb-6 hidden sm:block">
-        <div className="bg-white border border-slate-200 rounded px-6 py-4 relative overflow-visible min-h-[60px]">
-          {/* Timeline line with rounded end caps and muted gradient */}
-          <svg className="absolute left-0 right-0" style={{ top: '50%', height: timelineHeight, width: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'visible', transform: 'translateY(-50%)' }} viewBox="0 0 100 14" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="timeline-gradient" x1="6" y1="6" x2="94" y2="6" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#e0e7ff" /> {/* indigo-100 */}
-                <stop offset="100%" stopColor="#bae6fd" /> {/* cyan-100 */}
-              </linearGradient>
-            </defs>
-            {/* Main line with rounded end caps */}
-            <line x1="4" y1="8" x2="94" y2="8" stroke="url(#timeline-gradient)" strokeWidth="2" strokeLinecap="round" opacity="1" />
-            {/* Smaller arrowhead at the end, flush with the box edge */}
-            <g transform="translate(94,8)">
-              <polygon points="0,-3 2,0 0,3" fill="#bae6fd" opacity="1" />
-            </g>
-          </svg>
-          {/* Timeline upgrades as flex row, rounded boxes */}
-          <div className="relative flex flex-row justify-between items-stretch w-full px-12" style={{ zIndex: 1, minHeight: timelineHeight }}>
-            {upgrades.map((upgrade) => {
-              const isCurrent = upgrade.id === currentForkId;
-              let labelClass = 'text-slate-500 font-normal';
-              let boxClass = 'bg-white border border-slate-200';
-              let dateClass = 'text-xs text-slate-400';
-              if (isCurrent) {
-                labelClass = 'text-slate-900 font-semibold';
-                boxClass = 'bg-white border border-purple-200 shadow-sm';
-                dateClass = 'text-xs text-slate-500 font-medium';
-              }
-              
-              const boxContent = (
-                <div className={`px-3 py-1.5 rounded ${boxClass} mb-1 truncate max-w-[180px] text-center leading-tight flex flex-col items-center transition-all duration-200 ${!isCurrent ? 'hover:border-slate-300 hover:shadow-sm' : ''}`} style={{ position: 'relative', zIndex: 2 }}>
-                  <span className={`${labelClass} text-xs mb-0.5 leading-tight`}>
-                    {upgrade.name.replace(/ Upgrade$/, '')}
-                  </span>
-                  <span className={`text-xs ${dateClass}`}>{upgrade.activationDate}</span>
-                </div>
-              );
-
-              return (
-                <div key={upgrade.id} className="flex flex-col items-center flex-1 min-w-0" style={{ position: 'relative' }}>
-                  {/* Make non-current upgrades clickable */}
-                  {!isCurrent && upgrade.path ? (
-                    <Link to={upgrade.path} className="block">
-                      {boxContent}
-                    </Link>
-                  ) : (
-                    boxContent
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          {/* 'We are here' marker between upgrades - adjusted positioning */}
-          {activeIdx !== -1 && upcomingIdx !== -1 && (
-            <div
-              className="absolute flex flex-col items-center z-20"
-              style={{
-                left: `calc(${markerPercent}% - 10px)`,
-                top: '60%',
-                transform: 'translateY(-50%)',
-              }}
-            >
-              {/* Pulsing dot */}
-              <span className="relative flex h-4 w-4">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-200 opacity-40"></span>
-                <span className="relative inline-flex rounded-full h-4 w-4 bg-purple-300 border-2 border-purple-200"></span>
-              </span>
-              <div className="text-[10px] text-purple-300 font-medium mt-0.5 leading-tight text-center">
-                <div>we are here</div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  // Glamsterdam-specific timeline component
-  const GlamsterdamTimeline: React.FC = () => {
-    const phases = [
-      {
-        id: 'fork-focus',
-        title: 'Fork Focus Discussion & Headliner Proposals',
-        dateRange: 'May 26 - June 20',
-        description: 'ACD calls focus on discussing Glamsterdam\'s high-level goals. Headliner champions present proposals.',
-        status: 'completed'
-      },
-      {
-        id: 'headliner-discussion',
-        title: 'Headliner Discussion & Finalization',
-        dateRange: 'June 23 - July 17',
-        description: 'ACD evaluates candidate headliners, solicits community feedback, and finalizes decisions.',
-        status: 'current'
-      },
-      {
-        id: 'non-headliner-proposals',
-        title: 'Non-Headliner EIP Proposals',
-        dateRange: 'July 21 - Aug 21',
-        description: 'ACD begins reviewing other EIPs Proposed for Inclusion in Glamsterdam.',
-        status: 'upcoming'
-      },
-      {
-        id: 'cfi-decisions',
-        title: 'Non-Headliner EIP CFI Decisions',
-        dateRange: 'Sep 4 & 11',
-        description: 'ACDC and ACDE calls select which Proposed for Inclusion EIPs advance to Considered for Inclusion.',
-        status: 'upcoming'
-      },
-      {
-        id: 'cfi-to-sfi',
-        title: 'CFI → SFI EIP Decisions',
-        dateRange: 'Date TBD',
-        description: 'As Glamsterdam devnets begin, final decisions on which CFI EIPs will be included in the upgrade\'s devnet.',
-        status: 'upcoming'
-      }
-    ];
-
-    const getPhaseStatusColor = (status: string) => {
-      switch (status) {
-        case 'completed':
-          return 'bg-emerald-100 text-emerald-800 border-emerald-200';
-        case 'current':
-          return 'bg-purple-100 text-purple-800 border-purple-200';
-        case 'upcoming':
-          return 'bg-slate-100 text-slate-600 border-slate-200';
-        default:
-          return 'bg-slate-100 text-slate-600 border-slate-200';
-      }
-    };
-
-    const getPhaseStatusIcon = (status: string) => {
-      switch (status) {
-        case 'completed':
-          return (
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          );
-        case 'current':
-          return (
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          );
-        case 'upcoming':
-          return (
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          );
-        default:
-          return null;
-      }
-    };
-
-    return (
-      <div className="mb-4">
-        <div className="bg-white border border-slate-200 rounded-lg p-6">
-          <div className="space-y-2">
-            {phases.map((phase, index) => (
-              <div key={phase.id} className="relative">
-                {/* Timeline connector */}
-                {index < phases.length - 1 && (
-                  <div className="absolute left-5 top-10 w-0.5 h-16 bg-slate-200"></div>
-                )}
-
-                <div className="flex gap-3">
-                  {/* Status icon */}
-                  <div className={`flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center ${getPhaseStatusColor(phase.status)}`}>
-                    {getPhaseStatusIcon(phase.status)}
-                  </div>
-
-                  {/* Content */}
-                  <div className={`flex-1 ${index === phases.length - 1 ? 'pb-2' : 'pb-6'}`}>
-                    <div className="flex items-start justify-between mb-1">
-                      <h4 className="font-medium text-slate-900 text-sm">{phase.title}</h4>
-                      {/* Hidden dateRange for Glamsterdam timeline */}
-                      {/* <span className="text-xs text-slate-500 font-mono bg-slate-50 px-2 py-0.5 rounded">
-                        {phase.dateRange}
-                      </span> */}
-                    </div>
-                    <p className="text-xs text-slate-600 mb-2">{phase.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Source link */}
-          <div className="mt-3 pt-3 border-t border-slate-200">
-            <div className="flex items-start justify-between">
-              <a
-                href="https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
-              >
-                View full timeline details on Ethereum Magicians
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-              <p className="text-xs text-slate-500 italic">
-                Timeline subject to change
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -728,154 +264,22 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
         {/* Main Content with TOC */}
         <div className="flex gap-8">
           {/* Table of Contents */}
-          <div className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-6">
-              <h3 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Contents</h3>
-              <nav className="space-y-1">
-                {tocItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`w-full text-left rounded transition-colors ${
-                      item.type === 'section' 
-                        ? `px-3 py-2 text-sm ${
-                            activeSection === item.id
-                              ? 'bg-purple-100 text-purple-800 font-medium'
-                              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                          }`
-                        : `px-6 py-1.5 text-xs ${
-                            activeSection === item.id
-                              ? 'bg-purple-50 text-purple-700 font-medium'
-                              : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
-                          }`
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className={item.type === 'eip' ? 'truncate' : ''}>{item.label}</span>
-                      {item.count && (
-                        <span className="text-xs text-slate-400 flex-shrink-0 ml-2">{item.count}</span>
-                      )}
-                    </div>
-                  </button>
-                ))}
-              </nav>
-            </div>
-          </div>
+          <TableOfContents 
+            items={tocItems}
+            activeSection={activeSection}
+            onSectionClick={scrollToSection}
+          />
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
             {/* EIPs */}
             <div className="space-y-8">
               {/* Overview Section */}
-              <div className="bg-white border border-slate-200 rounded p-6" id="overview" data-section>
-                <div className="flex items-center gap-3 mb-4">
-                  <h2 className="text-lg font-semibold text-slate-900">Upgrade Overview</h2>
-                  <CopyLinkButton 
-                    sectionId="overview" 
-                    title="Copy link to overview"
-                    size="sm"
-                  />
-                </div>
-                {/* Special note for Glamsterdam's competitive headliner process */}
-                {forkName.toLowerCase() === 'glamsterdam' && (
-                  <>
-                    <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded">
-                      <div className="flex items-start gap-3">
-                        <svg className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <div>
-                          <h4 className="font-medium text-amber-900 text-sm mb-1">Headliner Selection in Progress</h4>
-                          <p className="text-amber-800 text-xs leading-relaxed">
-                            Headliners are the largest and most impactful features of an upgrade and may be permissionlessly proposed by anyone. The community is actively deciding which direction to prioritize in this network upgrade.
-                            <a 
-                              href="https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195" 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="text-amber-700 hover:text-amber-900 underline decoration-1 underline-offset-2 ml-1"
-                            >
-                              Follow the discussion →
-                            </a>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Headliner Options Overview */}
-                    <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded">
-                      <h4 className="font-medium text-purple-900 text-sm mb-4 flex items-center gap-2">
-                        <span className="text-purple-600">★</span>
-                        Competing Headliner Options
-                      </h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {eips
-                          .filter(eip => isHeadliner(eip))
-                          .sort((a, b) => a.id - b.id)
-                          .map(eip => {
-                            if (!eip.laymanDescription) return null;
-                            
-                            return (
-                              <button
-                                key={eip.id}
-                                onClick={() => scrollToSection(`eip-${eip.id}`)}
-                                className="text-left p-3 bg-white border border-purple-200 rounded hover:border-purple-300 hover:shadow-sm transition-all duration-200 group"
-                              >
-                                <div className="flex items-start justify-between mb-2">
-                                  <h5 className="font-medium text-purple-900 text-sm group-hover:text-purple-700 transition-colors">
-                                    EIP-{eip.id}: {getLaymanTitle(eip)}
-                                  </h5>
-                                  <svg className="w-4 h-4 text-purple-400 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                  </svg>
-                                </div>
-                                <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
-                                  {eip.laymanDescription.length > 120 
-                                    ? parseMarkdownLinks(eip.laymanDescription.substring(0, 120) + '...')
-                                    : parseMarkdownLinks(eip.laymanDescription)
-                                  }
-                                </p>
-                              </button>
-                            );
-                          })}
-                      </div>
-                      <p className="text-xs text-purple-700 mt-4 italic">
-                        Click any option above to jump to its detailed analysis below.
-                      </p>
-                    </div>
-                  </>
-                )}
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {[
-                    { stage: 'Proposed for Inclusion', count: eips.filter(eip => getInclusionStage(eip) === 'Proposed for Inclusion').length, color: 'bg-slate-100 text-slate-700' },
-                    { stage: 'Considered for Inclusion', count: eips.filter(eip => getInclusionStage(eip) === 'Considered for Inclusion').length, color: 'bg-slate-200 text-slate-700' },
-                    { stage: 'Scheduled for Inclusion', count: eips.filter(eip => getInclusionStage(eip) === 'Scheduled for Inclusion').length, color: 'bg-yellow-50 text-yellow-700' },
-                    { stage: 'Declined for Inclusion', count: eips.filter(eip => getInclusionStage(eip) === 'Declined for Inclusion').length, color: 'bg-red-50 text-red-800' }
-                  ].map(({ stage, count, color }) => {
-                    const stageId = stage.toLowerCase().replace(/\s+/g, '-');
-                    const hasEips = count > 0;
-                    
-                    return (
-                      <button
-                        key={stage}
-                        onClick={() => hasEips && scrollToSection(stageId)}
-                        disabled={!hasEips}
-                        className={`text-center p-4 rounded transition-all duration-200 ${
-                          hasEips 
-                            ? 'bg-slate-50 hover:bg-slate-100 hover:shadow-sm cursor-pointer' 
-                            : 'bg-slate-50 opacity-50 cursor-not-allowed'
-                        }`}
-                      >
-                        <div className="text-2xl font-light text-slate-900 mb-1">{count}</div>
-                        <div className="text-xs text-slate-500 mb-1">EIP{count !== 1 ? 's' : ''}</div>
-                        <div className={`text-xs font-medium px-2 py-1 rounded inline-block ${color}`}>
-                          {stage}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              <OverviewSection 
+                eips={eips}
+                forkName={forkName}
+                onStageClick={scrollToSection}
+              />
 
               {/* Glamsterdam Timeline Section */}
               {forkName.toLowerCase() === 'glamsterdam' && (
@@ -898,13 +302,13 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
               )}
 
               {/* Headliner Proposals Section (for Glamsterdam) */}
-              {forkName.toLowerCase() === 'glamsterdam' && eips.filter(eip => isHeadliner(eip)).length > 1 && (
+              {forkName.toLowerCase() === 'glamsterdam' && eips.filter(eip => isHeadliner(eip, forkName)).length > 1 && (
                 <div className="space-y-6" id="headliner-proposals" data-section>
                   <div className="border-b border-slate-200 pb-4">
                     <div className="flex items-center gap-3 mb-2">
                       <h2 className="text-xl font-medium text-slate-900">Headliner Proposals</h2>
                       <span className="px-2 py-1 text-xs font-medium rounded bg-purple-100 text-purple-700">
-                        {eips.filter(eip => isHeadliner(eip)).length} EIP{eips.filter(eip => isHeadliner(eip)).length !== 1 ? 's' : ''}
+                        {eips.filter(eip => isHeadliner(eip, forkName)).length} EIP{eips.filter(eip => isHeadliner(eip, forkName)).length !== 1 ? 's' : ''}
                       </span>
                       <CopyLinkButton
                         sectionId="headliner-proposals"
@@ -919,7 +323,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
 
                   <div className="space-y-6">
                     {eips
-                      .filter(eip => isHeadliner(eip))
+                      .filter(eip => isHeadliner(eip, forkName))
                       .sort((a, b) => a.id - b.id)
                       .map(eip => {
                         if (!eip.laymanDescription) return null;
@@ -934,7 +338,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 <div className="flex-1">
                                   <div className="flex items-center gap-3">
                                     <h3 className="text-xl font-medium text-slate-900 leading-tight">
-                                      {isHeadliner(eip) && (
+                                      {isHeadliner(eip, forkName) && (
                                         <Tooltip 
                                           text={forkName.toLowerCase() === 'glamsterdam' 
                                             ? "Competing headliner proposal for this network upgrade" 
@@ -984,8 +388,8 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
 
                               {/* Headliner Discussion Link (for headliners in regular sections) */}
                               {(() => {
-                                const isHeadlinerEip = isHeadliner(eip);
-                                const discussionLink = getHeadlinerDiscussionLink(eip);
+                                const isHeadlinerEip = isHeadliner(eip, forkName);
+                                const discussionLink = getHeadlinerDiscussionLink(eip, forkName);
                                 return isHeadlinerEip && discussionLink && (
                                   <div className="mt-3">
                                     <a 
@@ -1102,14 +506,14 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                 { stage: 'Proposed for Inclusion', description: 'EIPs that have been proposed for this upgrade but are still under initial review by client teams.' },
                 { stage: 'Declined for Inclusion', description: 'EIPs that client teams have decided not to include in this upgrade. They may be reconsidered for future upgrades.' }
               ].map(({ stage, description }) => {
-                const stageEips = eips.filter(eip => getInclusionStage(eip) === stage);
+                const stageEips = eips.filter(eip => getInclusionStage(eip, forkName) === stage);
                 
                 if (stageEips.length === 0) return null;
 
                 // Sort EIPs: headliners first, then by EIP number
                 const sortedStageEips = stageEips.sort((a, b) => {
-                  const aIsHeadliner = isHeadliner(a);
-                  const bIsHeadliner = isHeadliner(b);
+                  const aIsHeadliner = isHeadliner(a, forkName);
+                  const bIsHeadliner = isHeadliner(b, forkName);
                   
                   // If one is headliner and other isn't, headliner comes first
                   if (aIsHeadliner && !bIsHeadliner) return -1;
@@ -1126,7 +530,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                     <div className="border-b border-slate-200 pb-4">
                       <div className="flex items-center gap-3 mb-2">
                         <h2 className="text-xl font-medium text-slate-900">{stage}</h2>
-                        <span className={`px-2 py-1 text-xs font-medium rounded ${getInclusionStageColor(stage)}`}>
+                        <span className={`px-2 py-1 text-xs font-medium rounded ${getInclusionStageColor(stage as any)}`}>
                           {stageEips.length} EIP{stageEips.length !== 1 ? 's' : ''}
                         </span>
                         <CopyLinkButton 
@@ -1146,7 +550,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
 
                         return (
                           <article key={eip.id} className={`bg-white border rounded p-8 ${
-                            isHeadliner(eip) 
+                            isHeadliner(eip, forkName) 
                               ? 'border-purple-200 shadow-sm ring-1 ring-purple-100' 
                               : 'border-slate-200'
                           }`} id={eipId} data-section>
@@ -1156,7 +560,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 <div className="flex-1">
                                   <div className="flex items-center gap-3">
                                     <h3 className="text-xl font-medium text-slate-900 leading-tight">
-                                      {isHeadliner(eip) && (
+                                      {isHeadliner(eip, forkName) && (
                                         <Tooltip 
                                           text={forkName.toLowerCase() === 'glamsterdam' 
                                             ? "Competing headliner proposal for this network upgrade" 
@@ -1206,8 +610,8 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
 
                               {/* Headliner Discussion Link (for headliners in regular sections) */}
                               {(() => {
-                                const isHeadlinerEip = isHeadliner(eip);
-                                const discussionLink = getHeadlinerDiscussionLink(eip);
+                                const isHeadlinerEip = isHeadliner(eip, forkName);
+                                const discussionLink = getHeadlinerDiscussionLink(eip, forkName);
                                 return isHeadlinerEip && discussionLink && (
                                   <div className="mt-3">
                                     <a 
