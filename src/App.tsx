@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import PublicNetworkUpgradePage from './components/PublicNetworkUpgradePage';
 import HomePage from './components/HomePage';
 import { getUpgradeById } from './data/upgrades';
+import { useAnalytics } from './hooks/useAnalytics';
 
 function RedirectHandler() {
   const navigate = useNavigate();
@@ -27,6 +28,21 @@ function RedirectHandler() {
   return null;
 }
 
+function AnalyticsTracker() {
+  const location = useLocation();
+  const { trackPageView } = useAnalytics();
+
+  useEffect(() => {
+    // Track page views when route changes in SPA
+    const pageName = location.pathname === '/' ? 'homepage' : location.pathname;
+    const pageTitle = document.title;
+
+    trackPageView(pageName, pageTitle);
+  }, [location.pathname, trackPageView]);
+
+  return null;
+}
+
 function App() {
   const fusakaUpgrade = getUpgradeById('fusaka')!;
   const glamsterdamUpgrade = getUpgradeById('glamsterdam')!;
@@ -35,6 +51,7 @@ function App() {
   return (
     <Router basename="">
       <RedirectHandler />
+      <AnalyticsTracker />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/upgrade/fusaka" element={

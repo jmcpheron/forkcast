@@ -2,6 +2,7 @@ import React from 'react';
 import { EIP } from '../../types';
 import { getInclusionStage, isHeadliner, getLaymanTitle, parseMarkdownLinks } from '../../utils';
 import { CopyLinkButton } from '../ui/CopyLinkButton';
+import { useAnalytics } from '../../hooks/useAnalytics';
 
 interface OverviewSectionProps {
   eips: EIP[];
@@ -14,6 +15,12 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
   forkName,
   onStageClick
 }) => {
+  const { trackLinkClick } = useAnalytics();
+
+  const handleExternalLinkClick = (linkType: string, url: string) => {
+    trackLinkClick(linkType, url);
+  };
+
   const stageStats = [
     { 
       stage: 'Proposed for Inclusion', 
@@ -64,6 +71,7 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
                     href="https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195" 
                     target="_blank" 
                     rel="noopener noreferrer"
+                    onClick={() => handleExternalLinkClick('headliner_discussion', 'https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195')}
                     className="text-amber-700 hover:text-amber-900 underline decoration-1 underline-offset-2 ml-1"
                   >
                     Follow the discussion →

@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom';
 import { networkUpgrades } from '../data/upgrades';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 const HomePage = () => {
   const upgrades = networkUpgrades;
+  const { trackLinkClick } = useAnalytics();
+
+  const handleExternalLinkClick = (linkType: string, url: string) => {
+    trackLinkClick(linkType, url);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -102,6 +108,7 @@ const HomePage = () => {
             Have feedback? Contact{' '}
             <a
               href="mailto:nixo@ethereum.org"
+              onClick={() => handleExternalLinkClick('email_contact', 'mailto:nixo@ethereum.org')}
               className="text-slate-500 hover:text-slate-700 underline decoration-1 underline-offset-2"
             >
               nixo
@@ -111,6 +118,7 @@ const HomePage = () => {
               href="https://x.com/wolovim"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => handleExternalLinkClick('twitter_contact', 'https://x.com/wolovim')}
               className="text-slate-500 hover:text-slate-700 underline decoration-1 underline-offset-2"
             >
               @wolovim

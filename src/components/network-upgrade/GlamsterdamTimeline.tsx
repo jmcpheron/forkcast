@@ -2,9 +2,15 @@ import React from 'react';
 import { GLAMSTERDAM_TIMELINE_PHASES } from '../../constants/timeline-phases';
 import { getPhaseStatusIcon } from '../../utils/timeline';
 import { getPhaseStatusColor } from '../../utils/colors';
+import { useAnalytics } from '../../hooks/useAnalytics';
 
 export const GlamsterdamTimeline: React.FC = () => {
   const phases = GLAMSTERDAM_TIMELINE_PHASES;
+  const { trackLinkClick } = useAnalytics();
+
+  const handleExternalLinkClick = (linkType: string, url: string) => {
+    trackLinkClick(linkType, url);
+  };
 
   return (
     <div className="mb-4">
@@ -46,6 +52,7 @@ export const GlamsterdamTimeline: React.FC = () => {
               href="https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => handleExternalLinkClick('timeline_discussion', 'https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195')}
               className="inline-flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-800 underline decoration-1 underline-offset-2 transition-colors"
             >
               View full timeline details on Ethereum Magicians
