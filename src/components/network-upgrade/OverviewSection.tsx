@@ -74,7 +74,7 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
           </div>
 
           {/* Headliner Options Overview */}
-          <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded">
+          <div className={`p-6 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded ${forkName.toLowerCase() === 'glamsterdam' ? '' : 'mb-6'}`}>
             <h4 className="font-medium text-purple-900 text-sm mb-4 flex items-center gap-2">
               <span className="text-purple-600">★</span>
               Competing Headliner Options
@@ -117,31 +117,34 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
         </>
       )}
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stageStats.map(({ stage, count, color }) => {
-          const stageId = stage.toLowerCase().replace(/\s+/g, '-');
-          const hasEips = count > 0;
-          
-          return (
-            <button
-              key={stage}
-              onClick={() => hasEips && onStageClick(stageId)}
-              disabled={!hasEips}
-              className={`text-center p-4 rounded transition-all duration-200 ${
-                hasEips 
-                  ? 'bg-slate-50 hover:bg-slate-100 hover:shadow-sm cursor-pointer' 
-                  : 'bg-slate-50 opacity-50 cursor-not-allowed'
-              }`}
-            >
-              <div className="text-2xl font-light text-slate-900 mb-1">{count}</div>
-              <div className="text-xs text-slate-500 mb-1">EIP{count !== 1 ? 's' : ''}</div>
-              <div className={`text-xs font-medium px-2 py-1 rounded inline-block ${color}`}>
-                {stage}
-              </div>
-            </button>
-          );
-        })}
-      </div>
+      {/* Stage stats - only show for non-Glamsterdam forks */}
+      {forkName.toLowerCase() !== 'glamsterdam' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {stageStats.map(({ stage, count, color }) => {
+            const stageId = stage.toLowerCase().replace(/\s+/g, '-');
+            const hasEips = count > 0;
+            
+            return (
+              <button
+                key={stage}
+                onClick={() => hasEips && onStageClick(stageId)}
+                disabled={!hasEips}
+                className={`text-center p-4 rounded transition-all duration-200 ${
+                  hasEips 
+                    ? 'bg-slate-50 hover:bg-slate-100 hover:shadow-sm cursor-pointer' 
+                    : 'bg-slate-50 opacity-50 cursor-not-allowed'
+                }`}
+              >
+                <div className="text-2xl font-light text-slate-900 mb-1">{count}</div>
+                <div className="text-xs text-slate-500 mb-1">EIP{count !== 1 ? 's' : ''}</div>
+                <div className={`text-xs font-medium px-2 py-1 rounded inline-block ${color}`}>
+                  {stage}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }; 

@@ -126,60 +126,63 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
           count: null as number | null
         }))
     ] : []),
-    ...['Scheduled for Inclusion', 'Considered for Inclusion', 'Proposed for Inclusion', 'Declined for Inclusion']
-      .flatMap(stage => {
-        // For Glamsterdam, exclude headliners from "Proposed for Inclusion" since they have their own section
-        const stageEips = eips.filter(eip => {
-          const matchesStage = getInclusionStage(eip, forkName) === stage;
-          if (forkName.toLowerCase() === 'glamsterdam' && stage === 'Proposed for Inclusion') {
-            return matchesStage && !isHeadliner(eip, forkName);
-          }
-          return matchesStage;
-        });
-        
-        if (stageEips.length === 0) return [];
-        
-        // Sort EIPs: headliners first, then by EIP number
-        const sortedEips = stageEips.sort((a, b) => {
-          const aIsHeadliner = isHeadliner(a, forkName);
-          const bIsHeadliner = isHeadliner(b, forkName);
+    // For non-Glamsterdam forks, show all EIP sections
+    ...(forkName.toLowerCase() !== 'glamsterdam' ? [
+      ...['Scheduled for Inclusion', 'Considered for Inclusion', 'Proposed for Inclusion', 'Declined for Inclusion']
+        .flatMap(stage => {
+          // For Glamsterdam, exclude headliners from "Proposed for Inclusion" since they have their own section
+          const stageEips = eips.filter(eip => {
+            const matchesStage = getInclusionStage(eip, forkName) === stage;
+            if (forkName.toLowerCase() === 'glamsterdam' && stage === 'Proposed for Inclusion') {
+              return matchesStage && !isHeadliner(eip, forkName);
+            }
+            return matchesStage;
+          });
           
-          // If one is headliner and other isn't, headliner comes first
-          if (aIsHeadliner && !bIsHeadliner) return -1;
-          if (!aIsHeadliner && bIsHeadliner) return 1;
+          if (stageEips.length === 0) return [];
           
-          // If both are same type (both headliner or both not), sort by EIP number
-          return a.id - b.id;
-        });
-
-        const stageItem = {
-          id: stage.toLowerCase().replace(/\s+/g, '-'),
-          label: stage,
-          type: 'section' as const,
-          count: stageEips.length
-        };
-
-        // For Declined for Inclusion, only show the section header, not individual EIPs
-        if (stage === 'Declined for Inclusion') {
-          return [stageItem];
-        }
-
-        // For all other stages, show individual EIPs
-        const eipItems = sortedEips.map(eip => {
-          const isHeadlinerEip = isHeadliner(eip, forkName);
-          const starSymbol = forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★';
-          const proposalPrefix = getProposalPrefix(eip);
-
-          return {
-            id: `eip-${eip.id}`,
-            label: `${isHeadlinerEip ? `${starSymbol} ` : ''}${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}`,
-            type: 'eip' as const,
-            count: null as number | null
+          // Sort EIPs: headliners first, then by EIP number
+          const sortedEips = stageEips.sort((a, b) => {
+            const aIsHeadliner = isHeadliner(a, forkName);
+            const bIsHeadliner = isHeadliner(b, forkName);
+            
+            // If one is headliner and other isn't, headliner comes first
+            if (aIsHeadliner && !bIsHeadliner) return -1;
+            if (!aIsHeadliner && bIsHeadliner) return 1;
+            
+            // If both are same type (both headliner or both not), sort by EIP number
+            return a.id - b.id;
+          });
+          
+          const stageItem = {
+            id: stage.toLowerCase().replace(/\s+/g, '-'),
+            label: stage,
+            type: 'section' as const,
+            count: stageEips.length
           };
-        });
-        
-        return [stageItem, ...eipItems];
-      })
+          
+          // For Declined for Inclusion, only show the section header, not individual EIPs
+          if (stage === 'Declined for Inclusion') {
+            return [stageItem];
+          }
+          
+          // For all other stages, show individual EIPs
+          const eipItems = sortedEips.map(eip => {
+            const isHeadlinerEip = isHeadliner(eip, forkName);
+            const starSymbol = forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★';
+            const proposalPrefix = getProposalPrefix(eip);
+            
+            return {
+              id: `eip-${eip.id}`,
+              label: `${isHeadlinerEip ? `${starSymbol} ` : ''}${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}`,
+              type: 'eip' as const,
+              count: null as number | null
+            };
+          });
+          
+          return [stageItem, ...eipItems];
+        })
+    ] : [])
   ];
 
   const scrollToSection = (sectionId: string) => {
@@ -513,9 +516,14 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                 { stage: 'Proposed for Inclusion', description: 'EIPs that have been proposed for this upgrade but are still under initial review by client teams.' },
                 { stage: 'Declined for Inclusion', description: 'EIPs that were proposed, but ultimately declined for inclusion in the upgrade for various reasons. They may be reconsidered for future upgrades.' }
               ].map(({ stage, description }) => {
-                const stageEips = eips.filter(eip => getInclusionStage(eip, forkName) === stage);
+                let stageEips = eips.filter(eip => getInclusionStage(eip, forkName) === stage);
                 
                 if (stageEips.length === 0) return null;
+
+                // For Glamsterdam, hide all regular EIP sections since we only want to show headliner proposals
+                if (forkName.toLowerCase() === 'glamsterdam') {
+                  return null;
+                }
 
                 // Sort EIPs: headliners first, then by EIP number
                 const sortedStageEips = stageEips.sort((a, b) => {
