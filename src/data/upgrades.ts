@@ -19,7 +19,8 @@ export const networkUpgrades: NetworkUpgrade[] = [
     tagline: 'Account abstraction enables smart contract functionality for regular accounts, validator improvements increase balance limits and speed up deposits, and blob throughput doubles for better Layer 2 scaling.',
     status: 'Active',
     activationDate: 'May 7, 2025',
-    disabled: true
+    disabled: false,
+    metaEipLink: 'https://eips.ethereum.org/EIPS/eip-7600'
   },
   {
     id: 'fusaka',
