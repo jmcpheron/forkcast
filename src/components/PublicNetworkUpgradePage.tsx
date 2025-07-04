@@ -108,17 +108,6 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
     };
   }, [eips]);
 
-  // Helper function to check if an EIP is a Meta EIP
-  const isMetaEip = (eip: EIP) => eip.type === 'Meta';
-
-  // Helper to get description with fallback
-  const getEipDescription = (eip: EIP): string => {
-    if (isMetaEip(eip)) {
-      return eip.description;
-    }
-    return eip.laymanDescription || eip.description;
-  };
-
   // Generate TOC items
   const tocItems = [
     { id: 'overview', label: 'Overview', type: 'section' as const, count: null as number | null },
@@ -159,24 +148,16 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
           
           if (stageEips.length === 0) return [];
           
-          // Sort EIPs: Meta EIPs first, then headliners, then by EIP number
+          // Sort EIPs: headliners first, then by EIP number
           const sortedEips = stageEips.sort((a, b) => {
-            const aIsMeta = isMetaEip(a);
-            const bIsMeta = isMetaEip(b);
             const aIsHeadliner = isHeadliner(a, forkName);
             const bIsHeadliner = isHeadliner(b, forkName);
             
-            // Meta EIPs come first
-            if (aIsMeta && !bIsMeta) return -1;
-            if (!aIsMeta && bIsMeta) return 1;
+            // If one is headliner and other isn't, headliner comes first
+            if (aIsHeadliner && !bIsHeadliner) return -1;
+            if (!aIsHeadliner && bIsHeadliner) return 1;
             
-            // Then headliners
-            if (!aIsMeta && !bIsMeta) {
-              if (aIsHeadliner && !bIsHeadliner) return -1;
-              if (!aIsHeadliner && bIsHeadliner) return 1;
-            }
-            
-            // If both are same type, sort by EIP number
+            // If both are same type (both headliner or both not), sort by EIP number
             return a.id - b.id;
           });
           
@@ -193,31 +174,18 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
           }
           
           // For all other stages, show individual EIPs
-          const eipItems = sortedEips
-            .filter(eip => eip.laymanDescription || eip.description || isMetaEip(eip)) // Include EIPs with either description
-            .map(eip => {
-              const isHeadlinerEip = isHeadliner(eip, forkName);
-              const isMeta = isMetaEip(eip);
-              const starSymbol = forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★';
-              const proposalPrefix = getProposalPrefix(eip);
-              
-              // Generate appropriate label
-              let label = '';
-              if (isMeta) {
-                label = `📋 ${proposalPrefix}-${eip.id}: ${eip.title}`;
-              } else if (isHeadlinerEip) {
-                label = `${starSymbol} ${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}`;
-              } else {
-                label = `${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}`;
-              }
-              
-              return {
-                id: `eip-${eip.id}`,
-                label: label,
-                type: 'eip' as const,
-                count: null as number | null
-              };
-            });
+          const eipItems = sortedEips.map(eip => {
+            const isHeadlinerEip = isHeadliner(eip, forkName);
+            const starSymbol = forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★';
+            const proposalPrefix = getProposalPrefix(eip);
+            
+            return {
+              id: `eip-${eip.id}`,
+              label: `${isHeadlinerEip ? `${starSymbol} ` : ''}${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}`,
+              type: 'eip' as const,
+              count: null as number | null
+            };
+          });
           
           return [stageItem, ...eipItems];
         })
@@ -383,11 +351,9 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                       .filter(eip => isHeadliner(eip, forkName))
                       .sort((a, b) => a.id - b.id)
                       .map(eip => {
-                        // Show EIPs with either laymanDescription or description, and Meta EIPs
-                        if (!eip.laymanDescription && !eip.description && !isMetaEip(eip)) return null;
+                        if (!eip.laymanDescription) return null;
 
                         const eipId = `eip-${eip.id}`;
-                        const isMeta = isMetaEip(eip);
 
                         return (
                           <article key={eip.id} className="bg-white border border-purple-200 rounded p-8 shadow-sm ring-1 ring-purple-100" id={eipId} data-section>
@@ -397,19 +363,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 <div className="flex-1">
                                   <div className="flex items-center gap-3">
                                     <h3 className="text-xl font-medium text-slate-900 leading-tight">
-                                      {isMeta && (
-                                        <Tooltip 
-                                          text="Meta EIP defining the included proposals for this network upgrade"
-                                          className="inline-block cursor-pointer"
-                                        >
-                                          <span 
-                                            className="text-blue-500 hover:text-blue-700 mr-2 transition-colors cursor-help" 
-                                          >
-                                            📋
-                                          </span>
-                                        </Tooltip>
-                                      )}
-                                      {!isMeta && isHeadliner(eip, forkName) && (
+                                      {isHeadliner(eip, forkName) && (
                                         <Tooltip 
                                           text={forkName.toLowerCase() === 'glamsterdam' 
                                             ? "Competing headliner proposal for this network upgrade" 
@@ -425,7 +379,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                         </Tooltip>
                                       )}
                                       <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">{getProposalPrefix(eip)}-{eip.id}</span>
-                                      <span>{isMeta ? eip.title : getLaymanTitle(eip)}</span>
+                                      <span>{getLaymanTitle(eip)}</span>
                                     </h3>
                                     <div className="flex items-center gap-2 relative top-0.5">
                                       <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
@@ -455,7 +409,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                             {/* Description */}
                             <div className="">
                               <p className="text-slate-700 text-sm leading-relaxed">
-                                {parseMarkdownLinks(getEipDescription(eip))}
+                                {parseMarkdownLinks(eip.laymanDescription)}
                               </p>
 
                               {/* Headliner Discussion Link (for headliners in regular sections) */}
@@ -481,28 +435,25 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               })()}
                             </div>
 
-                            {/* Benefits - only show for non-Meta EIPs */}
-                            {!isMeta && eip.benefits && eip.benefits.length > 0 && (
-                              <div className="mt-8 mb-8">
-                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
-                                <ul className="space-y-2">
-                                  {eip.benefits.map((benefit, index) => (
-                                    <li key={index} className="flex items-start text-sm">
-                                      <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
-                                      <span className="text-slate-700">{benefit}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
+                            {/* Benefits */}
+                            <div className="mt-8 mb-8">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
+                              <ul className="space-y-2">
+                                {eip.benefits?.map((benefit, index) => (
+                                  <li key={index} className="flex items-start text-sm">
+                                    <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
+                                    <span className="text-slate-700">{benefit}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
 
-                            {/* Stakeholder Impact - only show for non-Meta EIPs */}
-                            {!isMeta && eip.stakeholderImpacts && Object.keys(eip.stakeholderImpacts).length > 0 && (
-                              <div className="mt-8 mb-8">
-                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Stakeholder Impact</h4>
-                                <div className="bg-slate-50 border border-slate-200 rounded p-4">
-                                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                    {Object.entries(eip.stakeholderImpacts || {}).map(([stakeholder, impact]) => {
+                            {/* Stakeholder Impact */}
+                            <div className="mt-8 mb-8">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Stakeholder Impact</h4>
+                              <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                  {Object.entries(eip.stakeholderImpacts || {}).map(([stakeholder, impact]) => {
                                     const stakeholderNames = {
                                       endUsers: 'End Users',
                                       appDevs: 'Application Developers',
@@ -522,14 +473,13 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                         <p className="text-slate-700 text-xs leading-relaxed">{impact.description}</p>
                                       </div>
                                     );
-                                    })}
-                                  </div>
+                                  })}
                                 </div>
                               </div>
-                            )}
+                            </div>
 
-                            {/* Trade-offs & Considerations - only show for non-Meta EIPs */}
-                            {!isMeta && eip.tradeoffs && eip.tradeoffs.length > 0 && (
+                            {/* Trade-offs & Considerations */}
+                            {eip.tradeoffs && eip.tradeoffs.length > 0 && (
                               <div className="mt-8 mb-8">
                                 <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Trade-offs & Considerations</h4>
                                 <ul className="space-y-2">
@@ -543,12 +493,11 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               </div>
                             )}
 
-                            {/* North Star Goal Alignment - only show for non-Meta EIPs */}
-                            {!isMeta && eip.northStarAlignment && (
-                              <div className="mt-8">
-                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
-                                <div className="bg-slate-50 border border-slate-200 rounded p-4">
-                                  <div className="space-y-4">
+                            {/* North Star Goal Alignment */}
+                            <div className="mt-8">
+                              <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
+                              <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                                <div className="space-y-4">
                                   {eip.northStarAlignment?.scaleL1 && (
                                     <div className="bg-white border border-slate-200 rounded p-4">
                                       <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
@@ -567,10 +516,9 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                       <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
                                     </div>
                                   )}
-                                  </div>
                                 </div>
                               </div>
-                            )}
+                            </div>
                           </article>
                         );
                       })}
@@ -659,8 +607,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                     ) : (
                       <div className="space-y-6">
                         {sortedStageEips.map(eip => {
-                          // Show EIPs with either laymanDescription or description, and Meta EIPs
-                          if (!eip.laymanDescription && !eip.description && !isMetaEip(eip)) return null;
+                          if (!eip.laymanDescription) return null;
 
                           const eipId = `eip-${eip.id}`;
 
@@ -719,12 +666,9 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                           }
 
                           // Full view for non-declined EIPs
-                          const isMeta = isMetaEip(eip);
                           return (
                             <article key={eip.id} className={`bg-white border rounded p-8 ${
-                              isMeta
-                                ? 'border-blue-200 shadow-sm ring-1 ring-blue-100'
-                                : isHeadliner(eip, forkName) 
+                              isHeadliner(eip, forkName) 
                                 ? 'border-purple-200 shadow-sm ring-1 ring-purple-100' 
                                 : 'border-slate-200'
                             }`} id={eipId} data-section>
@@ -734,19 +678,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                   <div className="flex-1">
                                     <div className="flex items-center gap-3">
                                       <h3 className="text-xl font-medium text-slate-900 leading-tight">
-                                        {isMeta && (
-                                          <Tooltip 
-                                            text="Meta EIP defining the included proposals for this network upgrade"
-                                            className="inline-block cursor-pointer"
-                                          >
-                                            <span 
-                                              className="text-blue-500 hover:text-blue-700 mr-2 transition-colors cursor-help" 
-                                            >
-                                              📋
-                                            </span>
-                                          </Tooltip>
-                                        )}
-                                        {!isMeta && isHeadliner(eip, forkName) && (
+                                        {isHeadliner(eip, forkName) && (
                                           <Tooltip 
                                             text={forkName.toLowerCase() === 'glamsterdam' 
                                               ? "Competing headliner proposal for this network upgrade" 
@@ -762,7 +694,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                           </Tooltip>
                                         )}
                                         <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">{getProposalPrefix(eip)}-{eip.id}</span>
-                                        <span>{isMeta ? eip.title : getLaymanTitle(eip)}</span>
+                                        <span>{getLaymanTitle(eip)}</span>
                                       </h3>
                                       <div className="flex items-center gap-2 relative top-0.5">
                                         <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
@@ -792,7 +724,7 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                               {/* Description */}
                               <div className="">
                                 <p className="text-slate-700 text-sm leading-relaxed">
-                                  {parseMarkdownLinks(getEipDescription(eip))}
+                                  {parseMarkdownLinks(eip.laymanDescription)}
                                 </p>
 
                                 {/* Headliner Discussion Link (for headliners in regular sections) */}
@@ -818,28 +750,25 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 })()}
                               </div>
 
-                              {/* Benefits - only show for non-Meta EIPs */}
-                              {!isMeta && eip.benefits && eip.benefits.length > 0 && (
-                                <div className="mt-8 mb-8">
-                                  <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
-                                  <ul className="space-y-2">
-                                    {eip.benefits.map((benefit, index) => (
-                                      <li key={index} className="flex items-start text-sm">
-                                        <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
-                                        <span className="text-slate-700">{benefit}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
+                              {/* Benefits */}
+                              <div className="mt-8 mb-8">
+                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Key Benefits</h4>
+                                <ul className="space-y-2">
+                                  {eip.benefits?.map((benefit, index) => (
+                                    <li key={index} className="flex items-start text-sm">
+                                      <span className="text-emerald-600 mr-3 mt-0.5 text-xs">●</span>
+                                      <span className="text-slate-700">{benefit}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
 
-                              {/* Stakeholder Impact - only show for non-Meta EIPs */}
-                              {!isMeta && eip.stakeholderImpacts && Object.keys(eip.stakeholderImpacts).length > 0 && (
-                                <div className="mt-8 mb-8">
-                                  <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Stakeholder Impact</h4>
-                                  <div className="bg-slate-50 border border-slate-200 rounded p-4">
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                      {Object.entries(eip.stakeholderImpacts || {}).map(([stakeholder, impact]) => {
+                              {/* Stakeholder Impact */}
+                              <div className="mt-8 mb-8">
+                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Stakeholder Impact</h4>
+                                <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                    {Object.entries(eip.stakeholderImpacts || {}).map(([stakeholder, impact]) => {
                                       const stakeholderNames = {
                                         endUsers: 'End Users',
                                         appDevs: 'Application Developers',
@@ -859,14 +788,13 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                           <p className="text-slate-700 text-xs leading-relaxed">{impact.description}</p>
                                         </div>
                                       );
-                                      })}
-                                    </div>
+                                    })}
                                   </div>
                                 </div>
-                              )}
+                              </div>
 
-                              {/* Trade-offs & Considerations - only show for non-Meta EIPs */}
-                              {!isMeta && eip.tradeoffs && eip.tradeoffs.length > 0 && (
+                              {/* Trade-offs & Considerations */}
+                              {eip.tradeoffs && eip.tradeoffs.length > 0 && (
                                 <div className="mt-8 mb-8">
                                   <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">Trade-offs & Considerations</h4>
                                   <ul className="space-y-2">
@@ -880,12 +808,11 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                 </div>
                               )}
 
-                              {/* North Star Goal Alignment - only show for non-Meta EIPs */}
-                              {!isMeta && eip.northStarAlignment && (
-                                <div className="mt-8">
-                                  <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
-                                  <div className="bg-slate-50 border border-slate-200 rounded p-4">
-                                    <div className="space-y-4">
+                              {/* North Star Goal Alignment */}
+                              <div className="mt-8">
+                                <h4 className="text-sm font-semibold text-slate-900 mb-4 uppercase tracking-wide">North Star Goal Alignment</h4>
+                                <div className="bg-slate-50 border border-slate-200 rounded p-4">
+                                  <div className="space-y-4">
                                     {eip.northStarAlignment?.scaleL1 && (
                                       <div className="bg-white border border-slate-200 rounded p-4">
                                         <h5 className="font-semibold text-slate-900 text-xs mb-3 border-b border-blue-200 pb-2">Scale L1</h5>
@@ -904,10 +831,9 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                         <p className="text-slate-700 text-xs leading-relaxed">{eip.northStarAlignment.improveUX.description}</p>
                                       </div>
                                     )}
-                                    </div>
                                   </div>
                                 </div>
-                              )}
+                              </div>
                             </article>
                           );
                         })}
