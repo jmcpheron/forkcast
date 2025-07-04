@@ -7,12 +7,14 @@ import { useAnalytics } from '../../hooks/useAnalytics';
 interface OverviewSectionProps {
   eips: EIP[];
   forkName: string;
+  status: string;
   onStageClick: (stageId: string) => void;
 }
 
 export const OverviewSection: React.FC<OverviewSectionProps> = ({
   eips,
   forkName,
+  status,
   onStageClick
 }) => {
   const { trackLinkClick } = useAnalytics();
@@ -22,6 +24,12 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
   };
 
   const stageStats = [
+    // Only show "Included" for active forks
+    ...(status === 'Active' ? [{
+      stage: 'Included', 
+      count: eips.filter(eip => getInclusionStage(eip, forkName) === 'Included').length, 
+      color: 'bg-emerald-50 text-emerald-800' 
+    }] : []),
     { 
       stage: 'Proposed for Inclusion', 
       count: eips.filter(eip => getInclusionStage(eip, forkName) === 'Proposed for Inclusion').length, 
@@ -127,7 +135,7 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
       
       {/* Stage stats - only show for non-Glamsterdam forks */}
       {forkName.toLowerCase() !== 'glamsterdam' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${status === 'Active' ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-4`}>
           {stageStats.map(({ stage, count, color }) => {
             const stageId = stage.toLowerCase().replace(/\s+/g, '-');
             const hasEips = count > 0;
