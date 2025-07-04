@@ -7,7 +7,7 @@ import { useAnalytics } from '../../hooks/useAnalytics';
 interface OverviewSectionProps {
   eips: EIP[];
   forkName: string;
-  status?: string;
+  status: string;
   onStageClick: (stageId: string) => void;
 }
 
@@ -23,33 +23,13 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
     trackLinkClick(linkType, url);
   };
 
-  // For active/completed forks, only show relevant stats
-  const isActiveFork = status === 'Active';
-  
-  const includedCount = eips.filter(eip => getInclusionStage(eip, forkName) === 'Included').length;
-  const declinedCount = eips.filter(eip => getInclusionStage(eip, forkName) === 'Declined for Inclusion').length;
-  
-  // For active forks, show simplified stats
-  const stageStats = isActiveFork ? [
-    { 
+  const stageStats = [
+    // Only show "Included" for active forks
+    ...(status === 'Active' ? [{
       stage: 'Included', 
-      count: includedCount,
-      color: 'bg-emerald-50 text-emerald-800',
-      description: 'Successfully implemented in this upgrade'
-    },
-    { 
-      stage: 'Declined', 
-      count: declinedCount,
-      color: 'bg-red-50 text-red-800',
-      description: 'Proposed but not included'
-    }
-  ].filter(stat => stat.count > 0) : [
-    // For upcoming forks, show all stages
-    { 
-      stage: 'Included', 
-      count: includedCount,
+      count: eips.filter(eip => getInclusionStage(eip, forkName) === 'Included').length, 
       color: 'bg-emerald-50 text-emerald-800' 
-    },
+    }] : []),
     { 
       stage: 'Proposed for Inclusion', 
       count: eips.filter(eip => getInclusionStage(eip, forkName) === 'Proposed for Inclusion').length, 
@@ -164,13 +144,8 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
       
       {/* Stage stats - only show for non-Glamsterdam forks */}
       {forkName.toLowerCase() !== 'glamsterdam' && (
-        <div className={`grid gap-4 ${
-          isActiveFork 
-            ? 'grid-cols-1 md:grid-cols-2' 
-            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
-        }`}>
-          {stageStats.map((stat) => {
-            const { stage, count, color, description } = stat;
+        <div className={`grid grid-cols-1 md:grid-cols-2 ${status === 'Active' ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-4`}>
+          {stageStats.map(({ stage, count, color }) => {
             const stageId = stage.toLowerCase().replace(/\s+/g, '-');
             const hasEips = count > 0;
             

@@ -332,7 +332,7 @@
     "type": "Standards Track",
     "category": "Core",
     "createdDate": "2023-06-28",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7251-increase-the-max-effective-balance/14982",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7251-increase-the-max-effective-balance/15982",
     "laymanDescription": "This upgrade allows validators to stake up to 2048 ETH instead of being limited to 32 ETH per validator. Large stakers who previously needed to run hundreds of validators can now consolidate them into fewer, more efficient validators. This is like allowing trucks to carry more cargo - instead of needing 64 small trucks, you can use one large truck, reducing traffic and operational overhead.",
     "northStars": [
       "scaleL1",
@@ -410,7 +410,7 @@
     "type": "Standards Track",
     "category": "Core",
     "createdDate": "2023-11-07",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7549-move-committee-index-outside-attestation/16646",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7549-move-committee-index-outside-attestation/16390",
     "laymanDescription": "This technical improvement reorganizes how validator votes (attestations) are structured, making it much more efficient to combine them. It's like reorganizing a filing system - the same information is stored, but in a way that makes it faster to process. This reduces the network bandwidth needed for consensus by allowing better compression of validator messages.",
     "northStars": [
       "scaleL1"
@@ -552,12 +552,12 @@
     "id": 7600,
     "title": "EIP-7600: Hardfork Meta - Pectra",
     "status": "Final",
-    "description": "Meta EIP specifying the included EIPs for the Prague/Electra (Pectra) network upgrade.",
+    "description": "Meta EIP listing the EIPs formally Scheduled for Inclusion in the Prague/Electra network upgrade.",
     "author": "Tim Beiko",
     "type": "Meta",
     "category": null,
     "createdDate": "2024-01-18",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7600-pectra-meta-eip/18400",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7600-hardfork-meta-prague-electra/18205",
     "forkRelationships": [
       {
         "forkName": "Pectra",
@@ -590,8 +590,8 @@
     "author": "Toni Wahrländer, et al.",
     "type": "Standards Track",
     "category": "Core",
-    "createdDate": "2024-02-15",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7623-increase-calldata-cost/18734",
+    "createdDate": "2024-02-13",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7623-increase-calldata-cost/18647",
     "laymanDescription": "This upgrade increases the gas cost for transaction data (calldata) to prevent blocks from becoming too large. It's like adding a weight limit to packages - by making heavy data more expensive, we ensure the network doesn't get congested with oversized blocks. This particularly affects data-heavy transactions while having minimal impact on regular transfers and smart contract interactions.",
     "northStars": [
       "scaleL1"
@@ -734,8 +734,8 @@
     "author": "Ansgar Dietrichs, et al.",
     "type": "Standards Track",
     "category": "Core",
-    "createdDate": "2024-04-12",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7685-general-purpose-execution-layer-requests/19507",
+    "createdDate": "2024-04-14",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7685-general-purpose-execution-layer-requests/19668",
     "laymanDescription": "This creates a standardized communication channel between Ethereum's execution layer (where transactions happen) and consensus layer (where validation happens). It's like establishing a proper postal system between two cities that previously had to use different methods for each type of message. This framework is used by other Pectra upgrades for deposits and exits.",
     "northStars": [
       "scaleL1",
@@ -813,7 +813,7 @@
     "type": "Standards Track",
     "category": "Core",
     "createdDate": "2024-04-17",
-    "discussionLink": "https://ethereum-magicians.org/t/eip-7691-blob-throughput-increase/19561",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7691-blob-throughput-increase/19694",
     "laymanDescription": "This upgrade doubles the amount of data that Layer 2 rollups can post to Ethereum, from 3 to 6 blobs per block (with a maximum of 9). It's like doubling the number of cargo containers a ship can carry - Layer 2s can now process twice as many transactions while maintaining the same security guarantees from Ethereum. This directly translates to lower fees on rollups.",
     "northStars": [
       "scaleBlobs"
@@ -1096,9 +1096,9 @@
     "description": "Adds blob configuration parameters to execution layer config files for better coordination.",
     "author": "Ansgar Dietrichs",
     "type": "Informational",
-    "category": null,
-    "createdDate": "2024-08-22",
-    "discussionLink": "https://github.com/ethereum/execution-apis/pull/555",
+    "category": "Interface",
+    "createdDate": "2024-05-01",
+    "discussionLink": "https://ethereum-magicians.org/t/eip-7840-add-blob-schedule-to-execution-client-configuration-files/22182",
     "laymanDescription": "This technical improvement adds blob-related configuration to execution layer config files, making it easier for node operators and tools to understand blob parameters. It's like adding a shipping manifest to a cargo ship - the information was already there, but now it's organized in a standard place where everyone can find it.",
     "northStars": [
       "scaleBlobs"
@@ -3060,7 +3060,7 @@
     "title": "EIP-3074: AUTH and AUTHCALL opcodes",
     "status": "Review",
     "description": "Adds AUTH and AUTHCALL opcodes to enable EOAs to delegate control to contracts for transaction execution.",
-    "author": "Sam Wilson, et al.",
+    "author": "Sam Wilson (@SamWilsn), Ansgar Dietrichs (@adietrichs), Matt Garnett (@lightclient), Micah Zoltu (@micahzoltu)",
     "type": "Standards Track",
     "category": "Core",
     "createdDate": "2020-10-01",
@@ -3583,4 +3583,3 @@
     ],
     "laymanDescription": "This adds practical stack manipulation tools to the EVM without requiring the complex EOF format. It extends the existing SWAP and DUP instructions to reach deeper stack positions (up to 24 positions), adds dynamic SWAPN and DUPN instructions for variable depth access, and introduces an EXCHANGE instruction that can swap any two arbitrary stack positions. These tools help compilers generate more efficient code when dealing with complex functions that have many local variables, reducing gas costs and bytecode size. Unlike previous attempts that required new code formats, this proposal works with existing legacy contracts by requiring specific PUSH instructions before the dynamic operations, making it a pragmatic solution that provides better stack access without breaking backward compatibility."
   }
-]

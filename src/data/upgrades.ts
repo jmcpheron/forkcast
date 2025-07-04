@@ -20,7 +20,7 @@ export const networkUpgrades: NetworkUpgrade[] = [
     status: 'Active',
     activationDate: 'May 7, 2025',
     disabled: false,
-    metaEipLink: 'https://eips.ethereum.org/EIPS/eip-7600'
+    metaEipLink: "https://ethereum-magicians.org/t/pectra-network-upgrade-meta-thread/16809"
   },
   {
     id: 'fusaka',
