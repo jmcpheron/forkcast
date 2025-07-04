@@ -77,7 +77,6 @@ function App() {
             forkName="Pectra"
             displayName={pectraUpgrade.name}
             description={pectraUpgrade.description}
-            activationDate={pectraUpgrade.activationDate}
             status={pectraUpgrade.status}
             metaEipLink={pectraUpgrade.metaEipLink}
           />

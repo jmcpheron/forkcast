@@ -47,7 +47,7 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
     },
     { 
       stage: 'Declined for Inclusion', 
-      count: eips.filter(eip => getInclusionStage(eip, forkName) === 'Declined for Inclusion').length, 
+      count: declinedCount,
       color: 'bg-red-50 text-red-800' 
     }
   ];
@@ -55,13 +55,22 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
   return (
     <div className="bg-white border border-slate-200 rounded p-6" id="overview" data-section>
       <div className="flex items-center gap-3 mb-4">
-        <h2 className="text-lg font-semibold text-slate-900">Upgrade Overview</h2>
+        <h2 className="text-lg font-semibold text-slate-900">
+          {isActiveFork ? 'Upgrade Summary' : 'Upgrade Overview'}
+        </h2>
         <CopyLinkButton 
           sectionId="overview" 
           title="Copy link to overview"
           size="sm"
         />
       </div>
+
+      {/* Add a note for active forks */}
+      {isActiveFork && forkName.toLowerCase() !== 'glamsterdam' && (
+        <div className="mb-4 text-sm text-slate-600">
+          This upgrade is now active on the Ethereum network. Below are the EIPs that were successfully implemented.
+        </div>
+      )}
 
       {/* Special note for Glamsterdam's competitive headliner process */}
       {forkName.toLowerCase() === 'glamsterdam' && (
@@ -153,9 +162,14 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
               >
                 <div className="text-2xl font-light text-slate-900 mb-1">{count}</div>
                 <div className="text-xs text-slate-500 mb-1">EIP{count !== 1 ? 's' : ''}</div>
-                <div className={`text-xs font-medium px-2 py-1 rounded inline-block ${color}`}>
+                <div className={`text-xs font-medium px-2 py-1 rounded inline-block ${color} mb-2`}>
                   {stage}
                 </div>
+                {isActiveFork && description && (
+                  <div className="text-xs text-slate-600 mt-2">
+                    {description}
+                  </div>
+                )}
               </button>
             );
           })}
