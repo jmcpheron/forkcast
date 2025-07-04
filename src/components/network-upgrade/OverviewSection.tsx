@@ -23,6 +23,9 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
     trackLinkClick(linkType, url);
   };
 
+  const isActiveFork = status === 'Active';
+  const declinedCount = eips.filter(eip => getInclusionStage(eip, forkName) === 'Declined for Inclusion').length;
+
   const stageStats = [
     // Only show "Included" for active forks
     ...(status === 'Active' ? [{
@@ -165,11 +168,6 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
                 <div className={`text-xs font-medium px-2 py-1 rounded inline-block ${color} mb-2`}>
                   {stage}
                 </div>
-                {isActiveFork && description && (
-                  <div className="text-xs text-slate-600 mt-2">
-                    {description}
-                  </div>
-                )}
               </button>
             );
           })}
