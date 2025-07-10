@@ -3,6 +3,7 @@ export interface ForkRelationship {
   status: string;
   isHeadliner?: boolean;
   headlinerDiscussionLink?: string;
+  layer?: string; // Indicates whether the headliner primarily affects Execution Layer or Consensus Layer
 }
 
 export interface EIP {

@@ -1,8 +1,15 @@
 import React from 'react';
 import { EIP } from '../../types';
-import { getInclusionStage, isHeadliner, getLaymanTitle, parseMarkdownLinks } from '../../utils';
+import {
+  getInclusionStage,
+  isHeadliner,
+  getLaymanTitle,
+  getHeadlinerLayer,
+  parseMarkdownLinks
+} from '../../utils';
 import { CopyLinkButton } from '../ui/CopyLinkButton';
 import { useAnalytics } from '../../hooks/useAnalytics';
+import { Tooltip } from '../ui/Tooltip';
 
 interface OverviewSectionProps {
   eips: EIP[];
@@ -90,9 +97,21 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {eips
                 .filter(eip => isHeadliner(eip, forkName))
-                .sort((a, b) => a.id - b.id)
+                .sort((a, b) => {
+                  const layerA = getHeadlinerLayer(a, forkName);
+                  const layerB = getHeadlinerLayer(b, forkName);
+
+                  // Sort by layer first (EL before CL)
+                  if (layerA === 'EL' && layerB === 'CL') return -1;
+                  if (layerA === 'CL' && layerB === 'EL') return 1;
+
+                  // Then sort by EIP number within each layer
+                  return a.id - b.id;
+                })
                 .map(eip => {
                   if (!eip.laymanDescription) return null;
+                  
+                  const layer = getHeadlinerLayer(eip, forkName);
                   
                   return (
                     <button
@@ -100,14 +119,30 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
                       onClick={() => onStageClick(`eip-${eip.id}`)}
                       className="text-left p-3 bg-white border border-purple-200 rounded hover:border-purple-300 hover:shadow-sm transition-all duration-200 group"
                     >
-                      <div className="flex items-start justify-between mb-2">
-                        <h5 className="font-medium text-purple-900 text-sm group-hover:text-purple-700 transition-colors">
-                          EIP-{eip.id}: {getLaymanTitle(eip)}
-                        </h5>
-                        <svg className="w-4 h-4 text-purple-400 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </div>
+                        <div className="flex items-start justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <h5 className="font-medium text-purple-900 text-sm group-hover:text-purple-700 transition-colors">
+                              EIP-{eip.id}: {getLaymanTitle(eip)}
+                            </h5>
+                            {layer && (
+                              <Tooltip
+                                text={layer === 'EL' ? 'Primarily impacts Execution Layer' : 'Primarily impacts Consensus Layer'}
+                                className="inline-block"
+                              >
+                                <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+                                  layer === 'EL'
+                                    ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                                    : 'bg-green-100 text-green-700 border border-green-200'
+                                }`}>
+                                  {layer}
+                                </span>
+                              </Tooltip>
+                            )}
+                          </div>
+                          <svg className="w-4 h-4 text-purple-400 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
                       <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
                         {eip.laymanDescription.length > 120 
                           ? parseMarkdownLinks(eip.laymanDescription.substring(0, 120) + '...')

@@ -11,7 +11,8 @@ import {
   getLaymanTitle,
   getProposalPrefix,
   getSpecificationUrl,
-  parseMarkdownLinks
+  parseMarkdownLinks,
+  getHeadlinerLayer
 } from '../utils';
 import {
   getInclusionStageColor,
@@ -125,13 +126,26 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
       },
       ...eips
         .filter(eip => isHeadliner(eip, forkName))
-        .sort((a, b) => a.id - b.id)
-        .map(eip => ({
-          id: `eip-${eip.id}`,
-          label: `☆ ${getProposalPrefix(eip)}-${eip.id}: ${getLaymanTitle(eip)}`,
-          type: 'eip' as const,
-          count: null as number | null
-        }))
+        .sort((a, b) => {
+          const layerA = getHeadlinerLayer(a, forkName);
+          const layerB = getHeadlinerLayer(b, forkName);
+
+          // Sort by layer first (EL before CL)
+          if (layerA === 'EL' && layerB === 'CL') return -1;
+          if (layerA === 'CL' && layerB === 'EL') return 1;
+
+          // Then sort by EIP number within each layer
+          return a.id - b.id;
+        })
+        .map(eip => {
+          const layer = getHeadlinerLayer(eip, forkName);
+          return {
+            id: `eip-${eip.id}`,
+            label: `☆ ${getProposalPrefix(eip)}-${eip.id}: ${getLaymanTitle(eip)}${layer ? ` (${layer})` : ''}`,
+            type: 'eip' as const,
+            count: null as number | null
+          };
+        })
     ] : []),
     // For non-Glamsterdam forks, show all EIP sections
     ...(forkName.toLowerCase() !== 'glamsterdam' ? [
@@ -178,10 +192,11 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
             const isHeadlinerEip = isHeadliner(eip, forkName);
             const starSymbol = forkName.toLowerCase() === 'glamsterdam' ? '☆' : '★';
             const proposalPrefix = getProposalPrefix(eip);
+            const layer = isHeadlinerEip ? getHeadlinerLayer(eip, forkName) : null;
             
             return {
               id: `eip-${eip.id}`,
-              label: `${isHeadlinerEip ? `${starSymbol} ` : ''}${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}`,
+              label: `${isHeadlinerEip ? `${starSymbol} ` : ''}${proposalPrefix}-${eip.id}: ${getLaymanTitle(eip)}${layer ? ` (${layer})` : ''}`,
               type: 'eip' as const,
               count: null as number | null
             };
@@ -348,11 +363,22 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                   <div className="space-y-6">
                     {eips
                       .filter(eip => isHeadliner(eip, forkName))
-                      .sort((a, b) => a.id - b.id)
+                      .sort((a, b) => {
+                        const layerA = getHeadlinerLayer(a, forkName);
+                        const layerB = getHeadlinerLayer(b, forkName);
+
+                        // Sort by layer first (EL before CL)
+                        if (layerA === 'EL' && layerB === 'CL') return -1;
+                        if (layerA === 'CL' && layerB === 'EL') return 1;
+
+                        // Then sort by EIP number within each layer
+                        return a.id - b.id;
+                      })
                       .map(eip => {
                         if (!eip.laymanDescription) return null;
 
                         const eipId = `eip-${eip.id}`;
+                        const layer = getHeadlinerLayer(eip, forkName);
 
                         return (
                           <article key={eip.id} className="bg-white border border-purple-200 rounded p-8 shadow-sm ring-1 ring-purple-100" id={eipId} data-section>
@@ -379,6 +405,20 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                       )}
                                       <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">{getProposalPrefix(eip)}-{eip.id}</span>
                                       <span>{getLaymanTitle(eip)}</span>
+                                      {layer && (
+                                        <Tooltip
+                                          text={layer === 'EL' ? 'Primarily impacts Execution Layer' : 'Primarily impacts Consensus Layer'}
+                                          className="inline-block"
+                                        >
+                                          <span className={`px-2 py-1 text-xs font-medium rounded ml-2 ${
+                                            layer === 'EL'
+                                              ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                                              : 'bg-green-100 text-green-700 border border-green-200'
+                                          }`}>
+                                            {layer}
+                                          </span>
+                                        </Tooltip>
+                                      )}
                                     </h3>
                                     <div className="flex items-center gap-2 relative top-0.5">
                                       <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
@@ -694,6 +734,20 @@ const PublicNetworkUpgradePage: React.FC<PublicNetworkUpgradePageProps> = ({
                                         <span className="text-slate-400 text-sm font-mono mr-2 relative -top-px">{getProposalPrefix(eip)}-{eip.id}</span>
                                         <span>{getLaymanTitle(eip)}</span>
                                       </h3>
+                                      {isHeadliner(eip, forkName) && getHeadlinerLayer(eip, forkName) && (
+                                        <Tooltip
+                                          text={getHeadlinerLayer(eip, forkName) === 'EL' ? 'Primarily impacts Execution Layer' : 'Primarily impacts Consensus Layer'}
+                                          className="inline-block"
+                                        >
+                                          <span className={`px-2 py-1 text-xs font-medium rounded ml-2 ${
+                                            getHeadlinerLayer(eip, forkName) === 'EL'
+                                              ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                                              : 'bg-green-100 text-green-700 border border-green-200'
+                                          }`}>
+                                            {getHeadlinerLayer(eip, forkName)}
+                                          </span>
+                                        </Tooltip>
+                                      )}
                                       <div className="flex items-center gap-2 relative top-0.5">
                                         <Tooltip text={`View ${getProposalPrefix(eip)}-${eip.id} specification`}>
                                           <a 
