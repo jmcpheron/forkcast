@@ -1173,7 +1173,7 @@
         "status": "Proposed",
         "isHeadliner": true,
         "headlinerDiscussionLink": "https://ethereum-magicians.org/t/glamsterdam-headliner-proposal-pureth/24459",
-        "layer": "CL"
+        "layer": "EL"
       }
     ],
     "laymanDescription": "This enables Ethereum nodes to provide cryptographic proofs with their responses, eliminating the need to trust RPC providers. Users can verify that data from any source is authentic without running their own full node.",
