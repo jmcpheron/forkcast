@@ -28,7 +28,7 @@ export const networkUpgrades: NetworkUpgrade[] = [
     description: 'Major improvements to Ethereum\'s scalability and user experience, including PeerDAS for enhanced data availability. Named after the combination of "Fulu" (consensus layer upgrade, named after a star) and "Osaka" (execution layer upgrade, named after a Devcon location).',
     tagline: 'PeerDAS enables nodes to specialize in storing different data pieces while maintaining security, dramatically increasing data capacity for Layer 2 networks and improving overall scalability.',
     status: 'Upcoming',
-    activationDate: '~Q3\'25-Q1\'26',
+    activationDate: 'Q4 2025',
     disabled: false
   },
   {
@@ -38,7 +38,7 @@ export const networkUpgrades: NetworkUpgrade[] = [
     description: 'Major network upgrade whose "headliner feature" is currently being decided. Named after the combination of "Amsterdam" (execution layer upgrade, named after the previous Devconnect location) and "Gloas" (consensus layer upgrade, named after a star).',
     tagline: 'Multiple major features competing for inclusion including ePBS for MEV resistance, EVM64 for computational efficiency, Pureth for trustless data access, and several other proposals for improved UX and scaling.',
     status: 'Planning',
-    activationDate: 'TBD',
+    activationDate: '2026',
     disabled: false,
     metaEipLink: 'https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195'
   }
