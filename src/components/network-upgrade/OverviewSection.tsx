@@ -197,7 +197,7 @@ export const OverviewSection: React.FC<OverviewSectionProps> = ({
           </div>
 
           {/* Client Team Perspectives */}
-          <div className="mt-6 p-4 bg-indigo-50 border border-indigo-200 rounded" id="client-team-perspectives" data-section>
+          <div className="mt-6 p-6 bg-indigo-50 border border-indigo-200 rounded" id="client-team-perspectives" data-section>
             <h4 className="font-medium text-indigo-900 text-sm mb-3 flex items-center gap-2">
               Client Team Perspectives
               <div className="flex items-center relative top-0.5">

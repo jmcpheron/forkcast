@@ -46,9 +46,19 @@ export const networkUpgrades: NetworkUpgrade[] = [
     metaEipLink: 'https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195',
     clientTeamPerspectives: [
       {
+        teamName: 'Erigon',
+        teamType: 'Both',
+        blogPostUrl: 'https://hackmd.io/@erigon/Glamsterdam_Headliners_View'
+      },
+      {
         teamName: 'Geth',
         teamType: 'EL',
         blogPostUrl: 'https://github.com/ethereum/pm/issues/1610#issuecomment-3073521193'
+      },
+      {
+        teamName: 'Grandine',
+        teamType: 'CL',
+        blogPostUrl: 'https://github.com/ethereum/pm/issues/1610#issuecomment-3078680887'
       },
       {
         teamName: 'Lighthouse',
