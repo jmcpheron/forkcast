@@ -79,6 +79,11 @@ export const networkUpgrades: NetworkUpgrade[] = [
         teamName: 'Reth',
         teamType: 'EL',
         blogPostUrl: 'https://hackmd.io/@ZPrq5kalQqSX-138YNSJUQ/H1JafRXLle'
+      },
+      {
+        teamName: 'Teku',
+        teamType: 'CL',
+        blogPostUrl: 'https://hackmd.io/@teku/SJeW2JULlx'
       }
     ]
   }
