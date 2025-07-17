@@ -42,4 +42,4 @@ export const GLAMSTERDAM_TIMELINE_PHASES: TimelinePhase[] = [
     description: 'As Glamsterdam devnets begin, final decisions on which CFI EIPs will be included in the upgrade\'s devnet.',
     status: 'upcoming'
   }
-]; 
+];

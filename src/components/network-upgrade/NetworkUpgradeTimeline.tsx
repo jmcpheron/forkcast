@@ -17,7 +17,7 @@ export const NetworkUpgradeTimeline: React.FC<NetworkUpgradeTimelineProps> = ({ 
 
   return (
     <div className="mb-6 hidden sm:block">
-      <div className="bg-white border border-slate-200 rounded px-6 py-4 relative overflow-visible min-h-[60px]">
+      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded px-6 py-4 relative overflow-visible min-h-[60px]">
         {/* Timeline line with rounded end caps and muted gradient */}
         <svg className="absolute left-0 right-0" style={{ top: '50%', height: timelineHeight, width: '100%', pointerEvents: 'none', zIndex: 0, overflow: 'visible', transform: 'translateY(-50%)' }} viewBox="0 0 100 14" preserveAspectRatio="none">
           <defs>
@@ -37,17 +37,17 @@ export const NetworkUpgradeTimeline: React.FC<NetworkUpgradeTimelineProps> = ({ 
         <div className="relative flex flex-row justify-between items-stretch w-full px-12" style={{ zIndex: 1, minHeight: timelineHeight }}>
           {upgrades.map((upgrade) => {
             const isCurrent = upgrade.id === currentForkId;
-            let labelClass = 'text-slate-500 font-normal';
-            let boxClass = 'bg-white border border-slate-200';
-            let dateClass = 'text-xs text-slate-400';
+            let labelClass = 'text-slate-500 dark:text-slate-400 font-normal';
+            let boxClass = 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600';
+            let dateClass = 'text-xs text-slate-400 dark:text-slate-500';
             if (isCurrent) {
-              labelClass = 'text-slate-900 font-semibold';
-              boxClass = 'bg-white border border-purple-200 shadow-sm';
-              dateClass = 'text-xs text-slate-500 font-medium';
+              labelClass = 'text-slate-900 dark:text-slate-100 font-semibold';
+              boxClass = 'bg-white dark:bg-slate-700 border border-purple-200 dark:border-purple-600 shadow-sm';
+              dateClass = 'text-xs text-slate-500 dark:text-slate-400 font-medium';
             }
-            
+
             const boxContent = (
-              <div className={`px-3 py-1.5 rounded ${boxClass} mb-1 truncate max-w-[180px] text-center leading-tight flex flex-col items-center transition-all duration-200 ${!isCurrent ? 'hover:border-slate-300 hover:shadow-sm' : ''}`} style={{ position: 'relative', zIndex: 2 }}>
+              <div className={`px-3 py-1.5 rounded ${boxClass} mb-1 truncate max-w-[180px] text-center leading-tight flex flex-col items-center transition-all duration-200 ${!isCurrent ? 'hover:border-slate-300 dark:hover:border-slate-500 hover:shadow-sm' : ''}`} style={{ position: 'relative', zIndex: 2 }}>
                   <span className={`${labelClass} text-xs mb-0.5 leading-tight`}>
                     {upgrade.name.replace(/ Upgrade$/, '')}
                   </span>
@@ -81,10 +81,10 @@ export const NetworkUpgradeTimeline: React.FC<NetworkUpgradeTimelineProps> = ({ 
           >
             {/* Pulsing dot */}
             <span className="relative flex h-4 w-4">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-200 opacity-40"></span>
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-purple-300 border-2 border-purple-200"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-200 dark:bg-purple-400 opacity-40"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 bg-purple-300 dark:bg-purple-400 border-2 border-purple-200 dark:border-purple-500"></span>
             </span>
-            <div className="text-[10px] text-purple-300 font-medium mt-0.5 leading-tight text-center">
+            <div className="text-[10px] text-purple-300 dark:text-purple-400 font-medium mt-0.5 leading-tight text-center">
               <div>we are here</div>
             </div>
           </div>
@@ -92,4 +92,4 @@ export const NetworkUpgradeTimeline: React.FC<NetworkUpgradeTimelineProps> = ({ 
       </div>
     </div>
   );
-}; 
+};

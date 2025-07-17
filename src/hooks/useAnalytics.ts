@@ -60,4 +60,4 @@ export const useAnalytics = () => {
     trackUpgradeView,
     trackLinkClick,
   };
-}; 
+};

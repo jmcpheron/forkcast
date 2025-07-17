@@ -8,9 +8,9 @@ interface MetaTagsProps {
   type?: string;
 }
 
-export const useMetaTags = ({ 
-  title, 
-  description, 
+export const useMetaTags = ({
+  title,
+  description,
   url = window.location.href,
   image = '/ethereum-icon.svg',
   type = 'website'
@@ -61,7 +61,7 @@ export const useMetaTags = ({
     return () => {
       // Restore default title
       document.title = 'Forkcast - Ethereum Upgrade Tracker';
-      
+
       // Restore default meta tags
       updateNameTag('description', 'See what\'s on the horizon and how it impacts you. Track Ethereum network upgrades and explore how changes affect users, developers, and the ecosystem.');
       updateMetaTag('og:title', 'Forkcast - Ethereum Upgrade Tracker');
@@ -72,4 +72,4 @@ export const useMetaTags = ({
       updateMetaTag('twitter:url', 'https://forkcast.org/');
     };
   }, [title, description, url, image, type]);
-}; 
+};

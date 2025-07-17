@@ -93,4 +93,4 @@ export const ClientTeamPerspectives: React.FC<ClientTeamPerspectivesProps> = ({
       </div>
     </div>
   );
-}; 
+};

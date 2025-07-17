@@ -6,15 +6,15 @@ interface TooltipProps {
   className?: string;
 }
 
-export const Tooltip: React.FC<TooltipProps> = ({ 
-  children, 
-  text, 
-  className = '' 
+export const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  text,
+  className = ''
 }) => {
   const [isVisible, setIsVisible] = useState(false);
-  
+
   return (
-    <div 
+    <div
       className={`relative ${className}`}
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
@@ -28,4 +28,4 @@ export const Tooltip: React.FC<TooltipProps> = ({
       )}
     </div>
   );
-}; 
+};

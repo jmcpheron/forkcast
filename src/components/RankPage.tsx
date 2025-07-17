@@ -9,6 +9,7 @@ import {
 } from "../utils/eip";
 import { useAnalytics } from "../hooks/useAnalytics";
 import eipsData from "../data/eips.json";
+import ThemeToggle from "./ui/ThemeToggle";
 
 interface TierItem {
   id: string;
@@ -436,20 +437,23 @@ const TiermakerPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white border-b border-slate-200">
+      <div className="bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center h-auto py-3 sm:flex-row sm:justify-center sm:items-center sm:h-16 sm:py-0 relative">
             <button
               onClick={() => navigate("/upgrade/glamsterdam")}
-              className="mb-2 sm:mb-0 sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 text-slate-600 hover:text-slate-900 transition-colors"
+              className="mb-2 sm:mb-0 sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100 transition-colors"
             >
               ← Back to Glamsterdam
             </button>
-            <h1 className="font-semibold text-slate-900 text-center truncate max-w-full overflow-hidden text-base sm:text-xl">
+            <h1 className="font-semibold text-slate-900 dark:text-slate-100 text-center truncate max-w-full overflow-hidden text-base sm:text-xl">
               Glamsterdam Headliner Tier Maker
             </h1>
+            <div className="sm:absolute sm:right-0 sm:top-1/2 sm:-translate-y-1/2">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </div>
@@ -458,18 +462,18 @@ const TiermakerPage: React.FC = () => {
           {/* Tiers */}
           <div>
             {/* Instructions */}
-            <div className="mb-4 p-4 bg-white rounded-lg border border-slate-200">
-              <h3 className="text-sm font-medium text-slate-900 mb-2">
+            <div className="mb-4 p-4 bg-white rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700">
+              <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
                 What is this?
               </h3>
-              <p className="text-xs text-slate-600 leading-relaxed mb-2">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-2">
                 Ethereum's Glamsterdam network upgrade aims to include one
                 consensus layer (CL) EIP and one execution layer (EL) EIP as its
                 main features. Users, app developers, core developers, and any
                 other stakeholders are invited to voice their support for their
                 preferences.
               </p>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Drag and drop (desktop) or tap-to-assign (mobile) the
                 Glamsterdam headliner proposals into tiers. S-tier represents
                 your highest priority proposals, while D-tier represents your
@@ -477,14 +481,14 @@ const TiermakerPage: React.FC = () => {
                 start a conversation.{" "}
                 <a
                   href="https://forkcast.org/upgrade/glamsterdam"
-                  className="text-purple-600 hover:text-purple-700"
+                  className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
                 >
                   Learn more about Glamsterdam
                 </a>
                 .
               </p>
             </div>
-            <div className="rounded-lg bg-white shadow border border-slate-200 flex flex-col overflow-hidden p-0">
+            <div className="rounded-lg bg-white shadow border border-slate-200 dark:bg-slate-800 dark:border-slate-700 flex flex-col overflow-hidden p-0">
               {/* Meme-style header */}
               <div className="bg-slate-800 px-4 py-3">
                 <h3 className="text-lg font-bold text-white">Your Rankings</h3>
@@ -527,9 +531,9 @@ const TiermakerPage: React.FC = () => {
                   </div>
                   {/* Items column with horizontal scroll */}
                   <div
-                    className={`flex-1 flex items-center px-0 border-l border-slate-200 overflow-hidden ${
+                    className={`flex-1 flex items-center px-0 border-l border-slate-200 dark:border-slate-600 overflow-hidden ${
                       dragOverTier === tier.id
-                        ? "bg-[repeating-linear-gradient(45deg,#f3f4f6_0_8px,transparent_8px_16px)]"
+                        ? "bg-[repeating-linear-gradient(45deg,#f3f4f6_0_8px,transparent_8px_16px)] dark:bg-[repeating-linear-gradient(45deg,#374151_0_8px,transparent_8px_16px)]"
                         : tier.rowBgColor
                     }`}
                   >
@@ -553,10 +557,10 @@ const TiermakerPage: React.FC = () => {
                                 : undefined
                             }
                             onDragEnd={!isTouchDevice ? handleDragEnd : undefined}
-                            className="flex items-center justify-between p-2 bg-white border border-slate-200 rounded shadow-sm min-w-max"
+                            className="flex items-center justify-between p-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded shadow-sm min-w-max"
                           >
                             <div className="flex items-center gap-2 min-w-0 flex-1">
-                              <span className="text-xs font-mono text-slate-500 flex-shrink-0">
+                              <span className="text-xs font-mono text-slate-500 dark:text-slate-400 flex-shrink-0">
                                 {getProposalPrefix(item.eip)}-{item.eip.id}
                               </span>
                               {getHeadlinerLayer(item.eip, "glamsterdam") && (
@@ -566,20 +570,20 @@ const TiermakerPage: React.FC = () => {
                                       item.eip,
                                       "glamsterdam"
                                     ) === "EL"
-                                      ? "bg-blue-100 text-blue-700"
-                                      : "bg-green-100 text-green-700"
+                                      ? "bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300"
+                                      : "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-300"
                                   }`}
                                 >
                                   {getHeadlinerLayer(item.eip, "glamsterdam")}
                                 </span>
                               )}
-                              <span className="font-medium text-xs text-slate-900 truncate">
+                              <span className="font-medium text-xs text-slate-900 dark:text-slate-100 truncate">
                                 {getLaymanTitle(item.eip)}
                               </span>
                             </div>
                             <button
                               onClick={() => handleRemoveFromTier(item.id)}
-                              className="ml-1 p-1 text-slate-400 hover:text-slate-600 transition-colors flex-shrink-0"
+                              className="ml-1 p-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex-shrink-0"
                             >
                               <svg
                                 className="w-3 h-3"
@@ -625,11 +629,11 @@ const TiermakerPage: React.FC = () => {
           {/* Unassigned Items */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-slate-900">
+              <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">
                 Unassigned Proposals
               </h3>
               {items.filter((item) => item.tier !== null).length > 0 && (
-                <div className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                <div className="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded">
                   Ready to generate image
                 </div>
               )}
@@ -669,30 +673,30 @@ const TiermakerPage: React.FC = () => {
                       ? () => handleMobileItemClick(item.id)
                       : undefined
                   }
-                  className={`p-2 bg-white border border-slate-200 rounded-lg cursor-move hover:shadow-md transition-all touch-manipulation ${
+                  className={`p-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg cursor-move hover:shadow-md transition-all touch-manipulation ${
                     draggedItem === item.id ? "opacity-50" : ""
                   } ${
                     selectedMobileItem === item.id
-                      ? "ring-2 ring-purple-400 bg-purple-50"
+                      ? "ring-2 ring-purple-400 bg-purple-50 dark:bg-purple-900/20"
                       : ""
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-slate-500">
+                    <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
                       {getProposalPrefix(item.eip)}-{item.eip.id}
                     </span>
                     {getHeadlinerLayer(item.eip, "glamsterdam") && (
                       <span
                         className={`px-1 py-0.5 text-xs font-medium rounded ${
                           getHeadlinerLayer(item.eip, "glamsterdam") === "EL"
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-green-100 text-green-700"
+                            ? "bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300"
+                            : "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-300"
                         }`}
                       >
                         {getHeadlinerLayer(item.eip, "glamsterdam")}
                       </span>
                     )}
-                    <span className="font-medium text-xs text-slate-900 truncate">
+                    <span className="font-medium text-xs text-slate-900 dark:text-slate-100 truncate">
                       {getLaymanTitle(item.eip)}
                     </span>
                   </div>
@@ -705,7 +709,7 @@ const TiermakerPage: React.FC = () => {
       {/* Experiment Disclaimer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
         <div className="text-center space-y-3">
-          <p className="text-xs text-slate-500 max-w-2xl mx-auto">
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
             This is an experimental tool for expressing preferences. Rankings
             are not stored or displayed by Forkcast and do not represent an
             official vote of any kind. To learn more about Ethereum governance
@@ -713,13 +717,13 @@ const TiermakerPage: React.FC = () => {
             <a
               target="_blank"
               href="https://ethereum.org/governance"
-              className="text-purple-600 hover:text-purple-700 underline decoration-1 underline-offset-2"
+              className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 underline decoration-1 underline-offset-2"
             >
               ethereum.org
             </a>
             .
           </p>
-          <div className="text-xs text-slate-400">
+          <div className="text-xs text-slate-400 dark:text-slate-500">
             <span className="italic">Have feedback? Contact </span>
             <a
               href="mailto:nixo@ethereum.org"
@@ -729,7 +733,7 @@ const TiermakerPage: React.FC = () => {
                   "mailto:nixo@ethereum.org"
                 )
               }
-              className="text-slate-500 hover:text-slate-700 underline decoration-1 underline-offset-2"
+              className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 underline decoration-1 underline-offset-2"
             >
               nixo
             </a>
@@ -744,7 +748,7 @@ const TiermakerPage: React.FC = () => {
                   "https://x.com/wolovim"
                 )
               }
-              className="text-slate-500 hover:text-slate-700 underline decoration-1 underline-offset-2"
+              className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 underline decoration-1 underline-offset-2"
             >
               @wolovim
             </a>

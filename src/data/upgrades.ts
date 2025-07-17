@@ -106,4 +106,4 @@ export const networkUpgrades: NetworkUpgrade[] = [
 
 export const getUpgradeById = (id: string): NetworkUpgrade | undefined => {
   return networkUpgrades.find(upgrade => upgrade.id === id);
-}; 
+};

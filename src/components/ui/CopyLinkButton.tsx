@@ -7,13 +7,13 @@ interface CopyLinkButtonProps {
   size?: 'sm' | 'md';
 }
 
-export const CopyLinkButton: React.FC<CopyLinkButtonProps> = ({ 
-  sectionId, 
-  title, 
-  size = 'md' 
+export const CopyLinkButton: React.FC<CopyLinkButtonProps> = ({
+  sectionId,
+  title,
+  size = 'md'
 }) => {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
-  
+
   const copyLinkToClipboard = (sectionId: string) => {
     const url = `${window.location.origin}${window.location.pathname}#${sectionId}`;
     navigator.clipboard.writeText(url).then(() => {
@@ -30,15 +30,15 @@ export const CopyLinkButton: React.FC<CopyLinkButtonProps> = ({
 
   const isCopied = copiedSection === sectionId;
   const iconSize = size === 'sm' ? 'w-3.5 h-3.5' : 'w-5 h-5';
-  
+
   return (
     <div className="relative">
       <Tooltip text={isCopied ? "Copied!" : title}>
         <button
           onClick={() => copyLinkToClipboard(sectionId)}
           className={`transition-colors cursor-pointer ${
-            isCopied 
-              ? 'text-emerald-600' 
+            isCopied
+              ? 'text-emerald-600'
               : 'text-slate-400 hover:text-slate-600'
           }`}
         >
@@ -55,4 +55,4 @@ export const CopyLinkButton: React.FC<CopyLinkButtonProps> = ({
       </Tooltip>
     </div>
   );
-}; 
+};

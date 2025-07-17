@@ -6,10 +6,10 @@ interface StatusBadgeProps {
   className?: string;
 }
 
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ 
-  status, 
+export const StatusBadge: React.FC<StatusBadgeProps> = ({
+  status,
   type = 'inclusion-stage',
-  className = '' 
+  className = ''
 }) => {
   const getColorClasses = () => {
     switch (type) {
@@ -62,4 +62,4 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       {status}
     </span>
   );
-}; 
+};
