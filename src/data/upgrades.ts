@@ -46,6 +46,11 @@ export const networkUpgrades: NetworkUpgrade[] = [
     metaEipLink: 'https://ethereum-magicians.org/t/eip-7773-glamsterdam-network-upgrade-meta-thread/21195',
     clientTeamPerspectives: [
       {
+        teamName: 'Besu',
+        teamType: 'EL',
+        blogPostUrl: 'https://hackmd.io/@RoboCopsGoneMad/Ski-5cHLge'
+      },
+      {
         teamName: 'Erigon',
         teamType: 'Both',
         blogPostUrl: 'https://hackmd.io/@erigon/Glamsterdam_Headliners_View'
@@ -69,6 +74,16 @@ export const networkUpgrades: NetworkUpgrade[] = [
         teamName: 'Lodestar',
         teamType: 'CL',
         blogPostUrl: 'https://blog.chainsafe.io/lodestars-glamsterdam-headliner-vision/'
+      },
+      {
+        teamName: 'Nethermind',
+        teamType: 'EL',
+        blogPostUrl: 'https://hackmd.io/@nethermindclient/Syqj3VUUxg'
+      },
+      {
+        teamName: 'Nimbus',
+        teamType: 'CL',
+        blogPostUrl: 'https://notes.status.im/MJFCsbS0RTaDZYMMapR1ng?view'
       },
       {
         teamName: 'Prysm',
