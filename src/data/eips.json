@@ -600,7 +600,7 @@
     "forkRelationships": [
       {
         "forkName": "Fusaka",
-        "status": "Scheduled"
+        "status": "Declined"
       }
     ],
     "laymanDescription": "This increases the contract code size limit from 24KB to 256KB and introduces gas metering for larger contracts. The change eliminates the need for complex architectural workarounds and enables more sophisticated single-contract applications.",
@@ -629,7 +629,7 @@
   {
     "id": 7951,
     "title": "EIP-7951: Precompile for secp256r1 Curve Support",
-    "status": "Draft", 
+    "status": "Draft",
     "description": "Add precompiled contract for secp256r1 ECDSA signature verification with proper security checks",
     "author": "Carl Beekhuizen (@carlbeek), Ulaş Erdoğan (@ulerdogan), Doğan Alpaslan (@doganalpaslan)",
     "type": "Standards Track",
@@ -671,13 +671,13 @@
     "status": "Draft",
     "description": "Pre-calculate and store a deterministic proposer lookahead in the beacon state at the start of every epoch",
     "author": "Lin Oshitani (@linoscope) <lin@nethermind.io>, Justin Drake (@JustinDrake) <justin@ethereum.org>",
-    "type": "Standards Track", 
+    "type": "Standards Track",
     "category": "Core",
     "createdDate": "2025-03-24",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7917-deterministic-proposer-lookahead/23259",
     "forkRelationships": [
       {
-        "forkName": "Fusaka", 
+        "forkName": "Fusaka",
         "status": "Scheduled"
       }
     ],
@@ -708,7 +708,7 @@
     "description": "Introduce a protocol-level cap on the maximum RLP-encoded block size to 10 MiB, including a 2 MiB margin for beacon block size.",
     "author": "Giulio Rebuffo (@Giulio2002), Ben Adams (@benaadams), Storm Slivkoff (@sslivkoff)",
     "type": "Standards Track",
-    "category": "Core", 
+    "category": "Core",
     "createdDate": "2025-04-16",
     "discussionLink": "https://ethereum-magicians.org/t/eip-7934-add-bytesize-limit-to-blocks/23589",
     "forkRelationships": [
@@ -890,7 +890,7 @@
     },
     "benefits": [
       "Enables cheap verification of Verkle proofs in smart contracts",
-      "Unlocks new cross-chain application possibilities", 
+      "Unlocks new cross-chain application possibilities",
       "Reduces gas costs for state proof verification",
       "Essential infrastructure for stateless applications"
     ]
@@ -1061,7 +1061,7 @@
     "benefits": [
       "Better slot utilization getting close to 100% utilization for broadcasting + execution",
       "Removal of most of the heavy work from the hot path of block validation.",
-      "Removal of trust assumptions for proposers and builders.", 
+      "Removal of trust assumptions for proposers and builders.",
       "Removal of trust assumptions on off-protocol closed source software."
     ]
   },
@@ -1929,4 +1929,4 @@
     ],
     "laymanDescription": "This adds practical stack manipulation tools to the EVM without requiring the complex EOF format. It extends the existing SWAP and DUP instructions to reach deeper stack positions (up to 24 positions), adds dynamic SWAPN and DUPN instructions for variable depth access, and introduces an EXCHANGE instruction that can swap any two arbitrary stack positions. These tools help compilers generate more efficient code when dealing with complex functions that have many local variables, reducing gas costs and bytecode size. Unlike previous attempts that required new code formats, this proposal works with existing legacy contracts by requiring specific PUSH instructions before the dynamic operations, making it a pragmatic solution that provides better stack access without breaking backward compatibility."
   }
-] 
+]
