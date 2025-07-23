@@ -6,6 +6,7 @@ import RankPage from './components/RankPage';
 import { getUpgradeById } from './data/upgrades';
 import { useAnalytics } from './hooks/useAnalytics';
 import { ThemeProvider } from './contexts/ThemeContext';
+import ExternalRedirect from './components/ExternalRedirect';
 
 function RedirectHandler() {
   const navigate = useNavigate();
@@ -15,13 +16,13 @@ function RedirectHandler() {
     // Check for redirect parameter from 404.html
     const urlParams = new URLSearchParams(location.search);
     const redirect = urlParams.get('redirect');
-    
+
     if (redirect) {
       // Remove the redirect parameter and navigate to the target path
       urlParams.delete('redirect');
       const newSearch = urlParams.toString();
       const newPath = redirect + (newSearch ? '?' + newSearch : '');
-      
+
       // Use replace to avoid adding to browser history
       navigate(newPath, { replace: true });
     }
@@ -58,7 +59,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/upgrade/fusaka" element={
-            <PublicNetworkUpgradePage 
+            <PublicNetworkUpgradePage
               forkName="Fusaka"
               displayName={fusakaUpgrade.name}
               description={fusakaUpgrade.description}
@@ -67,7 +68,7 @@ function App() {
             />
           } />
           <Route path="/upgrade/glamsterdam" element={
-            <PublicNetworkUpgradePage 
+            <PublicNetworkUpgradePage
               forkName="Glamsterdam"
               displayName={glamsterdamUpgrade.name}
               description={glamsterdamUpgrade.description}
@@ -77,8 +78,9 @@ function App() {
             />
           } />
           <Route path="/rank" element={<RankPage />} />
+          <Route path="/feedback" element={<ExternalRedirect />} />
           {/* <Route path="/upgrade/pectra" element={
-            <PublicNetworkUpgradePage 
+            <PublicNetworkUpgradePage
               forkName="Pectra"
               displayName={pectraUpgrade.name}
               description={pectraUpgrade.description}
@@ -94,4 +96,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
