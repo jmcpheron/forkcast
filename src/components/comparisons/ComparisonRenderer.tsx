@@ -9,6 +9,7 @@ interface ComparisonRendererProps {
 
 export default function ComparisonRenderer({ comparison }: ComparisonRendererProps) {
   const [eips, setEips] = useState<Record<string, EIP>>({});
+  const [expandedForkcast, setExpandedForkcast] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const eipMap: Record<string, EIP> = {};
@@ -866,30 +867,46 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
       case 'forkcast-facts':
         const forkcastSection = section as any; // Type assertion for ForkcastFacts
         const { data } = forkcastSection;
+        const isExpanded = expandedForkcast[forkcastSection.eipId] || false;
         
         return (
-          <div key={index} className="mb-6 p-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg">
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-2">
+          <div key={index} className="mb-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg">
+            <button
+              onClick={() => setExpandedForkcast(prev => ({ ...prev, [forkcastSection.eipId]: !prev[forkcastSection.eipId] }))}
+              className="w-full p-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+            >
+              <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                   <span>📊</span>
-                  Forkcast Facts: EIP-{forkcastSection.eipId}
+                  Forkcast Data: EIP-{forkcastSection.eipId}
                 </h3>
-                <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
-                  From Forkcast Repository
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
+                    Repository Data
+                  </span>
+                  <svg 
+                    className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 italic">
-                The following is neutral, factual data maintained by Forkcast
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Data compiled by Forkcast from EIP specifications and discussions
               </p>
-            </div>
+            </button>
             
-            {data.laymanDescription && (
-              <div className="mb-4">
-                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Overview</h4>
-                <p className="text-gray-600 dark:text-gray-400">{data.laymanDescription}</p>
-              </div>
-            )}
+            {isExpanded && (
+              <div className="p-4 pt-0">
+                {data.laymanDescription && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Overview</h4>
+                    <p className="text-gray-600 dark:text-gray-400">{data.laymanDescription}</p>
+                  </div>
+                )}
             
             {data.benefits && data.benefits.length > 0 && (
               <div className="mb-4">
@@ -951,6 +968,8 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                     </div>
                   )}
                 </div>
+              </div>
+            )}
               </div>
             )}
           </div>

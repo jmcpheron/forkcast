@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { EIPComparison, ForkcastFacts } from '../../types/comparison';
+import { EIPComparison } from '../../types/comparison';
 import ComparisonRenderer from './ComparisonRenderer';
 import { eipDataService } from '../../services/eipDataService';
 
@@ -42,34 +42,6 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
         reasoning: ''
       }
     ];
-
-    // Add Forkcast facts for each EIP that has neutral data
-    selectedEips.forEach((eipId, index) => {
-      const neutralData = eipDataService.getNeutralData(eipId);
-      if (neutralData && eipDataService.hasNeutralData(eipId)) {
-        // Add header before first Forkcast fact
-        if (index === 0) {
-          sections.push({
-            type: 'header',
-            content: 'Forkcast Neutral Facts',
-            level: 2
-          });
-        }
-        
-        sections.push({
-          type: 'forkcast-facts',
-          source: 'forkcast',
-          eipId: eipId,
-          data: {
-            laymanDescription: neutralData.laymanDescription,
-            benefits: neutralData.benefits,
-            tradeoffs: neutralData.tradeoffs,
-            northStarAlignment: neutralData.northStarAlignment,
-            stakeholderImpacts: neutralData.stakeholderImpacts
-          }
-        } as ForkcastFacts);
-      }
-    });
 
     return {
       meta: {
@@ -212,7 +184,63 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
               Back to Editor
             </button>
             <button
-              onClick={() => onComplete(comparison)}
+              onClick={() => {
+                // Build final comparison with Forkcast data inserted after executive summary
+                const finalSections = [...comparison.sections];
+                
+                // Find where to insert Forkcast data (after quick-stats/executive summary)
+                let insertIndex = 1; // Default after author preference
+                for (let i = 1; i < finalSections.length; i++) {
+                  if (finalSections[i].type === 'quick-stats' || 
+                      (finalSections[i].type === 'header' && (finalSections[i] as any).content?.includes('Executive Summary'))) {
+                    insertIndex = i + 1;
+                    // Look for the next non-quick-stats section
+                    while (insertIndex < finalSections.length && 
+                           (finalSections[insertIndex].type === 'quick-stats' || 
+                            finalSections[insertIndex].type === 'text')) {
+                      insertIndex++;
+                    }
+                    break;
+                  }
+                }
+                
+                // Build Forkcast sections
+                const forkcastSections: any[] = [];
+                let hasData = false;
+                selectedEips.forEach((eipId) => {
+                  const forkcastData = eipDataService.getForkcastData(eipId);
+                  if (forkcastData && eipDataService.hasForkcastData(eipId)) {
+                    if (!hasData) {
+                      forkcastSections.push({
+                        type: 'header',
+                        content: 'Forkcast Data',
+                        level: 2
+                      });
+                      hasData = true;
+                    }
+                    forkcastSections.push({
+                      type: 'forkcast-facts',
+                      source: 'forkcast',
+                      eipId: eipId,
+                      data: {
+                        laymanDescription: forkcastData.laymanDescription,
+                        benefits: forkcastData.benefits,
+                        tradeoffs: forkcastData.tradeoffs,
+                        northStarAlignment: forkcastData.northStarAlignment,
+                        stakeholderImpacts: forkcastData.stakeholderImpacts
+                      }
+                    });
+                  }
+                });
+                
+                // Insert Forkcast sections at the appropriate position
+                finalSections.splice(insertIndex, 0, ...forkcastSections);
+                
+                onComplete({
+                  ...comparison,
+                  sections: finalSections
+                });
+              }}
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
             >
               Finish & Share
@@ -236,10 +264,10 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
         </p>
         <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg">
           <h3 className="font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-            <span>📊</span> About Forkcast Facts
+            <span>📊</span> About Forkcast Data
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Gray sections labeled "Forkcast Facts" contain neutral, verified data from our EIP repository. 
+            Gray sections labeled "Forkcast Data" contain compiled information from our EIP repository. 
             These provide factual baselines about each EIP. You can't edit these, but you should add your 
             own analysis sections (benefits, tradeoffs, etc.) to share YOUR perspective on top of these facts.
           </p>
@@ -366,29 +394,7 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
           </div>
 
           {/* Additional Sections */}
-          {comparison.sections.slice(1).map((section, idx) => {
-            // Special rendering for Forkcast facts sections
-            if (section.type === 'forkcast-facts') {
-              return (
-                <div key={idx + 1} className="border border-gray-300 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span>📊</span>
-                    <h3 className="font-medium text-gray-700 dark:text-gray-300">
-                      Forkcast Facts: EIP-{(section as ForkcastFacts).eipId}
-                    </h3>
-                    <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
-                      (Read-only - From Forkcast Repository)
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    This section displays neutral data from Forkcast's EIP repository.
-                    Add your own analysis sections to share your opinions.
-                  </p>
-                </div>
-              );
-            }
-            
-            return (
+          {comparison.sections.slice(1).map((section, idx) => (
               <SectionEditor
                 key={idx + 1}
                 section={section}
@@ -399,8 +405,7 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
                 onUpdate={(updates: any) => updateSection(idx + 1, updates)}
                 onRemove={() => removeSection(idx + 1)}
               />
-            );
-          })}
+          ))}
         </div>
 
         {/* Right Panel: Add Sections & Actions */}

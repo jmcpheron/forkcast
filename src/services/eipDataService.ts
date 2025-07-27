@@ -1,7 +1,7 @@
 import eipsData from '../data/eips.json';
 import { EIP } from '../types/eip';
 
-interface NeutralEIPData {
+interface ForkcastEIPData {
   id: number;
   title: string;
   laymanDescription?: string;
@@ -37,9 +37,9 @@ class EIPDataService {
   }
 
   /**
-   * Get neutral data for a specific EIP
+   * Get Forkcast data for a specific EIP
    */
-  getNeutralData(eipId: number): NeutralEIPData | null {
+  getForkcastData(eipId: number): ForkcastEIPData | null {
     const eip = this.eipMap.get(eipId);
     if (!eip) return null;
 
@@ -56,13 +56,13 @@ class EIPDataService {
   }
 
   /**
-   * Get neutral data for multiple EIPs
+   * Get Forkcast data for multiple EIPs
    */
-  getMultipleNeutralData(eipIds: number[]): Map<number, NeutralEIPData> {
-    const result = new Map<number, NeutralEIPData>();
+  getMultipleForkcastData(eipIds: number[]): Map<number, ForkcastEIPData> {
+    const result = new Map<number, ForkcastEIPData>();
     
     eipIds.forEach(id => {
-      const data = this.getNeutralData(id);
+      const data = this.getForkcastData(id);
       if (data) {
         result.set(id, data);
       }
@@ -72,9 +72,9 @@ class EIPDataService {
   }
 
   /**
-   * Check if an EIP has Forkcast neutral data
+   * Check if an EIP has Forkcast data
    */
-  hasNeutralData(eipId: number): boolean {
+  hasForkcastData(eipId: number): boolean {
     const eip = this.eipMap.get(eipId);
     return !!(eip && (
       eip.laymanDescription ||
@@ -87,10 +87,10 @@ class EIPDataService {
   }
 
   /**
-   * Get all EIPs that have neutral data
+   * Get all EIPs that have Forkcast data
    */
-  getEIPsWithNeutralData(): number[] {
-    return Array.from(this.eipMap.keys()).filter(id => this.hasNeutralData(id));
+  getEIPsWithForkcastData(): number[] {
+    return Array.from(this.eipMap.keys()).filter(id => this.hasForkcastData(id));
   }
 }
 
