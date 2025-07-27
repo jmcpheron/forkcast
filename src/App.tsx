@@ -9,6 +9,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import ExternalRedirect from './components/ExternalRedirect';
 import ComparisonCreator from './components/comparisons/ComparisonCreator';
 import ComparisonViewer from './components/comparisons/ComparisonViewer';
+import ExampleLoader from './components/comparisons/ExampleLoader';
 
 function RedirectHandler() {
   const navigate = useNavigate();
@@ -82,6 +83,7 @@ function App() {
           <Route path="/rank" element={<RankPage />} />
           <Route path="/feedback" element={<ExternalRedirect />} />
           <Route path="/compare/new" element={<ComparisonCreator />} />
+          <Route path="/compare/example" element={<ExampleLoader />} />
           <Route path="/compare/:id" element={<ComparisonViewer />} />
           {/* <Route path="/upgrade/pectra" element={
             <PublicNetworkUpgradePage

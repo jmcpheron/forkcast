@@ -320,7 +320,7 @@ export default function ComparisonCreator() {
           <button
             onClick={() => {
               const url = loadExampleComparison();
-              window.open(url, '_blank');
+              navigate(url);
             }}
             className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
           >
