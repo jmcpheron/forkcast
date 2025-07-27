@@ -744,7 +744,7 @@ const TiermakerPage: React.FC = () => {
               rel="noopener noreferrer"
               onClick={() =>
                 handleExternalLinkClick(
-                  "twitter_contact",
+                  "x_contact",
                   "https://x.com/wolovim"
                 )
               }

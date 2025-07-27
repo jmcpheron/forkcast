@@ -51,7 +51,7 @@ export const useMetaTags = ({
     updateMetaTag('og:image', image);
     updateMetaTag('og:site_name', 'Forkcast');
 
-    // Twitter tags
+    // X (formerly Twitter) tags
     updateMetaTag('twitter:title', title);
     updateMetaTag('twitter:description', description);
     updateMetaTag('twitter:url', url);

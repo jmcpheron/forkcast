@@ -38,7 +38,7 @@ export default function ComparisonCreator() {
 
   const generateTemplate = () => {
     // Check which EIPs have Forkcast data
-    const eipsWithData = selectedEips.filter(eip => eipDataService.hasNeutralData(eip));
+    const eipsWithData = selectedEips.filter(eip => eipDataService.hasForkcastData(eip));
     
     // Build Forkcast facts sections
     let forkcastSections = '';
@@ -46,7 +46,7 @@ export default function ComparisonCreator() {
       forkcastSections = `
     {
       "type": "header",
-      "content": "Forkcast Neutral Facts",
+      "content": "Forkcast Data",
       "level": 2
     },`;
       
@@ -64,7 +64,7 @@ export default function ComparisonCreator() {
     const templateStructure = `{
   "meta": {
     "title": "[Your comparison title - be specific]",
-    "author": "[Your Name] ([ENS/handle] @twitter)",
+    "author": "[Your Name] ([ENS/handle] @x_handle)",
     "created": "${new Date().toISOString().split('T')[0]}",
     "description": "[One sentence explaining what you're comparing and why it matters]"
   },
@@ -75,7 +75,7 @@ export default function ComparisonCreator() {
       "preferredEip": ${selectedEips[0]},
       "strength": "strong",
       "reasoning": "[Explain why you prefer this EIP - be specific about the tradeoffs and why this choice aligns with your values/priorities for Ethereum]"
-    },${forkcastSections}
+    },
     {
       "type": "header",
       "content": "Executive Summary"
@@ -94,7 +94,7 @@ export default function ComparisonCreator() {
           { "icon": "🔧", "label": "Complexity", "value": "Medium", "color": "yellow" }
         ]`).join(',\n        ')}
       }
-    },
+    },${forkcastSections}
     {
       "type": "northstar-comparison",
       "northStars": ["Scale L1", "Scale blobs", "Improve UX"],
@@ -249,18 +249,18 @@ export default function ComparisonCreator() {
       parsed.sections = parsed.sections.map(section => {
         if (section.type === 'forkcast-facts' && 'eipId' in section) {
           const eipId = (section as any).eipId;
-          const neutralData = eipDataService.getNeutralData(eipId);
-          if (neutralData) {
+          const forkcastData = eipDataService.getForkcastData(eipId);
+          if (forkcastData) {
             return {
               type: 'forkcast-facts',
               source: 'forkcast',
               eipId: eipId,
               data: {
-                laymanDescription: neutralData.laymanDescription,
-                benefits: neutralData.benefits,
-                tradeoffs: neutralData.tradeoffs,
-                northStarAlignment: neutralData.northStarAlignment,
-                stakeholderImpacts: neutralData.stakeholderImpacts
+                laymanDescription: forkcastData.laymanDescription,
+                benefits: forkcastData.benefits,
+                tradeoffs: forkcastData.tradeoffs,
+                northStarAlignment: forkcastData.northStarAlignment,
+                stakeholderImpacts: forkcastData.stakeholderImpacts
               }
             } as any;
           }
@@ -341,8 +341,8 @@ export default function ComparisonCreator() {
           </p>
           <div className="mt-3 p-3 bg-gray-100 dark:bg-gray-800 rounded">
             <p className="text-xs text-gray-600 dark:text-gray-400">
-              <strong>📊 Forkcast Integration:</strong> We automatically include neutral facts from Forkcast's 
-              EIP repository. These gray sections provide factual baselines. Add YOUR analysis and opinions 
+              <strong>📊 Forkcast Integration:</strong> We automatically include compiled data from Forkcast's 
+              EIP repository. These gray sections provide EIP information. Add YOUR analysis and opinions 
               in additional sections to build on these facts.
             </p>
           </div>
@@ -560,12 +560,12 @@ export default function ComparisonCreator() {
             <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
               Use this structure to build your comparison of 2 Glamsterdam proposals. Start with YOUR preference at the top - 
               this is your take on which EIP should win and why. Forkcast facts are included automatically 
-              to provide neutral baselines.
+              to provide repository data.
             </p>
             <div className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded">
               <p className="text-xs text-gray-600 dark:text-gray-400">
-                <strong>How it works:</strong> Forkcast sections (gray) contain verified facts from our repository. 
-                Add YOUR analysis in new sections. This separation ensures readers know what's fact vs. opinion.
+                <strong>How it works:</strong> Forkcast sections (gray) contain compiled data from our repository. 
+                Add YOUR analysis in new sections. This separation ensures readers know what's repository data vs. personal analysis.
               </p>
             </div>
           </div>

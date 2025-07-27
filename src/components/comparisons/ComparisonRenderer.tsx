@@ -9,6 +9,7 @@ interface ComparisonRendererProps {
 
 export default function ComparisonRenderer({ comparison }: ComparisonRendererProps) {
   const [eips, setEips] = useState<Record<string, EIP>>({});
+  const [expandedForkcast, setExpandedForkcast] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const eipMap: Record<string, EIP> = {};
@@ -772,9 +773,9 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
         const isTopPosition = index < 3;
         
         if (isTopPosition) {
-          // Extract Twitter handle from author string
+          // Extract X handle from author string
           const authorMatch = comparison.meta.author.match(/@(\w+)/);
-          const twitterHandle = authorMatch ? authorMatch[1] : null;
+          const xHandle = authorMatch ? authorMatch[1] : null;
           const authorName = comparison.meta.author.split(' (')[0];
           
           return (
@@ -783,13 +784,21 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                 <div className="max-w-4xl mx-auto">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
-                      {/* Twitter/X Avatar */}
+                      {/* X Avatar */}
                       <div className="relative">
-                        <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30">
-                          <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                          </svg>
-                        </div>
+                        {comparison.meta.authorAvatar ? (
+                          <img 
+                            src={comparison.meta.authorAvatar} 
+                            alt={authorName}
+                            className="w-14 h-14 rounded-full border-2 border-white/30 object-cover"
+                          />
+                        ) : (
+                          <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30">
+                            <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                          </div>
+                        )}
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
                           <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -801,14 +810,14 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                         <h3 className="text-xl font-bold">
                           {authorName} {strengthLabels[section.strength]} EIP-{authorPreferredEip}
                         </h3>
-                        {twitterHandle && (
+                        {xHandle && (
                           <a 
-                            href={`https://twitter.com/${twitterHandle}`}
+                            href={`https://x.com/${xHandle}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm opacity-90 hover:opacity-100 transition-opacity flex items-center gap-1"
                           >
-                            @{twitterHandle}
+                            @{xHandle}
                             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
@@ -866,30 +875,46 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
       case 'forkcast-facts':
         const forkcastSection = section as any; // Type assertion for ForkcastFacts
         const { data } = forkcastSection;
+        const isExpanded = expandedForkcast[forkcastSection.eipId] || false;
         
         return (
-          <div key={index} className="mb-6 p-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg">
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-2">
+          <div key={index} className="mb-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg">
+            <button
+              onClick={() => setExpandedForkcast(prev => ({ ...prev, [forkcastSection.eipId]: !prev[forkcastSection.eipId] }))}
+              className="w-full p-4 text-left hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+            >
+              <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                   <span>📊</span>
-                  Forkcast Facts: EIP-{forkcastSection.eipId}
+                  Forkcast Data: EIP-{forkcastSection.eipId}
                 </h3>
-                <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
-                  From Forkcast Repository
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
+                    Repository Data
+                  </span>
+                  <svg 
+                    className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 italic">
-                The following is neutral, factual data maintained by Forkcast
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Data compiled by Forkcast from EIP specifications and discussions
               </p>
-            </div>
+            </button>
             
-            {data.laymanDescription && (
-              <div className="mb-4">
-                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Overview</h4>
-                <p className="text-gray-600 dark:text-gray-400">{data.laymanDescription}</p>
-              </div>
-            )}
+            {isExpanded && (
+              <div className="p-4 pt-0">
+                {data.laymanDescription && (
+                  <div className="mb-4">
+                    <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Overview</h4>
+                    <p className="text-gray-600 dark:text-gray-400">{data.laymanDescription}</p>
+                  </div>
+                )}
             
             {data.benefits && data.benefits.length > 0 && (
               <div className="mb-4">
@@ -951,6 +976,8 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                     </div>
                   )}
                 </div>
+              </div>
+            )}
               </div>
             )}
           </div>
