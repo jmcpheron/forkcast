@@ -276,16 +276,17 @@ export default function ComparisonCreator() {
     }
   };
 
-  const generateShareableUrl = () => {
-    if (!preview) return;
-    
-    // Store in localStorage with a hash
-    const hash = btoa(Math.random().toString(36).substring(7));
-    localStorage.setItem(`comparison-${hash}`, JSON.stringify(preview));
-    
-    // Navigate to the comparison page
-    navigate(`/compare/${hash}`);
-  };
+  // TODO: Implement persistent storage before enabling share functionality
+  // const generateShareableUrl = () => {
+  //   if (!preview) return;
+  //   
+  //   // Store in localStorage with a hash
+  //   const hash = btoa(Math.random().toString(36).substring(7));
+  //   localStorage.setItem(`comparison-${hash}`, JSON.stringify(preview));
+  //   
+  //   // Navigate to the comparison page
+  //   navigate(`/compare/${hash}`);
+  // };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -623,12 +624,7 @@ export default function ComparisonCreator() {
             >
               Edit
             </button>
-            <button
-              onClick={generateShareableUrl}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
-              Generate Shareable Link
-            </button>
+            {/* Share functionality hidden for now - TODO: implement persistent storage */}
           </div>
         </div>
         
