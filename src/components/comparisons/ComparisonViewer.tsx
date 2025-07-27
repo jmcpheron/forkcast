@@ -91,10 +91,7 @@ export default function ComparisonViewer() {
 
       <div className="mt-6 text-center">
         <button
-          onClick={() => {
-            const basePath = import.meta.env.DEV ? '' : '/forkcast';
-            navigate(`${basePath}/compare/new`);
-          }}
+          onClick={() => navigate('/compare/new')}
           className="text-blue-600 dark:text-blue-400 hover:underline"
         >
           Create your own comparison →

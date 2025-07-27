@@ -4,14 +4,11 @@
     <meta charset="utf-8">
     <title>Forkcast</title>
     <script type="text/javascript">
-      // SPA redirect for custom domain
-      // Redirect to root and let React Router handle the routing
-      var l = window.location;
-      var path = l.pathname + l.search + l.hash;
-      l.replace(l.origin + '/?redirect=' + encodeURIComponent(path));
+      // Simple redirect to home for hash routing
+      window.location.replace(window.location.origin + '/forkcast/');
     </script>
   </head>
   <body>
-    <p>Redirecting...</p>
+    <p>Redirecting to Forkcast...</p>
   </body>
-</html> 
+</html>
