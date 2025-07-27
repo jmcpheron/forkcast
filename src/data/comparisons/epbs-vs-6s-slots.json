@@ -140,14 +140,14 @@
           "Improve UX": {
             "impact": "Low",
             "icon": "🔴",
-            "description": "Mostly invisible to users, risk of empty blocks during volatility"
+            "description": "This is critical protocol plumbing. Unlike 6s slots, users won't feel this change day-one. The potential UX gains only come from future upgrades that ePBS enables."
           }
         },
         "7782": {
           "Scale L1": {
             "impact": "Low",
             "icon": "🔴",
-            "description": "Doesn't increase throughput, only reduces latency"
+            "description": "While faster finality improves L1's role as a settlement layer, I classify this as a UX win, not a direct scaling of transaction throughput (TPS), which remains unchanged."
           },
           "Scale blobs": {
             "impact": "Low",
@@ -230,9 +230,9 @@
             "description": "Update confirmation UIs and timing expectations"
           },
           "toolingInfra": {
-            "impact": "Medium",
-            "icon": "🔄",
-            "description": "Adjust monitoring intervals, API polling rates, analytics"
+            "impact": "High",
+            "icon": "🔧",
+            "description": "Doubles data volume, requiring significant updates to indexing, databases, and monitoring systems"
           },
           "layer2s": {
             "impact": "High",
@@ -250,9 +250,9 @@
             "description": "Optimize all timing loops, attestation aggregation, p2p propagation"
           },
           "elClients": {
-            "impact": "High",
-            "icon": "🔧",
-            "description": "Faster state transitions, optimize execution paths"
+            "impact": "Medium",
+            "icon": "⚡",
+            "description": "Must handle state transitions twice as frequently; a performance challenge, but fewer logic changes than CL"
           }
         }
       }
