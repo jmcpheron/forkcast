@@ -8,7 +8,9 @@ const EXAMPLE_COMPARISON = exampleComparison;
 export function loadExampleComparison() {
   const hash = 'example-epbs-6s';
   localStorage.setItem(`comparison-${hash}`, JSON.stringify(EXAMPLE_COMPARISON));
-  return `/compare/${hash}`;
+  // In development, we don't have the base path
+  const basePath = import.meta.env.DEV ? '' : '/json-battlecard';
+  return `${basePath}/compare/${hash}`;
 }
 
 export default function ExampleLoader() {

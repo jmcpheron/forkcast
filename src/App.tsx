@@ -55,7 +55,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Router basename="/json-battlecard">
+      <Router basename={import.meta.env.DEV ? "" : "/json-battlecard"}>
         <RedirectHandler />
         <AnalyticsTracker />
         <Routes>

@@ -284,7 +284,8 @@ export default function ComparisonCreator() {
     localStorage.setItem(`comparison-${hash}`, JSON.stringify(preview));
     
     // Navigate to the comparison page
-    navigate(`/compare/${hash}`);
+    const basePath = import.meta.env.DEV ? '' : '/json-battlecard';
+    navigate(`${basePath}/compare/${hash}`);
   };
 
   const copyToClipboard = (text: string) => {

@@ -48,7 +48,10 @@ export default function ComparisonViewer() {
             {error}
           </h2>
           <button
-            onClick={() => navigate('/compare/new')}
+            onClick={() => {
+              const basePath = import.meta.env.DEV ? '' : '/json-battlecard';
+              navigate(`${basePath}/compare/new`);
+            }}
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
           >
             Create New Comparison
@@ -75,7 +78,10 @@ export default function ComparisonViewer() {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => {
+              const basePath = import.meta.env.DEV ? '' : '/json-battlecard';
+              navigate(`${basePath}/`);
+            }}
             className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
           >
             ← Back to Forkcast
@@ -103,7 +109,10 @@ export default function ComparisonViewer() {
 
       <div className="mt-6 text-center">
         <button
-          onClick={() => navigate('/compare/new')}
+          onClick={() => {
+            const basePath = import.meta.env.DEV ? '' : '/json-battlecard';
+            navigate(`${basePath}/compare/new`);
+          }}
           className="text-blue-600 dark:text-blue-400 hover:underline"
         >
           Create your own comparison →
