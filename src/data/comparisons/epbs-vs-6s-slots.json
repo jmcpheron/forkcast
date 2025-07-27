@@ -4,7 +4,7 @@
     "author": "Jason J McPheron (jmcpheron.eth @jmcpheron)",
     "created": "2025-01-26",
     "description": "Comparing EIP-7732 (Enshrined PBS) and EIP-7782 (6-Second Slots) for the single consensus-layer headline slot in Glamsterdam",
-    "authorAvatar": "/jmcpheron.jpg"
+    "authorAvatar": "/forkcast/jmcpheron.jpg"
   },
   "eips": [7732, 7782],
   "sections": [
