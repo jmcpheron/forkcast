@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { EIPComparison } from '../../types/comparison';
+import { useState, useEffect } from 'react';
+import { EIPComparison, ForkcastFacts } from '../../types/comparison';
 import ComparisonRenderer from './ComparisonRenderer';
+import { eipDataService } from '../../services/eipDataService';
 
 // Icon components
 const ChevronDown = ({ className }: { className?: string }) => (
@@ -32,22 +33,54 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
   const [showPreview, setShowPreview] = useState(false);
   
   // Initialize comparison with required fields
-  const [comparison, setComparison] = useState<EIPComparison>({
-    meta: {
-      title: '',
-      author: '',
-      created: new Date().toISOString().split('T')[0],
-      description: ''
-    },
-    eips: selectedEips,
-    sections: [
+  const [comparison, setComparison] = useState<EIPComparison>(() => {
+    const sections: any[] = [
       {
         type: 'author-preference',
         preferredEip: selectedEips[0],
         strength: 'strong',
         reasoning: ''
       }
-    ]
+    ];
+
+    // Add Forkcast facts for each EIP that has neutral data
+    selectedEips.forEach((eipId, index) => {
+      const neutralData = eipDataService.getNeutralData(eipId);
+      if (neutralData && eipDataService.hasNeutralData(eipId)) {
+        // Add header before first Forkcast fact
+        if (index === 0) {
+          sections.push({
+            type: 'header',
+            content: 'Forkcast Neutral Facts',
+            level: 2
+          });
+        }
+        
+        sections.push({
+          type: 'forkcast-facts',
+          source: 'forkcast',
+          eipId: eipId,
+          data: {
+            laymanDescription: neutralData.laymanDescription,
+            benefits: neutralData.benefits,
+            tradeoffs: neutralData.tradeoffs,
+            northStarAlignment: neutralData.northStarAlignment,
+            stakeholderImpacts: neutralData.stakeholderImpacts
+          }
+        } as ForkcastFacts);
+      }
+    });
+
+    return {
+      meta: {
+        title: '',
+        author: '',
+        created: new Date().toISOString().split('T')[0],
+        description: ''
+      },
+      eips: selectedEips,
+      sections
+    };
   });
 
   // Update meta fields
@@ -151,10 +184,10 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
   const sectionTypes = [
     { type: 'header', label: 'Section Header', icon: '📝' },
     { type: 'text', label: 'Text Paragraph', icon: '📄' },
-    { type: 'quick-stats', label: 'Quick Stats', icon: '📊' },
-    { type: 'northstar-comparison', label: 'North Star Alignment', icon: '⭐' },
-    { type: 'benefits-tradeoffs', label: 'Benefits & Tradeoffs', icon: '⚖️' },
-    { type: 'stakeholder-impacts', label: 'Stakeholder Impacts', icon: '👥' },
+    { type: 'quick-stats', label: 'Quick Stats (Your Analysis)', icon: '📊' },
+    { type: 'northstar-comparison', label: 'North Star Alignment (Your View)', icon: '⭐' },
+    { type: 'benefits-tradeoffs', label: 'Benefits & Tradeoffs (Your Take)', icon: '⚖️' },
+    { type: 'stakeholder-impacts', label: 'Stakeholder Impacts (Your Analysis)', icon: '👥' },
     { type: 'debate', label: 'Debate Section', icon: '🗣️' },
     { type: 'argument', label: 'Argument', icon: '💭' },
     { type: 'risk-analysis', label: 'Risk Analysis', icon: '🎲' },
@@ -323,18 +356,41 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
           </div>
 
           {/* Additional Sections */}
-          {comparison.sections.slice(1).map((section, idx) => (
-            <SectionEditor
-              key={idx + 1}
-              section={section}
-              index={idx + 1}
-              selectedEips={selectedEips}
-              isActive={activeSection === `section-${idx + 1}`}
-              onToggle={() => setActiveSection(activeSection === `section-${idx + 1}` ? '' : `section-${idx + 1}`)}
-              onUpdate={(updates) => updateSection(idx + 1, updates)}
-              onRemove={() => removeSection(idx + 1)}
-            />
-          ))}
+          {comparison.sections.slice(1).map((section, idx) => {
+            // Special rendering for Forkcast facts sections
+            if (section.type === 'forkcast-facts') {
+              return (
+                <div key={idx + 1} className="border border-gray-300 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span>📊</span>
+                    <h3 className="font-medium text-gray-700 dark:text-gray-300">
+                      Forkcast Facts: EIP-{(section as ForkcastFacts).eipId}
+                    </h3>
+                    <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                      (Read-only - From Forkcast Repository)
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    This section displays neutral data from Forkcast's EIP repository.
+                    Add your own analysis sections to share your opinions.
+                  </p>
+                </div>
+              );
+            }
+            
+            return (
+              <SectionEditor
+                key={idx + 1}
+                section={section}
+                index={idx + 1}
+                selectedEips={selectedEips}
+                isActive={activeSection === `section-${idx + 1}`}
+                onToggle={() => setActiveSection(activeSection === `section-${idx + 1}` ? '' : `section-${idx + 1}`)}
+                onUpdate={(updates) => updateSection(idx + 1, updates)}
+                onRemove={() => removeSection(idx + 1)}
+              />
+            );
+          })}
         </div>
 
         {/* Right Panel: Add Sections & Actions */}
@@ -398,6 +454,7 @@ function SectionEditor({
       'northstar-comparison': '⭐',
       'benefits-tradeoffs': '⚖️',
       'stakeholder-impacts': '👥',
+      'forkcast-facts': '📊',
       debate: '🗣️',
       argument: '💭',
       'risk-analysis': '🎲',

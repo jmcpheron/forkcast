@@ -862,6 +862,99 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
           </div>
         );
 
+      case 'forkcast-facts':
+        const forkcastSection = section as any; // Type assertion for ForkcastFacts
+        const { data } = forkcastSection;
+        
+        return (
+          <div key={index} className="mb-6 p-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg">
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <span>📊</span>
+                  Forkcast Facts: EIP-{forkcastSection.eipId}
+                </h3>
+                <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
+                  From Forkcast Repository
+                </span>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 italic">
+                The following is neutral, factual data maintained by Forkcast
+              </p>
+            </div>
+            
+            {data.laymanDescription && (
+              <div className="mb-4">
+                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Overview</h4>
+                <p className="text-gray-600 dark:text-gray-400">{data.laymanDescription}</p>
+              </div>
+            )}
+            
+            {data.benefits && data.benefits.length > 0 && (
+              <div className="mb-4">
+                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Benefits</h4>
+                <ul className="list-disc list-inside space-y-1">
+                  {data.benefits.map((benefit: string, i: number) => (
+                    <li key={i} className="text-gray-600 dark:text-gray-400">{benefit}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {data.tradeoffs && data.tradeoffs.length > 0 && (
+              <div className="mb-4">
+                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Tradeoffs</h4>
+                <ul className="list-disc list-inside space-y-1">
+                  {data.tradeoffs.map((tradeoff: string, i: number) => (
+                    <li key={i} className="text-gray-600 dark:text-gray-400">{tradeoff}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {data.northStarAlignment && (
+              <div className="mb-4">
+                <h4 className="font-medium text-gray-700 dark:text-gray-300 mb-2">North Star Alignment</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {data.northStarAlignment.scaleL1 && (
+                    <div className="p-3 bg-white dark:bg-gray-700 rounded">
+                      <div className="font-medium text-sm text-gray-700 dark:text-gray-300">Scale L1</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Impact: {data.northStarAlignment.scaleL1.impact}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        {data.northStarAlignment.scaleL1.description}
+                      </div>
+                    </div>
+                  )}
+                  {data.northStarAlignment.scaleBlobs && (
+                    <div className="p-3 bg-white dark:bg-gray-700 rounded">
+                      <div className="font-medium text-sm text-gray-700 dark:text-gray-300">Scale Blobs</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Impact: {data.northStarAlignment.scaleBlobs.impact}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        {data.northStarAlignment.scaleBlobs.description}
+                      </div>
+                    </div>
+                  )}
+                  {data.northStarAlignment.improveUX && (
+                    <div className="p-3 bg-white dark:bg-gray-700 rounded">
+                      <div className="font-medium text-sm text-gray-700 dark:text-gray-300">Improve UX</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Impact: {data.northStarAlignment.improveUX.impact}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        {data.northStarAlignment.improveUX.description}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+
       default:
         return null;
     }
