@@ -17,19 +17,36 @@ export default function ComparisonCreator() {
     const templateStructure = `{
   "meta": {
     "title": "[Your comparison title - be specific]",
-    "author": "[Your name]",
+    "author": "[Your Name] ([ENS/handle] @twitter)",
     "created": "${new Date().toISOString().split('T')[0]}",
     "description": "[One sentence explaining what you're comparing and why it matters]"
   },
   "eips": [${selectedEips.join(', ')}],
   "sections": [
     {
-      "type": "header",
-      "content": "Overview"
+      "type": "author-preference",
+      "preferredEip": [YOUR_PREFERRED_EIP_NUMBER],
+      "strength": "strong",
+      "reasoning": "[Explain why you prefer this EIP - be specific about the tradeoffs and why this choice aligns with your values/priorities for Ethereum]"
     },
     {
-      "type": "text",
-      "content": "[Introduce the comparison context - why are these EIPs being compared?]"
+      "type": "header",
+      "content": "Executive Summary"
+    },
+    {
+      "type": "quick-stats",
+      "stats": {
+        "${selectedEips[0]}": [
+          { "icon": "🎯", "label": "Key Benefit", "value": "[Main advantage]" },
+          { "icon": "⚠️", "label": "Key Risk", "value": "[Main concern]", "color": "yellow" },
+          { "icon": "🔧", "label": "Complexity", "value": "[Low/Medium/High]", "color": "[green/yellow/red]" }
+        ],
+        ${selectedEips.slice(1).map(eip => `"${eip}": [
+          { "icon": "🎯", "label": "Key Benefit", "value": "[Main advantage]" },
+          { "icon": "⚠️", "label": "Key Risk", "value": "[Main concern]", "color": "yellow" },
+          { "icon": "🔧", "label": "Complexity", "value": "[Low/Medium/High]", "color": "[green/yellow/red]" }
+        ]`).join(',\n        ')}
+      }
     },
     {
       "type": "comparison-table",
@@ -96,13 +113,17 @@ export default function ComparisonCreator() {
 
 INSTRUCTIONS FOR YOUR LLM:
 1. Fill in all [bracketed] placeholders with actual content
-2. Add/remove rows in comparison tables as needed
-3. Use "debate" sections for contentious topics with multiple viewpoints
-4. Use "argument" sections to present nuanced positions with evidence
-5. Add more sections as needed - you can repeat section types
-6. For severity in values, use: "low", "medium", or "high"
-7. For callout styles, use: "info", "warning", "success", or "error"
-8. Keep values concise in tables, use text/argument sections for detail`;
+2. Start with your author-preference - this is YOUR take, own it!
+3. Include your Twitter handle for attribution (format: "Name (ens.eth @twitter)")
+4. Add/remove rows in comparison tables as needed
+5. Use "debate" sections for contentious topics with multiple viewpoints
+6. Use "argument" sections to present nuanced positions with evidence
+7. Add more sections as needed - you can repeat section types
+8. For severity in values, use: "low", "medium", or "high"
+9. For callout styles, use: "info", "warning", "success", or "error"
+10. Keep values concise in tables, use text/argument sections for detail
+
+Remember: This is YOUR comparison. Take a stand!`;
 
     return templateStructure;
   };
@@ -167,6 +188,9 @@ INSTRUCTIONS FOR YOUR LLM:
           >
             View Example: ePBS vs 6-Second Slots →
           </button>
+          <p className="text-xs text-blue-700 dark:text-blue-300 mt-2 italic">
+            Don't like someone's take? Fork yourself and make your own comparison! 🍴
+          </p>
         </div>
         
         <div className="mb-8">
@@ -244,9 +268,12 @@ INSTRUCTIONS FOR YOUR LLM:
           </div>
           
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
+            <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
               Copy the template above and paste it into your preferred LLM (ChatGPT, Claude, etc.) 
               along with your research notes. Ask it to fill in the template with detailed comparisons.
+            </p>
+            <p className="text-xs text-blue-700 dark:text-blue-300 italic">
+              Pro tip: Your author preference at the top is what makes this YOUR comparison. Don't be shy!
             </p>
           </div>
         </div>
