@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import PublicNetworkUpgradePage from './components/PublicNetworkUpgradePage';
 import HomePage from './components/HomePage';
@@ -10,29 +10,6 @@ import ExternalRedirect from './components/ExternalRedirect';
 import ComparisonCreator from './components/comparisons/ComparisonCreator';
 import ComparisonViewer from './components/comparisons/ComparisonViewer';
 import ExampleLoader from './components/comparisons/ExampleLoader';
-
-function RedirectHandler() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    // Check for redirect parameter from 404.html
-    const urlParams = new URLSearchParams(location.search);
-    const redirect = urlParams.get('redirect');
-
-    if (redirect) {
-      // Remove the redirect parameter and navigate to the target path
-      urlParams.delete('redirect');
-      const newSearch = urlParams.toString();
-      const newPath = redirect + (newSearch ? '?' + newSearch : '');
-
-      // Use replace to avoid adding to browser history
-      navigate(newPath, { replace: true });
-    }
-  }, [navigate, location.search]);
-
-  return null;
-}
 
 function AnalyticsTracker() {
   const location = useLocation();
@@ -56,8 +33,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Router basename={import.meta.env.DEV ? "" : "/forkcast"}>
-        <RedirectHandler />
+      <Router>
         <AnalyticsTracker />
         <Routes>
           <Route path="/" element={<HomePage />} />
