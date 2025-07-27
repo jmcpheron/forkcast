@@ -24,21 +24,22 @@ export default function ComparisonViewer() {
     }
   }, [id]);
 
-  const shareOnX = () => {
-    const url = window.location.href;
-    const text = comparison 
-      ? `Check out this EIP comparison: ${comparison.meta.title}`
-      : 'Check out this EIP comparison on Forkcast';
-    
-    window.open(
-      `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
-      '_blank'
-    );
-  };
+  // TODO: Implement persistent storage before enabling share functionality
+  // const shareOnX = () => {
+  //   const url = window.location.href;
+  //   const text = comparison 
+  //     ? `Check out this EIP comparison: ${comparison.meta.title}`
+  //     : 'Check out this EIP comparison on Forkcast';
+  //   
+  //   window.open(
+  //     `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+  //     '_blank'
+  //   );
+  // };
 
-  const copyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-  };
+  // const copyLink = () => {
+  //   navigator.clipboard.writeText(window.location.href);
+  // };
 
   if (error) {
     return (
@@ -81,20 +82,7 @@ export default function ComparisonViewer() {
             ← Back to Forkcast
           </button>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={copyLink}
-            className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2"
-          >
-            <span>📋</span> Copy Link
-          </button>
-          <button
-            onClick={shareOnX}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2"
-          >
-            <span>𝕏</span> Share
-          </button>
-        </div>
+        {/* Share functionality hidden for now - TODO: implement persistent storage */}
       </div>
 
       <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-6">
