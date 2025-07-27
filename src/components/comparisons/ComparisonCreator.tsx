@@ -49,22 +49,70 @@ export default function ComparisonCreator() {
       }
     },
     {
-      "type": "comparison-table",
-      "rows": [
-        {
-          "label": "Primary Goal",
-          "values": {
-            "${selectedEips[0]}": "[Main objective of EIP-${selectedEips[0]}]",
-            ${selectedEips.slice(1).map(eip => `"${eip}": "[Main objective of EIP-${eip}]"`).join(',\n            ')}
+      "type": "northstar-comparison",
+      "northStars": ["Scale L1", "Scale blobs", "Improve UX"],
+      "alignment": {
+        ${selectedEips.map(eip => `"${eip}": {
+          "Scale L1": {
+            "impact": "[High/Medium/Low]",
+            "icon": "[🟢/🟡/🔴]",
+            "description": "[How does EIP-${eip} impact L1 scaling?]"
+          },
+          "Scale blobs": {
+            "impact": "[High/Medium/Low]",
+            "icon": "[🟢/🟡/🔴]",
+            "description": "[How does EIP-${eip} impact blob scaling?]"
+          },
+          "Improve UX": {
+            "impact": "[High/Medium/Low]",
+            "icon": "[🟢/🟡/🔴]",
+            "description": "[How does EIP-${eip} improve user experience?]"
           }
-        },
-        {
-          "label": "[Add your comparison criteria]",
-          "values": {
-            ${selectedEips.map(eip => `"${eip}": "[Value for EIP-${eip}]"`).join(',\n            ')}
+        }`).join(',\n        ')}
+      }
+    },
+    {
+      "type": "stakeholder-impacts",
+      "stakeholders": ["endUsers", "appDevs", "walletDevs", "toolingInfra", "layer2s", "stakersNodes", "clClients", "elClients"],
+      "impacts": {
+        ${selectedEips.map(eip => `"${eip}": {
+          "endUsers": {
+            "impact": "[High/Medium/Low]",
+            "icon": "[😍/😐/😟]",
+            "description": "[How are end users affected?]"
+          },
+          "appDevs": {
+            "impact": "[High/Medium/Low]",
+            "icon": "[🔧/🔄/⚠️]",
+            "description": "[How are app developers affected?]"
+          },
+          "layer2s": {
+            "impact": "[High/Medium/Low]",
+            "icon": "[🚀/📈/😐]",
+            "description": "[How are L2s affected?]"
+          },
+          "clClients": {
+            "impact": "[High/Medium/Low]",
+            "icon": "[🚨/🔧/😐]",
+            "description": "[Implementation complexity for consensus clients]"
           }
-        }
-      ]
+        }`).join(',\n        ')}
+      }
+    },
+    {
+      "type": "benefits-tradeoffs",
+      "data": {
+        ${selectedEips.map(eip => `"${eip}": {
+          "benefits": [
+            { "text": "[Key benefit 1]", "icon": "✅" },
+            { "text": "[Key benefit 2]", "icon": "✅" }
+          ],
+          "tradeoffs": [
+            { "text": "[Tradeoff or risk 1]", "severity": "[low/medium/high]", "icon": "⚠️" },
+            { "text": "[Tradeoff or risk 2]", "severity": "[low/medium/high]", "icon": "⚠️" }
+          ]
+        }`).join(',\n        ')}
+      }
     },
     {
       "type": "debate",
@@ -105,14 +153,33 @@ export default function ComparisonCreator() {
       "content": "[Explanation of a key factor that affects the comparison]"
     },
     {
+      "type": "tradeoff-matrix",
+      "dimensions": [
+        {
+          "name": "[Key dimension 1 - e.g., Decentralization Impact]",
+          "description": "[What this dimension measures]",
+          "scores": {
+            ${selectedEips.map(eip => `"${eip}": { "score": [1-10], "icon": "[🟢/🟡/🔴]" }`).join(',\n            ')}
+          }
+        },
+        {
+          "name": "[Key dimension 2 - e.g., Implementation Risk]",
+          "description": "[What this dimension measures]",
+          "scores": {
+            ${selectedEips.map(eip => `"${eip}": { "score": [1-10], "icon": "[🟢/🟡/🔴]" }`).join(',\n            ')}
+          }
+        }
+      ]
+    },
+    {
       "type": "summary",
-      "content": "[Balanced conclusion weighing the trade-offs]"
+      "content": "[Final thoughts summarizing the key decision points and your overall assessment. End with a clear statement about which EIP you believe should be prioritized and why.]"
     }
   ]
 }
 
-INSTRUCTIONS FOR YOUR LLM:
-1. Fill in all [bracketed] placeholders with actual content
+HOW TO USE THIS STRUCTURE:
+1. Fill in all [bracketed] placeholders with your content
 2. Start with your author-preference - this is YOUR take, own it!
 3. Include your Twitter handle for attribution (format: "Name (ens.eth @twitter)")
 4. Add/remove rows in comparison tables as needed
@@ -193,6 +260,17 @@ Remember: This is YOUR comparison. Take a stand!`;
           </p>
         </div>
         
+        <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg">
+          <h3 className="font-medium text-green-800 dark:text-green-200 mb-2">
+            🎯 Your Comparison, Your Voice
+          </h3>
+          <p className="text-sm text-green-700 dark:text-green-300">
+            This is YOUR take on these EIPs. Start with your preference at the top - which EIP do you 
+            think should win and why? Don't just analyze, advocate! Your comparison should reflect your 
+            values and priorities for Ethereum's future.
+          </p>
+        </div>
+        
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4">
             Step 1: Select EIPs to Compare
@@ -247,19 +325,19 @@ Remember: This is YOUR comparison. Take a stand!`;
         
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4">
-            Step 2: Generate Comparison Content
+            Step 2: Build Your Comparison
           </h2>
           
           <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg mb-4">
             <div className="flex justify-between items-center mb-2">
               <h3 className="font-medium text-slate-700 dark:text-slate-300">
-                Template for your LLM:
+                Comparison Structure:
               </h3>
               <button
                 onClick={() => copyToClipboard(template)}
                 className="text-sm px-3 py-1 bg-slate-200 dark:bg-slate-700 rounded hover:bg-slate-300 dark:hover:bg-slate-600"
               >
-                Copy Template
+                Copy Structure
               </button>
             </div>
             <pre className="text-xs overflow-x-auto bg-white dark:bg-slate-900 p-4 rounded border border-slate-200 dark:border-slate-700">
@@ -269,8 +347,9 @@ Remember: This is YOUR comparison. Take a stand!`;
           
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
             <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
-              Copy the template above and paste it into your preferred LLM (ChatGPT, Claude, etc.) 
-              along with your research notes. Ask it to fill in the template with detailed comparisons.
+              Use this structure to build your comparison. Start with YOUR preference at the top - 
+              this is your take on which EIP should win and why. Fill in the sections with your research 
+              and analysis, following the format shown.
             </p>
             <p className="text-xs text-blue-700 dark:text-blue-300 italic">
               Pro tip: Your author preference at the top is what makes this YOUR comparison. Don't be shy!
@@ -280,13 +359,13 @@ Remember: This is YOUR comparison. Take a stand!`;
 
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4">
-            Step 3: Paste Your Completed JSON
+            Step 3: Paste Your Completed Comparison
           </h2>
           
           <textarea
             value={jsonInput}
             onChange={(e) => setJsonInput(e.target.value)}
-            placeholder="Paste your LLM-generated JSON here..."
+            placeholder="Paste your completed JSON comparison here..."
             className="w-full h-64 p-4 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-mono text-sm"
           />
           
