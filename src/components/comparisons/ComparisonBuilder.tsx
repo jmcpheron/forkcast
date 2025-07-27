@@ -231,9 +231,19 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
           Build Your Comparison
         </h1>
-        <p className="text-slate-600 dark:text-slate-400">
+        <p className="text-slate-600 dark:text-slate-400 mb-3">
           Fill out each section to create your EIP comparison. Your preference is already at the top!
         </p>
+        <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 rounded-lg">
+          <h3 className="font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+            <span>📊</span> About Forkcast Facts
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Gray sections labeled "Forkcast Facts" contain neutral, verified data from our EIP repository. 
+            These provide factual baselines about each EIP. You can't edit these, but you should add your 
+            own analysis sections (benefits, tradeoffs, etc.) to share YOUR perspective on top of these facts.
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

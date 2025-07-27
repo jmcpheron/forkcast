@@ -5,6 +5,7 @@ import { EIPComparison } from '../../types/comparison';
 import ComparisonRenderer from './ComparisonRenderer';
 import ComparisonBuilder from './ComparisonBuilder';
 import { loadExampleComparison } from './ExampleLoader';
+import { eipDataService } from '../../services/eipDataService';
 
 export default function ComparisonCreator() {
   const navigate = useNavigate();
@@ -15,6 +16,30 @@ export default function ComparisonCreator() {
   const [step, setStep] = useState<'select' | 'build' | 'paste' | 'preview'>('select');
 
   const generateTemplate = () => {
+    // Check which EIPs have Forkcast data
+    const eipsWithData = selectedEips.filter(eip => eipDataService.hasNeutralData(eip));
+    
+    // Build Forkcast facts sections
+    let forkcastSections = '';
+    if (eipsWithData.length > 0) {
+      forkcastSections = `
+    {
+      "type": "header",
+      "content": "Forkcast Neutral Facts",
+      "level": 2
+    },`;
+      
+      eipsWithData.forEach(eip => {
+        forkcastSections += `
+    {
+      "type": "forkcast-facts",
+      "source": "forkcast",
+      "eipId": ${eip},
+      "data": "AUTO-POPULATED FROM FORKCAST REPOSITORY"
+    },`;
+      });
+    }
+    
     const templateStructure = `{
   "meta": {
     "title": "[Your comparison title - be specific]",
@@ -29,7 +54,7 @@ export default function ComparisonCreator() {
       "preferredEip": ${selectedEips[0]},
       "strength": "strong",
       "reasoning": "[Explain why you prefer this EIP - be specific about the tradeoffs and why this choice aligns with your values/priorities for Ethereum]"
-    },
+    },${forkcastSections}
     {
       "type": "header",
       "content": "Executive Summary"
@@ -199,6 +224,29 @@ export default function ComparisonCreator() {
         throw new Error('Invalid comparison structure');
       }
       
+      // Process forkcast-facts sections - populate with actual data
+      parsed.sections = parsed.sections.map(section => {
+        if (section.type === 'forkcast-facts' && 'eipId' in section) {
+          const eipId = (section as any).eipId;
+          const neutralData = eipDataService.getNeutralData(eipId);
+          if (neutralData) {
+            return {
+              type: 'forkcast-facts',
+              source: 'forkcast',
+              eipId: eipId,
+              data: {
+                laymanDescription: neutralData.laymanDescription,
+                benefits: neutralData.benefits,
+                tradeoffs: neutralData.tradeoffs,
+                northStarAlignment: neutralData.northStarAlignment,
+                stakeholderImpacts: neutralData.stakeholderImpacts
+              }
+            } as any;
+          }
+        }
+        return section;
+      });
+      
       setError('');
       setPreview(parsed);
       setStep('preview');
@@ -251,11 +299,18 @@ export default function ComparisonCreator() {
           <h3 className="font-medium text-green-800 dark:text-green-200 mb-2">
             🎯 Your Comparison, Your Voice
           </h3>
-          <p className="text-sm text-green-700 dark:text-green-300">
+          <p className="text-sm text-green-700 dark:text-green-300 mb-2">
             This is YOUR take on these EIPs. Start with your preference at the top - which EIP do you 
             think should win and why? Don't just analyze, advocate! Your comparison should reflect your 
             values and priorities for Ethereum's future.
           </p>
+          <div className="mt-3 p-3 bg-gray-100 dark:bg-gray-800 rounded">
+            <p className="text-xs text-gray-600 dark:text-gray-400">
+              <strong>📊 Forkcast Integration:</strong> We automatically include neutral facts from Forkcast's 
+              EIP repository. These gray sections provide factual baselines. Add YOUR analysis and opinions 
+              in additional sections to build on these facts.
+            </p>
+          </div>
         </div>
         
         <div className="mb-8">
@@ -360,25 +415,31 @@ export default function ComparisonCreator() {
             </pre>
             <div className="mt-2 p-3 bg-slate-100 dark:bg-slate-800 rounded text-xs">
               <strong>Instructions:</strong>
-1. Copy this template to your text editor
-2. Replace [bracketed] placeholders with your content
-3. For impact levels: use "High", "Medium", or "Low"
-4. For colors: use "green", "yellow", or "red"
-5. For severity: use "low", "medium", or "high"
-6. Add/remove sections as needed
-7. Paste the completed JSON below
+              <ol className="list-decimal list-inside space-y-1 mt-1">
+                <li>Copy this template to your text editor</li>
+                <li>Replace [bracketed] placeholders with your content</li>
+                <li><strong>Note:</strong> Forkcast facts sections are auto-populated - don't edit these</li>
+                <li>Add YOUR analysis in new sections (quick-stats, benefits-tradeoffs, etc.)</li>
+                <li>For impact levels: use "High", "Medium", or "Low"</li>
+                <li>For colors: use "green", "yellow", or "red"</li>
+                <li>For severity: use "low", "medium", or "high"</li>
+                <li>Paste the completed JSON below</li>
+              </ol>
             </div>
           </div>
           
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
             <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
               Use this structure to build your comparison. Start with YOUR preference at the top - 
-              this is your take on which EIP should win and why. Fill in the sections with your research 
-              and analysis, following the format shown.
+              this is your take on which EIP should win and why. Forkcast facts are included automatically 
+              to provide neutral baselines.
             </p>
-            <p className="text-xs text-blue-700 dark:text-blue-300 italic">
-              Pro tip: Your author preference at the top is what makes this YOUR comparison. Don't be shy!
-            </p>
+            <div className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded">
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                <strong>How it works:</strong> Forkcast sections (gray) contain verified facts from our repository. 
+                Add YOUR analysis in new sections. This separation ensures readers know what's fact vs. opinion.
+              </p>
+            </div>
           </div>
         </div>
 
