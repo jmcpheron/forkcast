@@ -28,18 +28,19 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
   const renderSection = (section: ComparisonSection, index: number) => {
     switch (section.type) {
       case 'header':
-        const HeaderTag = `h${section.level || 2}` as keyof JSX.IntrinsicElements;
-        return (
-          <HeaderTag 
-            key={index} 
-            className={`font-semibold text-slate-900 dark:text-slate-100 ${
-              section.level === 1 ? 'text-2xl mb-4' : 
-              section.level === 3 ? 'text-lg mb-2' : 'text-xl mb-3'
-            }`}
-          >
-            {section.content}
-          </HeaderTag>
-        );
+        const level = section.level || 2;
+        const className = `font-semibold text-slate-900 dark:text-slate-100 ${
+          level === 1 ? 'text-2xl mb-4' : 
+          level === 3 ? 'text-lg mb-2' : 'text-xl mb-3'
+        }`;
+        
+        if (level === 1) {
+          return <h1 key={index} className={className}>{section.content}</h1>;
+        } else if (level === 3) {
+          return <h3 key={index} className={className}>{section.content}</h3>;
+        } else {
+          return <h2 key={index} className={className}>{section.content}</h2>;
+        }
 
       case 'comparison-table':
         return (

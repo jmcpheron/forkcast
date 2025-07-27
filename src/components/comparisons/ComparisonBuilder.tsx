@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { EIPComparison, ForkcastFacts } from '../../types/comparison';
 import ComparisonRenderer from './ComparisonRenderer';
 import { eipDataService } from '../../services/eipDataService';
@@ -396,7 +396,7 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
                 selectedEips={selectedEips}
                 isActive={activeSection === `section-${idx + 1}`}
                 onToggle={() => setActiveSection(activeSection === `section-${idx + 1}` ? '' : `section-${idx + 1}`)}
-                onUpdate={(updates) => updateSection(idx + 1, updates)}
+                onUpdate={(updates: any) => updateSection(idx + 1, updates)}
                 onRemove={() => removeSection(idx + 1)}
               />
             );
@@ -449,7 +449,6 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
 // Section Editor Component
 function SectionEditor({ 
   section, 
-  index, 
   selectedEips, 
   isActive, 
   onToggle, 
