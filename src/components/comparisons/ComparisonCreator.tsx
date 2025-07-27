@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import eipsData from '../../data/eips.json';
 import { EIPComparison } from '../../types/comparison';
 import ComparisonRenderer from './ComparisonRenderer';
+import ComparisonBuilder from './ComparisonBuilder';
 import { loadExampleComparison } from './ExampleLoader';
 
 export default function ComparisonCreator() {
@@ -11,7 +12,7 @@ export default function ComparisonCreator() {
   const [jsonInput, setJsonInput] = useState('');
   const [error, setError] = useState('');
   const [preview, setPreview] = useState<EIPComparison | null>(null);
-  const [step, setStep] = useState<'select' | 'paste' | 'preview'>('select');
+  const [step, setStep] = useState<'select' | 'build' | 'paste' | 'preview'>('select');
 
   const generateTemplate = () => {
     const templateStructure = `{
@@ -303,14 +304,36 @@ Remember: This is YOUR comparison. Take a stand!`;
           </div>
         </div>
         
-        <button
-          onClick={() => setStep('paste')}
-          disabled={selectedEips.length < 2}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Continue to Step 2
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={() => setStep('build')}
+            disabled={selectedEips.length < 2}
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Build Visually →
+          </button>
+          <button
+            onClick={() => setStep('paste')}
+            disabled={selectedEips.length < 2}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Paste JSON →
+          </button>
+        </div>
       </div>
+    );
+  }
+
+  if (step === 'build') {
+    return (
+      <ComparisonBuilder
+        selectedEips={selectedEips}
+        onComplete={(comparison) => {
+          setPreview(comparison);
+          setStep('preview');
+        }}
+        onBack={() => setStep('select')}
+      />
     );
   }
 
@@ -325,8 +348,14 @@ Remember: This is YOUR comparison. Take a stand!`;
         
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4">
-            Step 2: Build Your Comparison
+            Option B: Paste JSON Directly
           </h2>
+          
+          <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
+            <p className="text-sm text-amber-800 dark:text-amber-200">
+              <strong>Prefer a visual editor?</strong> Go back and click "Build Visually" for a guided interface.
+            </p>
+          </div>
           
           <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg mb-4">
             <div className="flex justify-between items-center mb-2">
