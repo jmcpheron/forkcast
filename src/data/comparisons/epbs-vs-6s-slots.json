@@ -380,7 +380,7 @@
           "argument": "The free option exists because we're maximizing slot utilization - extending blob broadcast from 2s to 10s. It's hard to exploit in practice: builders must maintain relationships with searchers and proposers, everyone sees the revealed payload context, and refunding searchers erodes profits. Plus, we can implement asymmetric payments as additional deterrent. Multiple mitigations exist: shortening the window to 3-6 seconds, introducing penalties for non-release, or dynamic penalties similar to EIP-1559.",
           "evidence": [
             "https://twitter.com/terencechain/status/1949124850314080294",
-            "https://ethresear.ch/t/epbs-builder-incentives/15420",
+            "https://hackmd.io/@tchain/in-defense-free-opt-problem",
             "https://blog.chainsafe.io/lodestars-glamsterdam-headliner-vision/"
           ]
         }
@@ -404,7 +404,7 @@
         "Social slashing is fragile - validators may disable blocklisting for higher revenue"
       ],
       "evidence": [
-        "https://www.galaxy.com/insights/podcasts/infinite-jungle/epbs-office-hours-w-potuz-and-terence/",
+        "https://www.galaxy.com/insights/podcasts/infinite-jungle/e-pbs-office-hours-w-potuz-and-terence/",
         "https://eips.ethereum.org/EIPS/eip-7732",
         "https://blog.chainsafe.io/lodestars-glamsterdam-headliner-vision/"
       ]
@@ -430,7 +430,7 @@
           "argument": "The relay oligopoly is an existential threat to Ethereum's credible neutrality. Every month we delay ePBS, relay dominance grows stronger. The free option concerns are overblown - practical constraints and mitigations make it manageable. If we don't enshrine PBS now, we may never get another chance as vested interests solidify. Real-time proving is approaching 12 seconds, making slot restructuring urgent for ZK integration.",
           "evidence": [
             "https://www.relayscan.io/",
-            "https://ethresear.ch/t/a-viable-path-to-epbs/15792",
+            "https://ethresear.ch/t/why-enshrine-proposer-builder-separation-a-viable-path-to-epbs/15710",
             "https://blog.sigmaprime.io/glamsterdam-headliner.html"
           ]
         },
@@ -439,7 +439,7 @@
           "author": "App Developers & L2 Teams",
           "argument": "Users don't care about relay architecture - they care about responsive apps. Halving confirmation times would be immediately felt by millions. ePBS is important but can wait for the next fork when we've had more time to fully address all concerns. Let's ship the obvious UX win now and tackle the complex MEV restructuring when it's fully baked.",
           "evidence": [
-            "https://ethereum-magicians.org/t/eip-7782-the-case-for-2x-shorter-slot-times-in-glamsterdam/21303",
+            "https://ethereum-magicians.org/t/eip-7782-the-case-for-2x-shorter-slot-times-in-glamsterdam/24616",
             "https://l2beat.com/",
             "https://ethresear.ch/t/the-glamsterdam-equation/22760"
           ]
