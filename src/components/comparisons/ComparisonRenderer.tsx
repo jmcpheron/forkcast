@@ -773,9 +773,9 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
         const isTopPosition = index < 3;
         
         if (isTopPosition) {
-          // Extract Twitter handle from author string
+          // Extract X handle from author string
           const authorMatch = comparison.meta.author.match(/@(\w+)/);
-          const twitterHandle = authorMatch ? authorMatch[1] : null;
+          const xHandle = authorMatch ? authorMatch[1] : null;
           const authorName = comparison.meta.author.split(' (')[0];
           
           return (
@@ -784,13 +784,21 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                 <div className="max-w-4xl mx-auto">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
-                      {/* Twitter/X Avatar */}
+                      {/* X Avatar */}
                       <div className="relative">
-                        <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30">
-                          <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                          </svg>
-                        </div>
+                        {comparison.meta.authorAvatar ? (
+                          <img 
+                            src={comparison.meta.authorAvatar} 
+                            alt={authorName}
+                            className="w-14 h-14 rounded-full border-2 border-white/30 object-cover"
+                          />
+                        ) : (
+                          <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30">
+                            <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                          </div>
+                        )}
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
                           <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -802,14 +810,14 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                         <h3 className="text-xl font-bold">
                           {authorName} {strengthLabels[section.strength]} EIP-{authorPreferredEip}
                         </h3>
-                        {twitterHandle && (
+                        {xHandle && (
                           <a 
-                            href={`https://twitter.com/${twitterHandle}`}
+                            href={`https://x.com/${xHandle}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm opacity-90 hover:opacity-100 transition-opacity flex items-center gap-1"
                           >
-                            @{twitterHandle}
+                            @{xHandle}
                             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>

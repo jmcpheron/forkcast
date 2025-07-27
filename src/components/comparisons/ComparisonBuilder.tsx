@@ -306,13 +306,13 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
                 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Author (include Twitter)
+                    Author (include X handle)
                   </label>
                   <input
                     type="text"
                     value={comparison.meta.author}
                     onChange={(e) => updateMeta('author', e.target.value)}
-                    placeholder="Your Name (yourname.eth @twitter)"
+                    placeholder="Your Name (yourname.eth @handle)"
                     className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900"
                   />
                 </div>
@@ -328,6 +328,22 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
                     rows={2}
                     className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900"
                   />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Avatar URL (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={comparison.meta.authorAvatar || ''}
+                    onChange={(e) => updateMeta('authorAvatar', e.target.value)}
+                    placeholder="https://pbs.twimg.com/profile_images/..."
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900"
+                  />
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Your X.com profile picture URL
+                  </p>
                 </div>
               </div>
             )}

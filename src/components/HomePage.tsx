@@ -131,7 +131,7 @@ const HomePage = () => {
               href="https://x.com/wolovim"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleExternalLinkClick('twitter_contact', 'https://x.com/wolovim')}
+              onClick={() => handleExternalLinkClick('x_contact', 'https://x.com/wolovim')}
               className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 underline decoration-1 underline-offset-2"
             >
               @wolovim

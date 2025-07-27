@@ -3,6 +3,7 @@ export interface ComparisonMeta {
   author: string;
   created: string;
   description: string;
+  authorAvatar?: string;
 }
 
 export interface ComparisonValue {

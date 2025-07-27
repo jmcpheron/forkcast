@@ -64,7 +64,7 @@ export default function ComparisonCreator() {
     const templateStructure = `{
   "meta": {
     "title": "[Your comparison title - be specific]",
-    "author": "[Your Name] ([ENS/handle] @twitter)",
+    "author": "[Your Name] ([ENS/handle] @x_handle)",
     "created": "${new Date().toISOString().split('T')[0]}",
     "description": "[One sentence explaining what you're comparing and why it matters]"
   },

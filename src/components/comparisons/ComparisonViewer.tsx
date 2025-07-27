@@ -24,14 +24,14 @@ export default function ComparisonViewer() {
     }
   }, [id]);
 
-  const shareOnTwitter = () => {
+  const shareOnX = () => {
     const url = window.location.href;
     const text = comparison 
       ? `Check out this EIP comparison: ${comparison.meta.title}`
       : 'Check out this EIP comparison on Forkcast';
     
     window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+      `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
       '_blank'
     );
   };
@@ -89,7 +89,7 @@ export default function ComparisonViewer() {
             <span>📋</span> Copy Link
           </button>
           <button
-            onClick={shareOnTwitter}
+            onClick={shareOnX}
             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2"
           >
             <span>𝕏</span> Share
