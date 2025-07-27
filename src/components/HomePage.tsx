@@ -43,6 +43,15 @@ const HomePage = () => {
           <p className="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
             See what's on the horizon and how it impacts you.
           </p>
+          <div className="mt-4">
+            <Link
+              to="/compare/new"
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-800/40 rounded-md transition-colors"
+            >
+              <span className="mr-2">🔍</span>
+              Compare EIPs
+            </Link>
+          </div>
         </div>
 
         {/* Upgrades Grid */}

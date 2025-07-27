@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "title": "PBS vs Delayed Execution: Consensus Layer Scaling Approaches",
+    "author": "Terrence",
+    "created": "2025-01-26",
+    "description": "Comparing two approaches to give validators more time for block processing and validation"
+  },
+  "eips": [7732, 7886],
+  "sections": [
+    {
+      "type": "header",
+      "content": "Overview",
+      "level": 2
+    },
+    {
+      "type": "text",
+      "content": "Both EIP-7732 (Enshrined Proposer-Builder Separation) and EIP-7886 (Delayed Execution) aim to improve Ethereum's throughput by giving validators more time to process blocks. However, they take fundamentally different approaches with distinct trade-offs."
+    },
+    {
+      "type": "comparison-table",
+      "rows": [
+        {
+          "label": "Primary Goal",
+          "values": {
+            "7732": "Separate block building from proposing via enshrined PBS mechanism",
+            "7886": "Decouple execution from consensus by delaying state root computation"
+          }
+        },
+        {
+          "label": "Key Innovation",
+          "values": {
+            "7732": "Introduces builder role with commitment-reveal pattern and PTC committee",
+            "7886": "Validators attest to blocks before full execution verification"
+          }
+        },
+        {
+          "label": "Timing Changes",
+          "values": {
+            "7732": "Builder commits at 3s, reveals payload at 9s, PTC votes at 11s",
+            "7886": "Attestation deadline at 4s based on pre-checks, execution completes later"
+          }
+        },
+        {
+          "label": "New Protocol Roles",
+          "values": {
+            "7732": "Yes - Builders and PTC (Payload Timeliness Committee)",
+            "7886": "No - Works within existing validator structure"
+          }
+        },
+        {
+          "label": "Side Effects",
+          "values": {
+            "7732": {
+              "text": "Free option problem - builders can abandon blocks during 8s reveal window",
+              "severity": "high",
+              "icon": "warning"
+            },
+            "7886": {
+              "text": "Free DA - invalid transactions consume block space without fees",
+              "severity": "medium",
+              "icon": "info"
+            }
+          }
+        },
+        {
+          "label": "MEV Impact",
+          "values": {
+            "7732": "Directly addresses MEV through builder separation and auctions",
+            "7886": "Neutral - doesn't change MEV dynamics"
+          }
+        },
+        {
+          "label": "Implementation Complexity",
+          "values": {
+            "7732": "High - requires new p2p protocols, builder registry, PTC logic",
+            "7886": "Medium - primarily changes block validation timing"
+          }
+        },
+        {
+          "label": "Empty Block Risk",
+          "values": {
+            "7732": "High during volatility - builders may exploit reveal window",
+            "7886": "Low - no incentive for empty blocks"
+          }
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Critical Trade-offs",
+      "level": 2
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "title": "The Builder's Free Option (EIP-7732)",
+      "content": "PBS introduces an 8-second window where builders can observe market conditions before deciding whether to reveal their block. During high volatility, rational builders might abandon unprofitable blocks, leading to empty slots and degraded user experience. This 'roulette wheel' dynamic is a fundamental consequence of the commitment-reveal pattern."
+    },
+    {
+      "type": "callout",
+      "style": "info",
+      "title": "The Free Data Availability Problem (EIP-7886)",
+      "content": "With delayed execution, blocks include transactions before knowing if they're valid. Invalid transactions still consume block space but pay no fees, potentially allowing spam attacks. While less severe than PBS's free option, this could impact block efficiency."
+    },
+    {
+      "type": "summary",
+      "content": "EIP-7732 (PBS) offers a comprehensive solution to MEV and block building but introduces significant protocol complexity and the risk of empty blocks during market volatility. EIP-7886 (Delayed Execution) maintains protocol simplicity while achieving similar performance gains, but doesn't address MEV and risks block space inefficiency. The choice between them represents a fundamental decision about Ethereum's architecture: embrace market-driven block building with its risks, or maintain simpler consensus with different trade-offs."
+    }
+  ]
+}

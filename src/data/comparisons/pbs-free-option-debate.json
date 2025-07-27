@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "title": "The PBS Free Option Debate: Is It Really a Problem?",
+    "author": "Terrence",
+    "created": "2025-01-26",
+    "description": "Examining different perspectives on whether the builder's free option in PBS (EIP-7732) is a significant concern"
+  },
+  "eips": [7732],
+  "sections": [
+    {
+      "type": "header",
+      "content": "The Free Option Controversy"
+    },
+    {
+      "type": "text",
+      "content": "EIP-7732's Proposer-Builder Separation introduces a commitment-reveal pattern where builders commit to blocks at 3 seconds but don't reveal until 9 seconds. This creates what critics call a 'free option' - builders can observe market conditions for 6 seconds before deciding whether to reveal their block."
+    },
+    {
+      "type": "debate",
+      "topic": "Is the free option a critical flaw or an overblown concern?",
+      "perspectives": [
+        {
+          "label": "The free option is a serious problem",
+          "author": "Critics",
+          "argument": "Builders get a 6-second window to observe market volatility. If prices move unfavorably, they can simply not reveal their block, leading to empty slots. During high volatility periods, this could result in degraded network performance as rational builders exploit this optionality.",
+          "evidence": [
+            "https://ethresear.ch/t/builders-free-option-analysis",
+            "https://notes.ethereum.org/@vbuterin/pbs_concerns"
+          ]
+        },
+        {
+          "label": "The free option concern is overblown",
+          "author": "Terrence",
+          "argument": "While the free option exists in theory, several factors mitigate its impact: 1) Builders have reputational stakes, 2) The PTC provides accountability, 3) Empty blocks hurt builders' long-term profitability, 4) Market makers already have similar options in traditional finance without catastrophic effects.",
+          "evidence": [
+            "https://ethresear.ch/t/pbs-builder-incentives",
+            "https://github.com/ethereum/EIPs/discussions/7732"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "argument",
+      "position": "The free option is a manageable trade-off, not a dealbreaker",
+      "points": [
+        "Builders who frequently abandon blocks will lose proposer trust and future opportunities",
+        "The 6-second window is actually quite short for exploiting major market movements",
+        "PBS brings significant MEV benefits that outweigh the free option risk",
+        "We can implement reputation systems and penalties for serial block abandoners"
+      ],
+      "counterpoints": [
+        "During extreme volatility (like major liquidation cascades), even reputable builders might rationally abandon blocks",
+        "The cumulative effect of many abandoned blocks could harm user experience"
+      ],
+      "evidence": [
+        "https://ethresear.ch/t/builder-reputation-systems",
+        "https://flashbots.net/research/builder-behavior-analysis"
+      ]
+    },
+    {
+      "type": "timeline",
+      "events": [
+        {
+          "time": "0-3s",
+          "description": "Builder constructs block and submits commitment",
+          "eip": 7732
+        },
+        {
+          "time": "3-9s",
+          "description": "Builder holds option - can observe market but block is locked",
+          "eip": 7732
+        },
+        {
+          "time": "9s",
+          "description": "Builder must reveal or forfeit (creating empty slot)",
+          "eip": 7732
+        },
+        {
+          "time": "11s",
+          "description": "PTC attests to payload timeliness",
+          "eip": 7732
+        }
+      ]
+    },
+    {
+      "type": "callout",
+      "style": "info",
+      "title": "Real-world context",
+      "content": "Traditional financial markets have dealt with similar 'free options' for decades through market maker privileges. While not perfect, these markets function effectively through a combination of regulation, reputation, and competition."
+    },
+    {
+      "type": "summary",
+      "content": "The free option in PBS is a real phenomenon but its severity is debated. While critics worry about empty blocks during volatility, proponents argue that builder reputation, competition, and the relatively short option window make this a manageable trade-off for the significant benefits PBS provides. The truth likely lies somewhere in between - it's a concern worth addressing through careful mechanism design, but not necessarily a fatal flaw."
+    }
+  ]
+}
