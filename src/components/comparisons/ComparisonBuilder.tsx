@@ -254,7 +254,7 @@ export default function ComparisonBuilder({ selectedEips, onComplete, onBack }: 
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 pb-12">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2">
           Build Your Comparison

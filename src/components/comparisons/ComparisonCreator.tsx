@@ -7,6 +7,7 @@ import ComparisonRenderer from './ComparisonRenderer';
 import ComparisonBuilder from './ComparisonBuilder';
 import { loadExampleComparison } from './ExampleLoader';
 import { eipDataService } from '../../services/eipDataService';
+import Navigation from '../Navigation';
 
 export default function ComparisonCreator() {
   const navigate = useNavigate();
@@ -294,7 +295,9 @@ export default function ComparisonCreator() {
 
   if (step === 'select') {
     return (
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+        <Navigation />
+        <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
           Create Glamsterdam EIP Comparison
         </h1>
@@ -357,7 +360,7 @@ export default function ComparisonCreator() {
             Choose exactly 2 competing Glamsterdam proposals to compare. For the most meaningful comparison, select EIPs competing for the same layer slot.
           </p>
           
-          <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 space-y-6">
+          <div className="border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-6">
             {/* Consensus Layer EIPs */}
             {clEips.length > 0 && (
               <div>
@@ -371,7 +374,7 @@ export default function ComparisonCreator() {
                     return (
                       <label 
                         key={eip.id} 
-                        className="flex items-start space-x-2 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer border border-slate-100 dark:border-slate-800"
+                        className="flex items-start space-x-2 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer border border-slate-200 dark:border-slate-700"
                       >
                         <input
                           type="checkbox"
@@ -416,7 +419,7 @@ export default function ComparisonCreator() {
                     return (
                       <label 
                         key={eip.id} 
-                        className="flex items-start space-x-2 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer border border-slate-100 dark:border-slate-800"
+                        className="flex items-start space-x-2 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer border border-slate-200 dark:border-slate-700"
                       >
                         <input
                           type="checkbox"
@@ -490,20 +493,24 @@ export default function ComparisonCreator() {
             Paste JSON →
           </button>
         </div>
+        </div>
       </div>
     );
   }
 
   if (step === 'build') {
     return (
-      <ComparisonBuilder
-        selectedEips={selectedEips}
-        onComplete={(comparison) => {
-          setPreview(comparison);
-          setStep('preview');
-        }}
-        onBack={() => setStep('select')}
-      />
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+        <Navigation />
+        <ComparisonBuilder
+          selectedEips={selectedEips}
+          onComplete={(comparison) => {
+            setPreview(comparison);
+            setStep('preview');
+          }}
+          onBack={() => setStep('select')}
+        />
+      </div>
     );
   }
 
@@ -511,7 +518,9 @@ export default function ComparisonCreator() {
     const template = generateTemplate();
     
     return (
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+        <Navigation />
+        <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
           Create Glamsterdam EIP Comparison
         </h1>
@@ -606,13 +615,16 @@ export default function ComparisonCreator() {
             Preview Comparison
           </button>
         </div>
+        </div>
       </div>
     );
   }
 
   if (step === 'preview' && preview) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+        <Navigation />
+        <div className="max-w-6xl mx-auto p-6">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
             Preview Your Comparison
@@ -628,8 +640,9 @@ export default function ComparisonCreator() {
           </div>
         </div>
         
-        <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-6 bg-white dark:bg-slate-900">
+        <div className="border border-slate-200 dark:border-slate-800 rounded-lg p-6 bg-white dark:bg-slate-900">
           <ComparisonRenderer comparison={preview} />
+        </div>
         </div>
       </div>
     );
