@@ -759,9 +759,9 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
         const isLeftPreferred = preferredIndex === 0;
         
         const strengthColors = {
-          strong: 'bg-green-600',
-          moderate: 'bg-blue-600',
-          slight: 'bg-gray-600'
+          strong: 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-2 border-green-200 dark:border-green-700',
+          moderate: 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 border-2 border-blue-200 dark:border-blue-700',
+          slight: 'bg-gray-50 dark:bg-gray-900/20 text-gray-800 dark:text-gray-200 border-2 border-gray-200 dark:border-gray-700'
         };
         const strengthLabels = {
           strong: 'Strongly Prefers',
@@ -780,7 +780,7 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
           
           return (
             <div key={index} className="mb-8">
-              <div className={`relative ${strengthColors[section.strength]} text-white p-6 rounded-lg shadow-lg`}>
+              <div className={`relative ${strengthColors[section.strength]} p-6 rounded-lg shadow-sm`}>
                 <div className="max-w-4xl mx-auto">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
@@ -790,13 +790,19 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                           <img 
                             src={comparison.meta.authorAvatar} 
                             alt={authorName}
-                            className="w-14 h-14 rounded-full border-2 border-white/30 object-cover"
+                            className="w-14 h-14 rounded-full border-2 border-green-300 dark:border-green-600 object-cover"
                           />
                         ) : (
-                          <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/30">
-                            <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                            </svg>
+                          <div className="w-14 h-14 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center border-2 border-green-300 dark:border-green-600">
+                            {xHandle ? (
+                              <span className="text-2xl font-bold text-green-700 dark:text-green-200">
+                                {authorName.charAt(0).toUpperCase()}
+                              </span>
+                            ) : (
+                              <svg className="w-7 h-7 text-green-700 dark:text-green-200" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                              </svg>
+                            )}
                           </div>
                         )}
                         <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
@@ -832,21 +838,21 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                       </div>
                     </div>
                   </div>
-                  <p className="text-white/90 leading-relaxed">
+                  <p className="leading-relaxed">
                     {section.reasoning}
                   </p>
                 </div>
                 
                 {/* Arrow pointing down to preferred EIP */}
                 <div className={`absolute -bottom-6 ${isLeftPreferred ? 'left-1/4' : 'right-1/4'} transform -translate-x-1/2`}>
-                  <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[24px] border-t-green-600"></div>
+                  <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[24px] border-t-green-200 dark:border-t-green-700"></div>
                 </div>
               </div>
               
               {/* Highlight bar under preferred EIP in next section */}
               <div className="mt-8 grid grid-cols-2 gap-4">
-                <div className={`h-1 rounded-full ${isLeftPreferred ? 'bg-green-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
-                <div className={`h-1 rounded-full ${!isLeftPreferred ? 'bg-green-600' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
+                <div className={`h-1 rounded-full ${isLeftPreferred ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
+                <div className={`h-1 rounded-full ${!isLeftPreferred ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'}`}></div>
               </div>
             </div>
           );

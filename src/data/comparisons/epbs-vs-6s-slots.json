@@ -4,7 +4,7 @@
     "author": "Jason J McPheron (jmcpheron.eth @jmcpheron)",
     "created": "2025-01-26",
     "description": "Comparing EIP-7732 (Enshrined PBS) and EIP-7782 (6-Second Slots) for the single consensus-layer headline slot in Glamsterdam",
-    "authorAvatar": "https://pbs.twimg.com/profile_images/1847348765063888897/9OPvOqXM_400x400.jpg"
+    "authorAvatar": "/jmcpheron.jpg"
   },
   "eips": [7732, 7782],
   "sections": [
@@ -341,21 +341,21 @@
       "type": "timeline-comparison",
       "timelines": {
         "7732": [
-          { "time": "0s", "event": "Proposer broadcasts beacon block", "icon": "📦" },
-          { "time": "3s", "event": "Builder commits to payload", "icon": "🔒" },
-          { "time": "3-9s", "event": "Builder holds 'free option'", "icon": "🎰", "highlight": true },
-          { "time": "9s", "event": "Builder reveals or forfeits", "icon": "💸" },
-          { "time": "11s", "event": "PTC votes on timeliness", "icon": "✅" }
+          { "time": "0s",  "event": "Beacon block (with builder bid) broadcast", "icon": "📦" },
+          { "time": "0‑8s", "event": "Builder holds “free option” window",       "icon": "🎰", "highlight": true },
+          { "time": "≤8s", "event": "Builder reveals payload or forfeits",       "icon": "💸" },
+          { "time": "~10s", "event": "PTC votes on timeliness",                  "icon": "✅" },
+          { "time": "12s", "event": "Next slot begins",                          "icon": "⏭️" }
         ],
         "7782": [
-          { "time": "0s", "event": "Block proposed", "icon": "📦" },
-          { "time": "2s", "event": "Block propagated (tight!)", "icon": "📡", "highlight": true },
-          { "time": "3s", "event": "Attestation deadline", "icon": "⏰", "highlight": true },
-          { "time": "4s", "event": "Aggregate signatures", "icon": "✍️" },
-          { "time": "6s", "event": "Next slot begins", "icon": "⏭️" }
+          { "time": "0s",  "event": "Block proposed",                            "icon": "📦" },
+          { "time": "0‑3s","event": "Block propagation window",                  "icon": "📡", "highlight": true },
+          { "time": "3s",  "event": "Attestation sub‑slot starts",               "icon": "⏰", "highlight": true },
+          { "time": "4.5s","event": "Aggregate signatures propagate",            "icon": "✍️" },
+          { "time": "6s",  "event": "Next slot begins",                          "icon": "⏭️" }
         ]
       }
-    },
+    }    ,
     {
       "type": "header",
       "content": "The Free Option Debate (Updated from ACDC #161)",
