@@ -8,9 +8,8 @@ const EXAMPLE_COMPARISON = exampleComparison;
 export function loadExampleComparison() {
   const hash = 'example-epbs-6s';
   localStorage.setItem(`comparison-${hash}`, JSON.stringify(EXAMPLE_COMPARISON));
-  // In development, we don't have the base path
-  const basePath = import.meta.env.DEV ? '' : '/forkcast';
-  return `${basePath}/compare/${hash}`;
+  // Return just the path without base - Router handles the base path
+  return `/compare/${hash}`;
 }
 
 export default function ExampleLoader() {

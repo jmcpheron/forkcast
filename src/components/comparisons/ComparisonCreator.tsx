@@ -284,8 +284,7 @@ export default function ComparisonCreator() {
     localStorage.setItem(`comparison-${hash}`, JSON.stringify(preview));
     
     // Navigate to the comparison page
-    const basePath = import.meta.env.DEV ? '' : '/forkcast';
-    navigate(`${basePath}/compare/${hash}`);
+    navigate(`/compare/${hash}`);
   };
 
   const copyToClipboard = (text: string) => {
@@ -322,7 +321,7 @@ export default function ComparisonCreator() {
               const url = loadExampleComparison();
               navigate(url);
             }}
-            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+            className="text-blue-600 dark:text-blue-400 hover:underline font-medium cursor-pointer"
           >
             View Example: ePBS vs 6-Second Slots →
           </button>
