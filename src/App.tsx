@@ -56,7 +56,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Router basename={import.meta.env.DEV ? "" : "/json-battlecard"}>
+      <Router basename={import.meta.env.DEV ? "" : "/forkcast"}>
         <RedirectHandler />
         <AnalyticsTracker />
         <Routes>
