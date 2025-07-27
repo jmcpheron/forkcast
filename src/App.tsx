@@ -55,7 +55,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Router basename="">
+      <Router basename="/json-battlecard">
         <RedirectHandler />
         <AnalyticsTracker />
         <Routes>

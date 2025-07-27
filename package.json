@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://wolovim.github.io/forkcast",
+  "homepage": "https://jmcpheron.github.io/json-battlecard",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
