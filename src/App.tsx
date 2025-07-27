@@ -7,6 +7,9 @@ import { getUpgradeById } from './data/upgrades';
 import { useAnalytics } from './hooks/useAnalytics';
 import { ThemeProvider } from './contexts/ThemeContext';
 import ExternalRedirect from './components/ExternalRedirect';
+import ComparisonCreator from './components/comparisons/ComparisonCreator';
+import ComparisonViewer from './components/comparisons/ComparisonViewer';
+import ExampleLoader from './components/comparisons/ExampleLoader';
 
 function RedirectHandler() {
   const navigate = useNavigate();
@@ -53,7 +56,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Router basename="">
+      <Router basename={import.meta.env.DEV ? "" : "/forkcast"}>
         <RedirectHandler />
         <AnalyticsTracker />
         <Routes>
@@ -79,6 +82,9 @@ function App() {
           } />
           <Route path="/rank" element={<RankPage />} />
           <Route path="/feedback" element={<ExternalRedirect />} />
+          <Route path="/compare/new" element={<ComparisonCreator />} />
+          <Route path="/compare/example" element={<ExampleLoader />} />
+          <Route path="/compare/:id" element={<ComparisonViewer />} />
           {/* <Route path="/upgrade/pectra" element={
             <PublicNetworkUpgradePage
               forkName="Pectra"
