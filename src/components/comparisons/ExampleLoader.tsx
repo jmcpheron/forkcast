@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import exampleComparison from '../../data/comparisons/epbs-vs-6s-slots.json';
 
 // Full example comparison data with author preference at top
-const EXAMPLE_COMPARISON = {
+const EXAMPLE_COMPARISON = exampleComparison;
+
+const EXAMPLE_COMPARISON_OLD = {
   meta: {
     title: "ePBS vs 6-Second Slots: Glamsterdam's Consensus Layer Fork Choice",
     author: "Jason J McPheron (jmcpheron.eth @jmcpheron)",
