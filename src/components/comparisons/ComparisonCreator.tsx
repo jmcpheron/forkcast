@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import eipsData from '../../data/eips.json';
 import { EIPComparison } from '../../types/comparison';
+import { EIP } from '../../types/eip';
 import ComparisonRenderer from './ComparisonRenderer';
 import ComparisonBuilder from './ComparisonBuilder';
 import { loadExampleComparison } from './ExampleLoader';
@@ -14,6 +15,26 @@ export default function ComparisonCreator() {
   const [error, setError] = useState('');
   const [preview, setPreview] = useState<EIPComparison | null>(null);
   const [step, setStep] = useState<'select' | 'build' | 'paste' | 'preview'>('select');
+  
+  // Cast eipsData to the correct type
+  const typedEips = eipsData as EIP[];
+  
+  // Filter for Glamsterdam headliner EIPs
+  const glamsterdamEips = typedEips.filter(eip => 
+    eip.forkRelationships?.some(rel => 
+      rel.forkName === 'Glamsterdam' && 
+      rel.isHeadliner === true &&
+      rel.status === 'Proposed'
+    )
+  );
+  
+  // Group by layer
+  const clEips = glamsterdamEips.filter(eip => 
+    eip.forkRelationships?.find(rel => rel.forkName === 'Glamsterdam')?.layer === 'CL'
+  );
+  const elEips = glamsterdamEips.filter(eip => 
+    eip.forkRelationships?.find(rel => rel.forkName === 'Glamsterdam')?.layer === 'EL'
+  );
 
   const generateTemplate = () => {
     // Check which EIPs have Forkcast data
@@ -274,8 +295,22 @@ export default function ComparisonCreator() {
     return (
       <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
-          Create EIP Comparison
+          Create Glamsterdam EIP Comparison
         </h1>
+        
+        <div className="mb-6 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg">
+          <h3 className="font-medium text-purple-800 dark:text-purple-200 mb-2">
+            🏗️ About Glamsterdam
+          </h3>
+          <p className="text-sm text-purple-700 dark:text-purple-300 mb-2">
+            Glamsterdam will include one consensus layer (CL) headliner and one execution layer (EL) headliner. 
+            Multiple proposals are competing for each slot, and this tool helps you create thoughtful comparisons 
+            between competing proposals.
+          </p>
+          <p className="text-xs text-purple-600 dark:text-purple-400">
+            <strong>Best practice:</strong> Compare EIPs competing for the same layer slot (e.g., ePBS vs 6-second slots for CL).
+          </p>
+        </div>
         
         <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
           <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
@@ -315,47 +350,140 @@ export default function ComparisonCreator() {
         
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4">
-            Step 1: Select EIPs to Compare
+            Step 1: Select 2 EIPs to Compare
           </h2>
           <p className="text-slate-600 dark:text-slate-400 mb-4">
-            Choose 2-4 EIPs you want to compare side-by-side
+            Choose exactly 2 competing Glamsterdam proposals to compare. For the most meaningful comparison, select EIPs competing for the same layer slot.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-96 overflow-y-auto border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-            {eipsData.map(eip => (
-              <label 
-                key={eip.id} 
-                className="flex items-center space-x-2 p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedEips.includes(eip.id)}
-                  onChange={() => handleEipToggle(eip.id)}
-                  className="rounded border-slate-300 dark:border-slate-600"
-                />
-                <span className="text-sm">
-                  <span className="font-medium">EIP-{eip.id}</span>: {eip.title}
-                </span>
-              </label>
-            ))}
+          <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 space-y-6">
+            {/* Consensus Layer EIPs */}
+            {clEips.length > 0 && (
+              <div>
+                <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
+                  <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs rounded">CL</span>
+                  Consensus Layer Candidates
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {clEips.map(eip => {
+                    const glamRel = eip.forkRelationships?.find(rel => rel.forkName === 'Glamsterdam');
+                    return (
+                      <label 
+                        key={eip.id} 
+                        className="flex items-start space-x-2 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer border border-slate-100 dark:border-slate-800"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedEips.includes(eip.id)}
+                          onChange={() => handleEipToggle(eip.id)}
+                          disabled={selectedEips.length >= 2 && !selectedEips.includes(eip.id)}
+                          className="rounded border-slate-300 dark:border-slate-600 mt-1"
+                        />
+                        <div className="flex-1">
+                          <div className="font-medium text-sm">
+                            EIP-{eip.id}: {eip.title}
+                          </div>
+                          {glamRel?.headlinerDiscussionLink && (
+                            <a 
+                              href={glamRel.headlinerDiscussionLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              View proposal →
+                            </a>
+                          )}
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            
+            {/* Execution Layer EIPs */}
+            {elEips.length > 0 && (
+              <div>
+                <h3 className="text-lg font-medium text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
+                  <span className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs rounded">EL</span>
+                  Execution Layer Candidates
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {elEips.map(eip => {
+                    const glamRel = eip.forkRelationships?.find(rel => rel.forkName === 'Glamsterdam');
+                    return (
+                      <label 
+                        key={eip.id} 
+                        className="flex items-start space-x-2 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer border border-slate-100 dark:border-slate-800"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedEips.includes(eip.id)}
+                          onChange={() => handleEipToggle(eip.id)}
+                          disabled={selectedEips.length >= 2 && !selectedEips.includes(eip.id)}
+                          className="rounded border-slate-300 dark:border-slate-600 mt-1"
+                        />
+                        <div className="flex-1">
+                          <div className="font-medium text-sm">
+                            EIP-{eip.id}: {eip.title}
+                          </div>
+                          {glamRel?.headlinerDiscussionLink && (
+                            <a 
+                              href={glamRel.headlinerDiscussionLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              View proposal →
+                            </a>
+                          )}
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
           
-          <div className="mt-4 text-sm text-slate-600 dark:text-slate-400">
-            Selected: {selectedEips.length} EIP{selectedEips.length !== 1 ? 's' : ''}
+          <div className="mt-4 space-y-2">
+            <div className="text-sm text-slate-600 dark:text-slate-400">
+              Selected: {selectedEips.length} of 2 EIPs
+            </div>
+            {selectedEips.length === 2 && (() => {
+              const eip1 = glamsterdamEips.find(e => e.id === selectedEips[0]);
+              const eip2 = glamsterdamEips.find(e => e.id === selectedEips[1]);
+              const layer1 = eip1?.forkRelationships?.find(rel => rel.forkName === 'Glamsterdam')?.layer;
+              const layer2 = eip2?.forkRelationships?.find(rel => rel.forkName === 'Glamsterdam')?.layer;
+              
+              if (layer1 !== layer2) {
+                return (
+                  <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg">
+                    <p className="text-sm text-amber-800 dark:text-amber-200">
+                      <strong>Note:</strong> You've selected EIPs from different layers (CL and EL). 
+                      While valid, comparisons are most meaningful between EIPs competing for the same slot.
+                    </p>
+                  </div>
+                );
+              }
+              return null;
+            })()}
           </div>
         </div>
         
         <div className="flex gap-4">
           <button
             onClick={() => setStep('build')}
-            disabled={selectedEips.length < 2}
+            disabled={selectedEips.length !== 2}
             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Build Visually →
           </button>
           <button
             onClick={() => setStep('paste')}
-            disabled={selectedEips.length < 2}
+            disabled={selectedEips.length !== 2}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Paste JSON →
@@ -384,7 +512,7 @@ export default function ComparisonCreator() {
     return (
       <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6">
-          Create EIP Comparison
+          Create Glamsterdam EIP Comparison
         </h1>
         
         <div className="mb-8">
@@ -430,7 +558,7 @@ export default function ComparisonCreator() {
           
           <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-6">
             <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
-              Use this structure to build your comparison. Start with YOUR preference at the top - 
+              Use this structure to build your comparison of 2 Glamsterdam proposals. Start with YOUR preference at the top - 
               this is your take on which EIP should win and why. Forkcast facts are included automatically 
               to provide neutral baselines.
             </p>
