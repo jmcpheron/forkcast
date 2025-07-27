@@ -48,10 +48,7 @@ export default function ComparisonViewer() {
             {error}
           </h2>
           <button
-            onClick={() => {
-              const basePath = import.meta.env.DEV ? '' : '/forkcast';
-              navigate(`${basePath}/compare/new`);
-            }}
+            onClick={() => navigate('/compare/new')}
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
           >
             Create New Comparison
@@ -78,10 +75,7 @@ export default function ComparisonViewer() {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => {
-              const basePath = import.meta.env.DEV ? '' : '/forkcast';
-              navigate(`${basePath}/`);
-            }}
+            onClick={() => navigate('/')}
             className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
           >
             ← Back to Forkcast
