@@ -344,7 +344,7 @@ export default function ComparisonCreator() {
             values and priorities for Ethereum's future.
           </p>
           <div className="mt-3 p-3 bg-gray-100 dark:bg-gray-800 rounded">
-            <p className="text-xs text-gray-600 dark:text-gray-400">
+            <p className="text-xs text-gray-600 dark:text-gray-300">
               <strong>📊 Forkcast Integration:</strong> We automatically include compiled data from Forkcast's 
               EIP repository. These gray sections provide EIP information. Add YOUR analysis and opinions 
               in additional sections to build on these facts.
@@ -356,7 +356,7 @@ export default function ComparisonCreator() {
           <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-200 mb-4">
             Step 1: Select 2 EIPs to Compare
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 mb-4">
+          <p className="text-slate-600 dark:text-slate-300 mb-4">
             Choose exactly 2 competing Glamsterdam proposals to compare. For the most meaningful comparison, select EIPs competing for the same layer slot.
           </p>
           
@@ -384,7 +384,7 @@ export default function ComparisonCreator() {
                           className="rounded border-slate-300 dark:border-slate-600 mt-1"
                         />
                         <div className="flex-1">
-                          <div className="font-medium text-sm">
+                          <div className="font-medium text-sm text-slate-900 dark:text-slate-100">
                             EIP-{eip.id}: {eip.title}
                           </div>
                           {glamRel?.headlinerDiscussionLink && (
@@ -429,7 +429,7 @@ export default function ComparisonCreator() {
                           className="rounded border-slate-300 dark:border-slate-600 mt-1"
                         />
                         <div className="flex-1">
-                          <div className="font-medium text-sm">
+                          <div className="font-medium text-sm text-slate-900 dark:text-slate-100">
                             EIP-{eip.id}: {eip.title}
                           </div>
                           {glamRel?.headlinerDiscussionLink && (
@@ -453,7 +453,7 @@ export default function ComparisonCreator() {
           </div>
           
           <div className="mt-4 space-y-2">
-            <div className="text-sm text-slate-600 dark:text-slate-400">
+            <div className="text-sm text-slate-600 dark:text-slate-300">
               Selected: {selectedEips.length} of 2 EIPs
             </div>
             {selectedEips.length === 2 && (() => {
@@ -543,15 +543,15 @@ export default function ComparisonCreator() {
               </h3>
               <button
                 onClick={() => copyToClipboard(template)}
-                className="text-sm px-3 py-1 bg-slate-200 dark:bg-slate-700 rounded hover:bg-slate-300 dark:hover:bg-slate-600"
+                className="text-sm px-3 py-1 bg-slate-200 dark:bg-slate-600 rounded hover:bg-slate-300 dark:hover:bg-slate-500"
               >
                 Copy Structure
               </button>
             </div>
-            <pre className="text-xs overflow-x-auto bg-white dark:bg-slate-900 p-4 rounded border border-slate-200 dark:border-slate-700">
+            <pre className="text-xs overflow-x-auto bg-white dark:bg-slate-800 p-4 rounded border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100">
               {template}
             </pre>
-            <div className="mt-2 p-3 bg-slate-100 dark:bg-slate-800 rounded text-xs">
+            <div className="mt-2 p-3 bg-slate-100 dark:bg-slate-800 rounded text-xs text-slate-700 dark:text-slate-200">
               <strong>Instructions:</strong>
               <ol className="list-decimal list-inside space-y-1 mt-1">
                 <li>Copy this template to your text editor</li>
@@ -573,7 +573,7 @@ export default function ComparisonCreator() {
               to provide repository data.
             </p>
             <div className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded">
-              <p className="text-xs text-gray-600 dark:text-gray-400">
+              <p className="text-xs text-gray-600 dark:text-gray-300">
                 <strong>How it works:</strong> Forkcast sections (gray) contain compiled data from our repository. 
                 Add YOUR analysis in new sections. This separation ensures readers know what's repository data vs. personal analysis.
               </p>
@@ -590,7 +590,7 @@ export default function ComparisonCreator() {
             value={jsonInput}
             onChange={(e) => setJsonInput(e.target.value)}
             placeholder="Paste your completed JSON comparison here..."
-            className="w-full h-64 p-4 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-mono text-sm"
+            className="w-full h-64 p-4 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-mono text-sm"
           />
           
           {error && (
@@ -603,7 +603,7 @@ export default function ComparisonCreator() {
         <div className="flex gap-4">
           <button
             onClick={() => setStep('select')}
-            className="px-6 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800"
+            className="px-6 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-slate-200"
           >
             Back
           </button>
@@ -632,7 +632,7 @@ export default function ComparisonCreator() {
           <div className="flex gap-4">
             <button
               onClick={() => setStep('paste')}
-              className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800"
+              className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200"
             >
               Edit
             </button>
