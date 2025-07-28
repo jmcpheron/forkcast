@@ -127,6 +127,3 @@ eip-battle-cards/
 └── README.md
 ```
 
-## Contact
-
-Have feedback? Contact [jmcpheron](mailto:jmcpheron@ethereum.org) or [@jmcpheron](https://x.com/jmcpheron)
