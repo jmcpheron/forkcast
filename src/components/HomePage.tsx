@@ -166,10 +166,10 @@ const HomePage = () => {
           </p>
           <p className="text-xs mb-2">
             <a
-              href="https://github.com/jmcpheron-forkcast/eip-battle-cards"
+              href="https://github.com/jmcpheron/eip-battle-cards"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleExternalLinkClick('source_code', 'https://github.com/jmcpheron-forkcast/eip-battle-cards')}
+              onClick={() => handleExternalLinkClick('source_code', 'https://github.com/jmcpheron/eip-battle-cards')}
               className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors duration-200 inline-flex items-center"
               aria-label="View source code on GitHub"
             >
