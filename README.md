@@ -1,10 +1,10 @@
 # EIP Battle Cards - Compare Ethereum Improvement Proposals
 
-An experiment by the Protocol Support team, adjacent to [forecast.org](https://forecast.org), for creating and sharing detailed comparisons of Ethereum Improvement Proposals (EIPs).
+An experiment by jmcpheron, adjacent to [forecast.org](https://forecast.org), for creating and sharing detailed comparisons of Ethereum Improvement Proposals (EIPs).
 
 ## Live Site
 
-Visit the deployed site at: https://eip-battle-cards.org
+Visit the deployed site at: https://jmcpheron.github.io/eip-battle-cards/
 
 ## Overview
 
@@ -24,11 +24,11 @@ EIP Battle Cards is a platform that enables the Ethereum community to create, sh
   - Timeline comparisons
   - Custom visualizations
 - **GitHub Gist Integration**: Export and import battle cards via GitHub Gists
-- **Community Sharing**: Share battle cards using Gist URLs like `https://gist.github.com/username/gistid`
+- **Community Sharing**: Share battle cards using clean URLs like `/gist/username/gistid`
 
 ## Example Battle Card
 
-Check out our featured example: [ePBS vs 6-Second Slots](https://eip-battle-cards.org/compare/example) - Comparing EIP-7732 (Enshrined PBS) and EIP-7782 (6-Second Slots) for Glamsterdam's consensus layer fork choice.
+Check out our featured example: [ePBS vs 6-Second Slots](https://jmcpheron.github.io/eip-battle-cards/#/compare/example) - Comparing EIP-7732 (Enshrined PBS) and EIP-7782 (6-Second Slots) for Glamsterdam's consensus layer fork choice.
 
 ## Development
 
@@ -48,7 +48,7 @@ npm run preview
 
 ## Creating a Battle Card
 
-1. Visit the [Create Battle Card](https://eip-battle-cards.org/compare/new) page
+1. Visit the [Create Battle Card](https://jmcpheron.github.io/eip-battle-cards/#/compare/new) page
 2. Select the EIPs you want to compare
 3. Add your analysis sections (author preference, risk analysis, etc.)
 4. Preview your battle card
@@ -59,7 +59,7 @@ npm run preview
 1. Click "Import from Gist" on the homepage
 2. Paste your Gist URL (e.g., `https://gist.github.com/jmcpheron/e91f4fc20a65e61a367b804a15f0cdf9`)
 3. The battle card will load and display immediately
-4. Share the direct link: `https://eip-battle-cards.org/#/compare/gist?url={gistUrl}`
+4. Share using the clean URL format: `https://jmcpheron.github.io/eip-battle-cards/#/gist/jmcpheron/e91f4fc20a65e61a367b804a15f0cdf9`
 
 ## Data Structure
 
@@ -129,4 +129,4 @@ eip-battle-cards/
 
 ## Contact
 
-Have feedback? Contact [nixo](mailto:nixo@ethereum.org) or [@wolovim](https://x.com/wolovim)
+Have feedback? Contact [jmcpheron](mailto:jmcpheron@ethereum.org) or [@jmcpheron](https://x.com/jmcpheron)
