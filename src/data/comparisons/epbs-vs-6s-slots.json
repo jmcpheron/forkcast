@@ -2,7 +2,7 @@
   "meta": {
     "title": "ePBS vs 6-Second Slots: Glamsterdam's Consensus Layer Fork Choice",
     "author": "Jason J McPheron (jmcpheron.eth @jmcpheron)",
-    "created": "2025-01-26",
+    "created": "2025-01-28",
     "description": "Comparing EIP-7732 (Enshrined PBS) and EIP-7782 (6-Second Slots) for the single consensus-layer headline slot in Glamsterdam",
     "authorAvatar": "/forkcast/jmcpheron.jpg"
   },
@@ -29,7 +29,7 @@
       "type": "author-preference",
       "preferredEip": 7732,
       "strength": "strong",
-    "reasoning": "Speaking as a long-time Ethereum enthusiast, community member, and solo staker supporter, I strongly prefer ePBS. While I appreciate the merits of both proposals, the urgency and benefits of enshrining Proposer-Builder Separation sooner rather than later drive my preference. Current data shows just two builders (Titan and beaverbuild) control >84% of blocks, and this concentration continues to grow. Although the free-option problem is real, it is overstated—practical limits such as builder–searcher relationships, reputation systems, and the current ~8 s reveal window make systematic exploitation difficult. Mitigations like asymmetric payments, penalties, and shorter reveal windows can further reduce risk. 6-second slots would deliver a nice UX improvement, but this can be safely implemented in a later fork. The benefits of addressing relay dependence and enshrining PBS at the protocol level merit prioritization in Glamsterdam."},
+    "reasoning": "Speaking as a Genesis solo staker, and long-time participant and community member in the ethstaker and consensus layer communities, I strongly prefer ePBS. While I appreciate the merits of both proposals, the urgency and benefits of enshrining Proposer-Builder Separation sooner rather than later drive my preference. Current data shows just two builders (Titan and beaverbuild) control >84% of blocks, and this concentration continues to grow. Although the free-option problem is real, it is overstated—practical limits such as builder–searcher relationships, reputation systems, and the current ~8 s reveal window make systematic exploitation difficult. Mitigations like asymmetric payments, penalties, and shorter reveal windows can further reduce risk. 6-second slots would deliver a nice UX improvement, but this can be safely implemented in a later fork. The benefits of addressing relay dependence and enshrining PBS at the protocol level merit prioritization in Glamsterdam."},
     {
       "type": "header",
       "content": "Forkcast Data",
