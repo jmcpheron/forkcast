@@ -1,24 +1,34 @@
-# Forkcast - Ethereum Network Upgrades
+# EIP Battle Cards - Compare Ethereum Improvement Proposals
 
-An experiment by the Protocol Support team to provide public-facing information about Ethereum network upgrades.
+An experiment by the Protocol Support team, adjacent to [forecast.org](https://forecast.org), for creating and sharing detailed comparisons of Ethereum Improvement Proposals (EIPs).
 
 ## Live Site
 
-Visit the deployed site at: https://forkcast.org
+Visit the deployed site at: https://eip-battle-cards.org
 
 ## Overview
 
-This is a standalone client-side application that provides public access to information about Ethereum network upgrades. It displays EIPs (Ethereum Improvement Proposals) in a user-friendly format, showing their inclusion status, impact on different stakeholders, and alignment with Ethereum's strategic goals.
+EIP Battle Cards is a platform that enables the Ethereum community to create, share, and explore detailed comparisons between competing EIPs. It combines neutral data from forecast.org with community perspectives to help stakeholders understand the tradeoffs between different proposals.
 
 ## Features
 
-- **Network Upgrade Overview**: View upcoming, scheduled, and completed Ethereum network upgrades
-- **EIP Details**: Detailed information about each EIP including:
+- **Create Battle Cards**: Build comprehensive comparisons between 2 or more EIPs
+- **Neutral Data Foundation**: Pulls official EIP information from forecast.org including:
   - Layman-friendly explanations
-  - Inclusion stage (Proposed, Considered, Scheduled, Declined)
-  - Impact on different stakeholders (developers, users, validators, etc.)
-  - Alignment with Ethereum's North Star goals (Scale L1, Scale blobs, Improve UX)
-  - Benefits, trade-offs, and timeline information
+  - Stakeholder impacts
+  - North Star alignment (Scale L1, Scale blobs, Improve UX)
+  - Benefits and tradeoffs
+- **Author Analysis Layer**: Add your own perspectives on top of the neutral data:
+  - Personal preferences and reasoning
+  - Risk analysis
+  - Timeline comparisons
+  - Custom visualizations
+- **GitHub Gist Integration**: Export and import battle cards via GitHub Gists
+- **Community Sharing**: Share battle cards using Gist URLs like `https://gist.github.com/username/gistid`
+
+## Example Battle Card
+
+Check out our featured example: [ePBS vs 6-Second Slots](https://eip-battle-cards.org/compare/example) - Comparing EIP-7732 (Enshrined PBS) and EIP-7782 (6-Second Slots) for Glamsterdam's consensus layer fork choice.
 
 ## Development
 
@@ -36,29 +46,46 @@ npm run build
 npm run preview
 ```
 
-## Deployment
+## Creating a Battle Card
 
-The site automatically deploys to GitHub Pages when changes are merged into the `main` branch.
+1. Visit the [Create Battle Card](https://eip-battle-cards.org/compare/new) page
+2. Select the EIPs you want to compare
+3. Add your analysis sections (author preference, risk analysis, etc.)
+4. Preview your battle card
+5. Export to GitHub Gist for sharing
 
-## Project Structure
+## Importing from GitHub Gist
 
-```
-forkcast-public/
-├── src/
-│   ├── components/
-│   │   ├── HomePage.tsx           # Landing page with upgrade list
-│   │   └── PublicNetworkUpgradePage.tsx  # Main upgrade detail page
-│   ├── data/
-│   │   └── eips.json             # EIP data
-│   ├── App.tsx                   # Main app component with routing
-│   ├── main.tsx                  # App entry point
-│   ├── index.css                 # Global styles
-│   └── vite-env.d.ts            # Vite type definitions
-├── public/                       # Static assets
-├── package.json
-├── vite.config.ts               # Vite configuration
-├── tsconfig.json                # TypeScript configuration
-└── README.md
+1. Click "Import from Gist" on the homepage
+2. Paste your Gist URL (e.g., `https://gist.github.com/jmcpheron/e91f4fc20a65e61a367b804a15f0cdf9`)
+3. The battle card will load and display immediately
+4. Share the direct link: `https://eip-battle-cards.org/#/compare/gist?url={gistUrl}`
+
+## Data Structure
+
+Battle cards combine two data sources:
+
+1. **Forecast.org Data** (`src/data/eips.json`): Official, neutral EIP information
+2. **Author Comparisons**: Personal analysis and perspectives layered on top
+
+Example comparison structure:
+```json
+{
+  "meta": {
+    "title": "Your Comparison Title",
+    "author": "Your Name",
+    "created": "2025-01-28",
+    "description": "Brief description"
+  },
+  "eips": [7732, 7782],
+  "sections": [
+    {
+      "type": "author-preference",
+      "preferredEip": 7732,
+      "reasoning": "Your analysis..."
+    }
+  ]
+}
 ```
 
 ## Technology Stack
@@ -70,10 +97,36 @@ forkcast-public/
 - **Tailwind CSS** - Styling
 - **ESLint** - Code linting
 
-## Data Structure
+## Contributing
 
-The application uses a JSON file (`src/data/eips.json`) containing EIP information. Each EIP includes:
+We welcome contributions! Please feel free to submit issues or pull requests.
 
-- Basic metadata (ID, title, status, author, etc.)
-- Fork relationships (which network upgrades include this EIP)
-- Public-facing explanations and impact assessments
+## Deployment
+
+The site automatically deploys to GitHub Pages when changes are merged into the `main` branch.
+
+## Project Structure
+
+```
+eip-battle-cards/
+├── src/
+│   ├── components/
+│   │   ├── HomePage.tsx                    # Landing page with featured cards
+│   │   ├── comparisons/
+│   │   │   ├── ComparisonCreator.tsx      # Create new battle cards
+│   │   │   ├── ComparisonViewer.tsx       # View battle cards
+│   │   │   └── ComparisonRenderer.tsx     # Render comparison sections
+│   │   └── ...
+│   ├── data/
+│   │   ├── eips.json                      # Forecast.org EIP data
+│   │   └── comparisons/                   # Example comparisons
+│   ├── App.tsx                            # Main app component with routing
+│   └── ...
+├── package.json
+├── vite.config.ts
+└── README.md
+```
+
+## Contact
+
+Have feedback? Contact [nixo](mailto:nixo@ethereum.org) or [@wolovim](https://x.com/wolovim)

@@ -1,148 +1,175 @@
 import { Link } from 'react-router-dom';
-import { networkUpgrades } from '../data/upgrades';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAnalytics } from '../hooks/useAnalytics';
 import ThemeToggle from './ui/ThemeToggle';
 
 const HomePage = () => {
-  const upgrades = networkUpgrades;
   const { trackLinkClick } = useAnalytics();
+  const navigate = useNavigate();
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [gistUrl, setGistUrl] = useState('');
 
   const handleExternalLinkClick = (linkType: string, url: string) => {
     trackLinkClick(linkType, url);
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Active':
-        return 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-300 dark:border-emerald-700';
-      case 'Scheduled':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-300 dark:border-yellow-700';
-      case 'Upcoming':
-        return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-700';
-      case 'Planning':
-        return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600';
-    }
+  const featuredComparison = {
+    title: "ePBS vs 6-Second Slots",
+    author: "Jason J McPheron",
+    description: "Comparing EIP-7732 (Enshrined PBS) and EIP-7782 (6-Second Slots) for Glamsterdam's consensus layer fork choice",
+    eips: [7732, 7782],
+    path: "/compare/example-epbs-6s"
   };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-12 text-center relative">
           <div className="absolute top-0 right-0">
             <ThemeToggle />
           </div>
           <Link to="/" className="text-4xl font-serif bg-gradient-to-r from-purple-600 via-blue-600 to-purple-800 bg-clip-text text-transparent hover:from-purple-700 hover:via-blue-700 hover:to-purple-900 transition-all duration-200 mb-3 tracking-tight inline-block">
-            Forkcast
+            EIP Battle Cards
           </Link>
           <h2 className="text-xl font-light text-slate-700 dark:text-slate-300 tracking-tight mb-2">
-            Ethereum Upgrade Tracker
+            Compare Ethereum Improvement Proposals
           </h2>
-          <p className="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            See what's on the horizon and how it impacts you.
+          <p className="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6">
+            Create and share detailed comparisons of EIPs with community perspectives and forecast.org data.
           </p>
-          <div className="mt-4">
+          <div className="flex gap-4 justify-center">
             <Link
               to="/compare/new"
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-800/40 rounded-md transition-colors"
+              className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm"
             >
-              <span className="mr-2">🔍</span>
-              Compare EIPs
+              <span className="mr-2">⚔️</span>
+              Create Your Battle Card
             </Link>
+            <button
+              onClick={() => setShowImportModal(true)}
+              className="inline-flex items-center px-6 py-3 text-base font-medium text-blue-600 bg-white hover:bg-slate-50 rounded-lg transition-colors border border-slate-200 dark:bg-slate-700 dark:text-blue-400 dark:hover:bg-slate-600 dark:border-slate-600"
+            >
+              <span className="mr-2">📥</span>
+              Import from Gist
+            </button>
           </div>
         </div>
 
-        {/* Upgrades Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {upgrades.map((upgrade) => {
-            const cardContent = (
-              <>
-                <div className="flex items-start justify-between mb-4">
-                  <h2 className={`text-xl font-medium leading-tight ${upgrade.disabled ? 'text-slate-500 dark:text-slate-400' : 'text-slate-900 dark:text-slate-100'}`}>
-                    {upgrade.name}
-                  </h2>
-                  <div className="flex flex-col items-end gap-1">
-                    <span className={`px-2 py-1 text-xs font-medium rounded border ${getStatusColor(upgrade.status)}`}>
-                      {upgrade.status}
-                    </span>
-                    {upgrade.disabled && (
-                      <span className="px-2 py-1 text-xs font-medium rounded bg-slate-100 text-slate-500 border border-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600 whitespace-nowrap">
-                        Page Coming Soon
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <p className={`text-sm leading-relaxed mb-4 ${upgrade.disabled ? 'text-slate-400 dark:text-slate-500' : 'text-slate-600 dark:text-slate-300'}`}>
-                  {upgrade.tagline}
+        {/* Featured Section */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6 text-center">Featured Battle Card</h2>
+          <Link
+            to={featuredComparison.path}
+            className="block bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-8 hover:shadow-xl transition-shadow duration-200 hover:border-slate-300 dark:hover:border-slate-600"
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+                  {featuredComparison.title}
+                </h3>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  by {featuredComparison.author}
                 </p>
+              </div>
+              <div className="flex gap-2">
+                {featuredComparison.eips.map(eip => (
+                  <span key={eip} className="px-3 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                    EIP-{eip}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              {featuredComparison.description}
+            </p>
+            <div className="mt-4 text-blue-600 dark:text-blue-400 font-medium">
+              Read Analysis →
+            </div>
+          </Link>
+        </div>
 
-                <div className={`text-xs ${upgrade.disabled ? 'text-slate-400 dark:text-slate-500' : 'text-slate-500 dark:text-slate-400'}`}>
-                  <span className="font-medium">
-                    {upgrade.status === 'Active' ? 'Activated:' :
-                     upgrade.status === 'Upcoming' ? 'Target:' :
-                     upgrade.status === 'Planning' ? 'Target:' : 'Date:'}
-                  </span> {upgrade.activationDate}
-                </div>
-              </>
-            );
+        {/* How It Works */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6 text-center">How It Works</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="text-4xl mb-4">📊</div>
+              <h3 className="text-lg font-semibold mb-2">Neutral EIP Data</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                We pull official EIP information from forecast.org, providing unbiased facts and stakeholder impacts.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl mb-4">💭</div>
+              <h3 className="text-lg font-semibold mb-2">Add Your Analysis</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Layer your opinions, preferences, and deeper analysis on top of the neutral data.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl mb-4">🔗</div>
+              <h3 className="text-lg font-semibold mb-2">Share via GitHub</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Export your battle card as a GitHub Gist and share it with the community.
+              </p>
+            </div>
+          </div>
+        </div>
 
-            if (upgrade.disabled) {
-              return (
-                <div
-                  key={upgrade.path}
-                  className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 opacity-60 cursor-not-allowed"
-                >
-                  {cardContent}
-                </div>
-              );
-            } else {
-              return (
-                <Link
-                  key={upgrade.path}
-                  to={upgrade.path}
-                  className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 hover:shadow-lg transition-shadow duration-200 hover:border-slate-300 dark:hover:border-slate-600"
-                >
-                  {cardContent}
-                </Link>
-              );
-            }
-          })}
+        {/* Call to Action */}
+        <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-8 text-center">
+          <h2 className="text-2xl font-semibold mb-4">Ready to Compare EIPs?</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-6">
+            Create your own battle card to share your perspective on competing Ethereum proposals.
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Link
+              to="/compare/new"
+              className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+            >
+              Create Battle Card
+            </Link>
+            <Link
+              to="/compare/example-epbs-6s"
+              className="inline-flex items-center px-6 py-3 text-base font-medium text-blue-600 bg-white hover:bg-slate-50 rounded-lg transition-colors border border-slate-200 dark:bg-slate-700 dark:text-blue-400 dark:hover:bg-slate-600 dark:border-slate-600"
+            >
+              View Example
+            </Link>
+          </div>
         </div>
 
         {/* Footer */}
         <div className="mt-16 text-center text-sm text-slate-500 dark:text-slate-400">
           <p className="italic mb-2">
-            An experiment by the Protocol Support team.
-          </p>
-          <p className="text-xs mb-4">
-            Have feedback? Contact{' '}
+            A Forkcast L2 by{' '}
             <a
-              href="mailto:nixo@ethereum.org"
-              onClick={() => handleExternalLinkClick('email_contact', 'mailto:nixo@ethereum.org')}
-              className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 underline decoration-1 underline-offset-2"
-            >
-              nixo
-            </a>
-            {' '}or{' '}
-            <a
-              href="https://x.com/wolovim"
+              href="https://x.com/jmcpheron"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleExternalLinkClick('x_contact', 'https://x.com/wolovim')}
-              className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 underline decoration-1 underline-offset-2"
+              onClick={() => handleExternalLinkClick('author_link', 'https://x.com/jmcpheron')}
+              className="text-blue-600 dark:text-blue-400 hover:underline"
             >
-              @wolovim
+              jmcpheron.eth
+            </a>
+            {' '}— Adjacent to{' '}
+            <a
+              href="https://forecast.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => handleExternalLinkClick('forecast_link', 'https://forecast.org')}
+              className="text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              forecast.org
             </a>
           </p>
           <p className="text-xs mb-2">
             <a
-              href="https://github.com/wolovim/forkcast"
+              href="https://github.com/jmcpheron-forkcast/eip-battle-cards"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => handleExternalLinkClick('source_code', 'https://github.com/wolovim/forkcast')}
+              onClick={() => handleExternalLinkClick('source_code', 'https://github.com/jmcpheron-forkcast/eip-battle-cards')}
               className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors duration-200 inline-flex items-center"
               aria-label="View source code on GitHub"
             >
@@ -152,6 +179,58 @@ const HomePage = () => {
             </a>
           </p>
         </div>
+
+        {/* Import Modal */}
+        {showImportModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-lg w-full">
+              <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-slate-100">
+                Import from GitHub Gist
+              </h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    Gist URL
+                  </label>
+                  <input
+                    type="text"
+                    value={gistUrl}
+                    onChange={(e) => setGistUrl(e.target.value)}
+                    placeholder="https://gist.github.com/username/gistid"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-slate-900 dark:text-slate-100"
+                  />
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                    Enter a public GitHub Gist URL containing your battle card JSON
+                  </p>
+                </div>
+                
+                <div className="flex gap-3 justify-end">
+                  <button
+                    onClick={() => {
+                      setShowImportModal(false);
+                      setGistUrl('');
+                    }}
+                    className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (gistUrl.trim()) {
+                        navigate(`/compare/gist?url=${encodeURIComponent(gistUrl.trim())}`);
+                      }
+                    }}
+                    disabled={!gistUrl.trim()}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Import
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

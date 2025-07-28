@@ -16,6 +16,7 @@ export default function ComparisonCreator() {
   const [error, setError] = useState('');
   const [preview, setPreview] = useState<EIPComparison | null>(null);
   const [step, setStep] = useState<'select' | 'build' | 'paste' | 'preview'>('select');
+  const [showGistModal, setShowGistModal] = useState(false);
   
   // Cast eipsData to the correct type
   const typedEips = eipsData as EIP[];
@@ -636,13 +637,89 @@ export default function ComparisonCreator() {
             >
               Edit
             </button>
-            {/* Share functionality hidden for now - TODO: implement persistent storage */}
+            <button
+              onClick={() => setShowGistModal(true)}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              Export to GitHub Gist
+            </button>
           </div>
         </div>
         
         <div className="border border-slate-200 dark:border-slate-800 rounded-lg p-6 bg-white dark:bg-slate-900">
           <ComparisonRenderer comparison={preview} />
         </div>
+
+        {showGistModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+              <h2 className="text-2xl font-bold mb-4 text-slate-900 dark:text-slate-100">Export to GitHub Gist</h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold mb-2 text-slate-900 dark:text-slate-100">Step 1: Copy Your Battle Card JSON</h3>
+                  <div className="relative">
+                    <textarea
+                      readOnly
+                      value={JSON.stringify(preview, null, 2)}
+                      className="w-full h-64 p-3 border border-slate-300 dark:border-slate-600 rounded-lg font-mono text-sm bg-slate-50 dark:bg-slate-900"
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(JSON.stringify(preview, null, 2));
+                      }}
+                      className="absolute top-2 right-2 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold mb-2 text-slate-900 dark:text-slate-100">Step 2: Create a GitHub Gist</h3>
+                  <ol className="list-decimal list-inside space-y-2 text-slate-700 dark:text-slate-300">
+                    <li>Click the button below to open GitHub Gist</li>
+                    <li>Paste your JSON in the large text area</li>
+                    <li>Name your file (e.g., "epbs-vs-6s-slots.json")</li>
+                    <li>Add a description (optional)</li>
+                    <li>Click "Create public gist"</li>
+                    <li>Copy the Gist URL to share your battle card</li>
+                  </ol>
+                  
+                  <button
+                    onClick={() => {
+                      window.open('https://gist.github.com/', '_blank');
+                    }}
+                    className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    Open GitHub Gist
+                  </button>
+                </div>
+                
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                  <p className="text-sm text-blue-800 dark:text-blue-200">
+                    <strong>Tip:</strong> Once you create a Gist, you can share the URL with others. They can import it using the "Import from Gist" feature on the homepage.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="mt-6 flex justify-end">
+                <button
+                  onClick={() => setShowGistModal(false)}
+                  className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     );
