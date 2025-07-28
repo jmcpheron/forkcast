@@ -63,6 +63,8 @@ function App() {
           <Route path="/compare/example" element={<ExampleViewer />} />
           <Route path="/compare/example-epbs-6s" element={<ExampleViewer />} />
           <Route path="/compare/gist" element={<GistViewer />} />
+          <Route path="/gist/:author/:gistId" element={<GistViewer />} />
+          <Route path="/gist/:gistId" element={<GistViewer />} />
           <Route path="/compare/:id" element={<ComparisonViewer />} />
           {/* <Route path="/upgrade/pectra" element={
             <PublicNetworkUpgradePage

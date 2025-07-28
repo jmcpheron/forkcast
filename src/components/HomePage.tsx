@@ -218,7 +218,37 @@ const HomePage = () => {
                   <button
                     onClick={() => {
                       if (gistUrl.trim()) {
-                        navigate(`/compare/gist?url=${encodeURIComponent(gistUrl.trim())}`);
+                        const url = gistUrl.trim();
+                        
+                        // Extract gist ID and optionally author from various URL formats
+                        const patterns = [
+                          /gist\.github\.com\/([^\/]+)\/([a-f0-9]+)/i,  // https://gist.github.com/user/id
+                          /gist\.github\.com\/([a-f0-9]+)/i,            // https://gist.github.com/id
+                        ];
+                        
+                        let matched = false;
+                        for (const pattern of patterns) {
+                          const match = url.match(pattern);
+                          if (match) {
+                            if (match.length === 3) {
+                              // Has author and ID
+                              navigate(`/gist/${match[1]}/${match[2]}`);
+                            } else {
+                              // Just ID
+                              navigate(`/gist/${match[1]}`);
+                            }
+                            matched = true;
+                            break;
+                          }
+                        }
+                        
+                        // If it's already just an ID
+                        if (!matched && /^[a-f0-9]+$/i.test(url)) {
+                          navigate(`/gist/${url}`);
+                        } else if (!matched) {
+                          // Fallback to legacy format if we can't parse it
+                          navigate(`/compare/gist?url=${encodeURIComponent(url)}`);
+                        }
                       }
                     }}
                     disabled={!gistUrl.trim()}
