@@ -892,11 +892,11 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
                   <span>📊</span>
-                  Forkcast Data: EIP-{forkcastSection.eipId}
+                  Forecast.org Data: EIP-{forkcastSection.eipId}
                 </h3>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
-                    Repository Data
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded">
+                    Neutral Data
                   </span>
                   <svg 
                     className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
@@ -909,7 +909,7 @@ export default function ComparisonRenderer({ comparison }: ComparisonRendererPro
                 </div>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                Data compiled by Forkcast from EIP specifications and discussions
+                Official EIP data from forecast.org - neutral facts without author bias
               </p>
             </button>
             

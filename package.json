@@ -1,9 +1,9 @@
 {
-  "name": "forkcast",
+  "name": "eip-battle-cards",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://jmcpheron.github.io/forkcast",
+  "homepage": "https://jmcpheron.github.io/eip-battle-cards",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

@@ -9,7 +9,8 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import ExternalRedirect from './components/ExternalRedirect';
 import ComparisonCreator from './components/comparisons/ComparisonCreator';
 import ComparisonViewer from './components/comparisons/ComparisonViewer';
-import ExampleLoader from './components/comparisons/ExampleLoader';
+import ExampleViewer from './components/comparisons/ExampleViewer';
+import GistViewer from './components/comparisons/GistViewer';
 
 function AnalyticsTracker() {
   const location = useLocation();
@@ -59,7 +60,9 @@ function App() {
           <Route path="/rank" element={<RankPage />} />
           <Route path="/feedback" element={<ExternalRedirect />} />
           <Route path="/compare/new" element={<ComparisonCreator />} />
-          <Route path="/compare/example" element={<ExampleLoader />} />
+          <Route path="/compare/example" element={<ExampleViewer />} />
+          <Route path="/compare/example-epbs-6s" element={<ExampleViewer />} />
+          <Route path="/compare/gist" element={<GistViewer />} />
           <Route path="/compare/:id" element={<ComparisonViewer />} />
           {/* <Route path="/upgrade/pectra" element={
             <PublicNetworkUpgradePage

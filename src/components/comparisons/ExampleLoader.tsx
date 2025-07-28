@@ -17,8 +17,15 @@ export default function ExampleLoader() {
   
   useEffect(() => {
     const url = loadExampleComparison();
-    navigate(url);
+    // Add a small delay to ensure localStorage is written
+    setTimeout(() => {
+      navigate(url, { replace: true });
+    }, 100);
   }, [navigate]);
   
-  return <div>Loading example...</div>;
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+      <div className="text-lg text-slate-600 dark:text-slate-400">Loading example...</div>
+    </div>
+  );
 }
