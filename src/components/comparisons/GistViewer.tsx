@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useParams } from 'react-router-dom';
 import ComparisonRenderer from './ComparisonRenderer';
 import { EIPComparison } from '../../types/comparison';
 import Navigation from '../Navigation';
@@ -25,21 +25,37 @@ interface GistResponse {
 
 export default function GistViewer() {
   const [searchParams] = useSearchParams();
+  const params = useParams<{ gistId?: string; author?: string }>();
+  
+  // Support multiple URL formats:
+  // 1. Legacy: /compare/gist?url=https://gist.github.com/user/id
+  // 2. Query param: /compare/gist?id=abc123
+  // 3. Clean path: /gist/abc123 or /gist/username/abc123
   const gistUrl = searchParams.get('url');
+  const gistIdFromQuery = searchParams.get('id');
+  const authorFromQuery = searchParams.get('author');
+  
+  // Prefer route params over query params
+  const gistId = params.gistId || gistIdFromQuery;
+  const author = params.author || authorFromQuery;
   
   const [comparison, setComparison] = useState<EIPComparison | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!gistUrl) {
-      setError('No Gist URL provided');
+    if (!gistUrl && !gistId) {
+      setError('No Gist URL or ID provided');
       setLoading(false);
       return;
     }
 
-    loadGist(gistUrl);
-  }, [gistUrl]);
+    // If we have a gistId, use it directly. Otherwise, extract from URL
+    const gistIdentifier = gistId || gistUrl;
+    if (gistIdentifier) {
+      loadGist(gistIdentifier);
+    }
+  }, [gistUrl, gistId]);
 
   const extractGistId = (url: string): string | null => {
     // Support various Gist URL formats
@@ -205,14 +221,14 @@ export default function GistViewer() {
       <div className="max-w-6xl mx-auto p-6">
         <div className="mb-4 flex items-center justify-between">
           <div className="text-sm text-slate-600 dark:text-slate-400">
-            Loaded from GitHub Gist
+            Loaded from GitHub Gist{author && ` by ${author}`}
           </div>
           <button
             onClick={() => {
-              const gistId = extractGistId(gistUrl!);
-              if (gistId) {
-                localStorage.removeItem(`gist-cache-${gistId}`);
-                loadGist(gistUrl!);
+              const identifier = gistId || (gistUrl ? extractGistId(gistUrl) : null);
+              if (identifier) {
+                localStorage.removeItem(`gist-cache-${identifier}`);
+                loadGist(identifier);
               }
             }}
             className="text-sm text-blue-600 dark:text-blue-400 hover:underline"

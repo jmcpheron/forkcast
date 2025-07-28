@@ -704,7 +704,10 @@ export default function ComparisonCreator() {
                 
                 <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
                   <p className="text-sm text-blue-800 dark:text-blue-200">
-                    <strong>Tip:</strong> Once you create a Gist, you can share the URL with others. They can import it using the "Import from Gist" feature on the homepage.
+                    <strong>Tip:</strong> Once you create a Gist, you can share it with a clean URL like:
+                    <code className="bg-blue-100 dark:bg-blue-800 px-1 py-0.5 rounded text-xs ml-1">
+                      {window.location.origin}/gist/username/gistid
+                    </code>
                   </p>
                 </div>
               </div>
